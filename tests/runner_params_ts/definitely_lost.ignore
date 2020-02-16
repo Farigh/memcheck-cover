@@ -1,0 +1,7 @@
+{
+   ignore-evil-func
+   Memcheck:Leak
+   ...
+   fun:_ZN8breakage25evil_definitely_lost_funcEv
+   fun:main
+}
