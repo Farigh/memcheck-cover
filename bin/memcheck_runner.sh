@@ -32,6 +32,8 @@ function print_usage()
     echo "  -i|--ignore=FILE        Provides valgrind FILE as the suppression file."
     echo "  -o|--output-name=NAME   [${RED}MANDATORY${RESET_FORMAT}] Defines the output file name"
     echo "                          (will be suffixed with the .${memcheck_result_ext} extension)."
+    echo "  -s|--gen-suppressions   Enables valgrind suppression generation in the output file,"
+    echo "                          those can be used to create a suppression file."
 }
 
 function error()
@@ -77,7 +79,8 @@ function print_args()
 
 memcheck_output_name=""
 memcheck_ignore_file=""
-while getopts ":hi:o:-:" parsed_option; do
+enable_suppression=0
+while getopts ":hi:o:s-:" parsed_option; do
     case "${parsed_option}" in
         # Long options
         -)
@@ -99,6 +102,9 @@ while getopts ":hi:o:-:" parsed_option; do
                     check_param "--output-name" "${memcheck_output_name}"
                     shift
                 ;;
+                gen-suppressions)
+                    enable_suppression=1
+                ;;
                 help)
                     print_usage
                     exit 0
@@ -114,6 +120,9 @@ while getopts ":hi:o:-:" parsed_option; do
         i)
             memcheck_ignore_file="${OPTARG}"
             check_param "-i" "${memcheck_ignore_file}"
+        ;;
+        s)
+            enable_suppression=1
         ;;
         o)
             memcheck_output_name="${OPTARG}"
@@ -188,6 +197,12 @@ if [ "${memcheck_ignore_file}" != "" ]; then
 
     valgrind_opts+=("--suppressions=${memcheck_ignore_file}")
     info "Memcheck suppression file set to: '${memcheck_ignore_file}'"
+fi
+
+# Add suppression generation if asked for
+if [ $enable_suppression -eq 1 ]; then
+    valgrind_opts+=("--gen-suppressions=all")
+    info "Valgrind suppression generation enabled"
 fi
 
 # Output option
