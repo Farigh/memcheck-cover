@@ -1,13 +1,11 @@
 #! /bin/bash
 
-# Enable colors only if in interactive shell
-if [ -t 1 ]; then
-    RESET_FORMAT=$(echo -e '\e[00m')
-    RED=$(echo -e '\e[31m')
-    CYAN=$(echo -e '\e[0;36m')
-fi
+resolved_script_path=$(readlink -f $0)
+current_script_dir=$(dirname $resolved_script_path)
+current_full_path=$(readlink -e $current_script_dir)
 
-memcheck_result_ext="memcheck"
+# Import common utils
+source "${current_full_path}/utils.common.sh"
 
 ################################################
 ###                CHECK DEPS                ###
@@ -32,36 +30,8 @@ function print_usage()
     echo "  -i|--ignore=FILE        Provides valgrind FILE as the suppression file."
     echo "  -o|--output-name=NAME   [${RED}MANDATORY${RESET_FORMAT}] Defines the output file name"
     echo "                          (will be suffixed with the .${memcheck_result_ext} extension)."
-    echo "  -s|--gen-suppressions   Enables valgrind suppression generation in the output file,"
-    echo "                          those can be used to create a suppression file."
-}
-
-function error()
-{
-    echo "${RED}Error:${RESET_FORMAT} $1" >&2
-}
-
-function info()
-{
-    echo "${CYAN}Info:${RESET_FORMAT} $1"
-}
-
-function check_param()
-{
-    local opt_name=$1
-    local opt_value=$2
-
-    # Ensure a value was passed or the -- opt separator was not considered a param value
-    if [ "${opt_value}" == "--" ] || [ "${opt_value}" == "" ]; then
-        error "Option '${opt_name}' requires a value"
-        print_usage
-        exit 1
-    # Ensure another opt was not considered a param value
-    elif [[ "${opt_value}" == "-"* ]]; then
-        error "Invalid value '${opt_value}' for option '${opt_name}'"
-        print_usage
-        exit 1
-    fi
+    echo "  -s|--gen-suppressions   Enables valgrind suppression generation in the output"
+    echo "                          file, those can be used to create a suppression file."
 }
 
 function print_args()
@@ -166,11 +136,7 @@ if [ $# -le 0 ]; then
     exit 1
 fi
 
-if [ "${memcheck_output_name}" == "" ]; then
-    error "Mandatory parameter '-o|--output-name' not provided"
-    print_usage
-    exit 1
-fi
+check_mandatory_param "-o|--output-name" "${memcheck_output_name}"
 
 ################################################
 ###                   MAIN                   ###
@@ -208,10 +174,13 @@ fi
 # Output option
 info "Output file set to: '${memcheck_output_file}'"
 ouput_file_dir=$(dirname "${memcheck_output_file}")
-if [ ! -d "${ouput_file_dir}" ]; then
-    info "Creating output directory '${ouput_file_dir}/'"
-    mkdir -p "${ouput_file_dir}"
+
+if [ -e "${ouput_file_dir}" ] && [ ! -d "${ouput_file_dir}" ]; then
+    error "Provided output name sub-dir '${ouput_file_dir}/' exists but is not a directory"
+    exit 1
 fi
+
+create_outdir_if_necessary "${ouput_file_dir}/"
 
 # Run the given args through valgrind memcheck analyser
 bin_cmd=$(print_args "$@")
