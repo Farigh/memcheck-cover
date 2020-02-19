@@ -19,6 +19,28 @@ function list_test_cases_option()
     fi
 }
 
+function anonymize_memcheck_file()
+{
+    local file_to_anonymize=$1
+
+    # Memcheck report contains process id at the start of each line
+    # Replace this id with a 1
+    local anonymize_sed_cmd="s/^==[0-9]*==/==1==/g"
+
+    # The parent process id is printed
+    anonymize_sed_cmd+=";s/\(==1== Parent PID:\) [0-9]*/\1 1/g"
+
+    # Remove host specific dir path
+    anonymize_sed_cmd+=";s# [^ ]*\(memcheck-cover/tests/bin/\)# \1#g"
+
+    sed -i "${anonymize_sed_cmd}" "${file_to_anonymize}"
+    sed -i "${anonymize_sed_cmd}" "${file_to_anonymize}"
+}
+
+###############################
+###   PROPERTIES GETTERS    ###
+###############################
+
 function get_test_outdir()
 {
     local resolved_test_path=$(readlink -f $0)
@@ -30,6 +52,25 @@ function get_test_outdir()
     current_test_name=${current_test_name%_ts_*.sh}
 
     echo "${current_test_full_path}/out/${current_test_name}/"
+}
+
+function get_test_bin_dir()
+{
+    local resolved_test_path=$(readlink -f $0)
+    local current_test_dir=$(dirname $resolved_test_path)
+    local current_test_full_path=$(readlink -e $current_test_dir)
+
+    readlink -e "${current_test_full_path}/../bin"
+}
+
+function get_definitely_lost_bin()
+{
+    local test_bin_dir=$(get_test_bin_dir)
+
+    local bin_name="definitely_lost"
+    local definitely_lost_bin_dir="${test_bin_dir}/${bin_name}/"
+
+    echo "${definitely_lost_bin_dir}out/${bin_name}"
 }
 
 ###############################
@@ -121,6 +162,22 @@ function expect_file()
 
     if [ ! -f "${expected_file}" ]; then
         error "Expected file not found: ${expected_file}"
+        error_occured=1
+    fi
+}
+
+function expect_dir_content_to_match()
+{
+    local reference_dir=$1
+    local to_compare_dir=$2
+
+    local diff_output
+    diff_output=$(diff -u "${reference_dir}" "${to_compare_dir}" 2>&1)
+
+    if [ $? -ne 0 ]; then
+        error "Directory does not match ref:"
+        local diff_output_with_special_char=$(echo "${diff_output}" | cat -A)
+        print_with_indent "    " "${diff_output_with_special_char}"
         error_occured=1
     fi
 }
