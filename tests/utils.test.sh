@@ -127,18 +127,32 @@ function expect_file()
 
 function expect_file_content()
 {
-    local file=$1
+    local file_to_check=$1
     local expected_content=$2
 
-    local file_content_match=$(grep --fixed-strings "${expected_content}" "${file}")
+    local file_content_match=$(grep --fixed-strings "${expected_content}" "${file_to_check}")
     if [ "${file_content_match}" == "" ]; then
-        error "Expected ${file} content:"
+        error "Expected ${file_to_check} content:"
         print_with_indent "    " "${expected_content}"
         echo "${CYAN}But found:${RESET_FORMAT}"
-        file_content=$(cat "${file}")
+        file_content=$(cat "${file_to_check}")
         print_with_indent "    " "${file_content}"
         error_occured=1
     fi
+}
+
+function expect_multiline_file_content()
+{
+    local file_to_check=$1
+    local expected_multiline_content=$2
+
+    OLDIFS=$IFS
+    IFS=$'\n'
+    local content_line
+    for content_line in $(echo -e "${expected_multiline_content}"); do
+        expect_file_content "${file_to_check}" "${content_line}"
+    done
+    IFS=$OLDIFS
 }
 
 function expect_exit_code()
