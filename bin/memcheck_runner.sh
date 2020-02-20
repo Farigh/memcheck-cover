@@ -56,7 +56,7 @@ while getopts ":hi:o:s-:" parsed_option; do
         -)
             case "${OPTARG}" in
                 ignore)
-                    memcheck_ignore_file="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    memcheck_ignore_file="${!OPTIND}"; ((OPTIND++))
                     check_param "--ignore" "${memcheck_ignore_file}"
                 ;;
                 ignore=*)
@@ -64,7 +64,7 @@ while getopts ":hi:o:s-:" parsed_option; do
                     check_param "--ignore" "${memcheck_ignore_file}"
                 ;;
                 output-name)
-                    memcheck_output_name="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    memcheck_output_name="${!OPTIND}"; ((OPTIND++))
                     check_param "--output-name" "${memcheck_output_name}"
                 ;;
                 output-name=*)

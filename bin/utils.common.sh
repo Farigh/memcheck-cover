@@ -3,7 +3,11 @@
 # Enable colors only if in interactive shell
 if [ -t 1 ]; then
     RESET_FORMAT=$(echo -e '\e[00m')
+    BOLD=$(echo -e '\e[1m')
     RED=$(echo -e '\e[31m')
+    GREEN=$(echo -e '\e[32m')
+    PURPLE=$(echo -e '\e[0;35m')
+    ORANGE=$(echo -e '\e[38;5;208m')
     CYAN=$(echo -e '\e[0;36m')
 fi
 

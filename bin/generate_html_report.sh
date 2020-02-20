@@ -118,7 +118,7 @@ while getopts ":hi:o:-:" parsed_option; do
         -)
             case "${OPTARG}" in
                 input-dir)
-                    memcheck_input_dir="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    memcheck_input_dir="${!OPTIND}"; ((OPTIND++))
                     check_param "--input-dir" "${memcheck_input_dir}"
                 ;;
                 input-dir=*)
@@ -126,7 +126,7 @@ while getopts ":hi:o:-:" parsed_option; do
                     check_param "--input-dir" "${memcheck_input_dir}"
                 ;;
                 output-dir)
-                    html_output_dir="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    html_output_dir="${!OPTIND}"; ((OPTIND++))
                     check_param "--output-dir" "${html_output_dir}"
                 ;;
                 output-dir=*)
