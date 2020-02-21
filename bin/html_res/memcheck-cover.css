@@ -1,0 +1,33 @@
+/* HTML report title */
+.report_title {
+    font-weight: bold;
+    font-size: 2.1em;
+    text-align: center;
+    margin: 10px;
+    padding-top: 30px;
+    color: #3333FF;
+}
+
+/* HTML report separator */
+.report_separator {
+    margin: 40px auto;
+    width: 425px;
+    height: 10px;
+    display: block;
+    border-radius: 10px;
+    background-color: #000084;
+}
+
+/* Memcheck analysis title */
+.memcheck_analysis_title {
+    font-weight: bold;
+    font-size: 1.2em;
+    padding-bottom: 3px;
+}
+
+/* Memcheck analysis content */
+.memcheck_analysis_content {
+    margin-left: 25px;
+    padding: 5px 10px 7px 25px;
+    border: solid thin #CCCCCC;
+}

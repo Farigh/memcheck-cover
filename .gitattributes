@@ -1,2 +1,8 @@
 # Scripts
+*.awk            eol=lf
 *.sh             eol=lf
+
+# HTML files
+*.html           eol=lf
+*.html.part      eol=lf
+bin/html_res/*   eol=lf

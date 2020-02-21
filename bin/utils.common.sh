@@ -27,6 +27,14 @@ function info()
     echo "${CYAN}Info:${RESET_FORMAT} $1"
 }
 
+function print_with_indent()
+{
+    local indent_string=$1
+    local to_print=$2
+
+    echo "${to_print}" | awk '{ print "'"${indent_string}"'" $0; }'
+}
+
 function check_param()
 {
     local opt_name=$1

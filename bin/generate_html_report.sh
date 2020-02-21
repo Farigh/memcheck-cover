@@ -9,6 +9,10 @@ source "${current_full_path}/utils.common.sh"
 
 html_part_ext=".html.part"
 
+awk_script_dir="${current_full_path}/awk/"
+
+html_res_dir="${current_full_path}/html_res/"
+
 ################################################
 ###                 FUNCTIONS                ###
 ################################################
@@ -29,11 +33,32 @@ function print_usage()
     echo "                        where the HTML report will be produced."
 }
 
+function format_memcheck_report()
+{
+    local report_to_format=$1
+
+    awk -f "${awk_script_dir}format_memcheck_report.awk" "${report_to_format}"
+}
+
+function get_memcheck_analysis_title()
+{
+    local memcheck_report_file=$1
+
+    # Get the command from the report, trim binary path
+    local valgrind_analysis_cmd=$(awk '/== Command: / { print gensub(/.*== Command: (.*\/)?(.*( .*)?)/, "\\2", 1); }' "${memcheck_report_file}")
+
+    local result_title=$valgrind_analysis_cmd
+
+    echo "${result_title}"
+}
+
 function generate_html_part()
 {
     local html_output_dir=$1
     local memcheck_input_dir_len=$2
     local memcheck_result=$3
+
+    local content_indent="        "
 
     local memcheck_result_sub_path="${memcheck_result:${memcheck_input_dir_len}}"
     info "Processing memcheck file '${memcheck_result_sub_path}' ..."
@@ -47,28 +72,60 @@ function generate_html_part()
         mkdir -p "${current_part_output_dir}"
     fi
 
+    # Compute memcheck title
+    local memcheck_report_title=$(get_memcheck_analysis_title "${memcheck_result}")
+
+    # HTML part output
     local html_part_output_fullpath="${current_part_output_dir}${current_part_filename}${html_part_ext}"
 
-    echo "<div>" > "${html_part_output_fullpath}"
+    # Add analysis title
+    print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_title\">" > "${html_part_output_fullpath}"
+    print_with_indent "${content_indent}    " "&#9658; Command: ${memcheck_report_title}" >> "${html_part_output_fullpath}"
+    print_with_indent "${content_indent}" "</div>" >> "${html_part_output_fullpath}"
 
-    cat "${memcheck_result}" >> "${html_part_output_fullpath}"
+    # Add analysis content
+    print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_content\">" >> "${html_part_output_fullpath}"
 
-    echo "</div>" >> "${html_part_output_fullpath}"
+    local memcheck_report_content=$(format_memcheck_report "${memcheck_result}")
+    print_with_indent "${content_indent}    " "${memcheck_report_content}" >> "${html_part_output_fullpath}"
+
+    print_with_indent "${content_indent}" "</div>" >> "${html_part_output_fullpath}"
+}
+
+function deploy_css_stylesheet()
+{
+    local output_dir=$1
+    cp "${html_res_dir}memcheck-cover.css" "${output_dir}"
+}
+
+function generate_title()
+{
+    local print_indent=$1
+
+    # Open the title div tag
+    print_with_indent "${print_indent}" '<div class="report_title">'
+
+    # Add title content
+    print_with_indent "${print_indent}    " "Valgrind's memcheck report"
+
+    # Close the title div tag
+    print_with_indent "${print_indent}" "</div>"
+
+    # Add a separator
+    print_with_indent "${print_indent}" '<div class="report_separator"></div>'
 }
 
 function generate_html_header()
 {
-    echo "<!doctype html>"
-    echo "<html>"
-    echo "    <head>"
-    echo "    </head>"
-    echo "    <body>"
+    cat "${html_res_dir}html_report.header"
+
+    # Add report title part
+    generate_title "        "
 }
 
 function generate_html_footer()
 {
-    echo "    </body>"
-    echo "</html>"
+    cat "${html_res_dir}html_report.footer"
 }
 
 function generate_html_report()
@@ -104,6 +161,9 @@ function generate_html_report()
     done
 
     generate_html_footer >> "${output_index_file}"
+
+    # Deploy CSS stylesheet to output directory
+    deploy_css_stylesheet "${html_output_dir}"
 }
 
 ################################################
