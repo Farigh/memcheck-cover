@@ -1,7 +1,5 @@
 # ! /bin/bash
 
-bin_dir=$1
-
 resolved_script_path=$(readlink -f $0)
 current_script_dir=$(dirname $resolved_script_path)
 current_full_path=$(readlink -e $current_script_dir)
@@ -16,7 +14,7 @@ source "${test_utils_import}"
 function generate_memcheck_report()
 {
     local test_out_dir=$(get_test_outdir)
-    local memcheck_runner="${bin_dir}memcheck_runner.sh"
+    local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
     local definitely_lost_bin=$(get_definitely_lost_bin)
 
     # Create output dir if needed
@@ -36,7 +34,7 @@ function generate_memcheck_report()
 function test_definitely_lost_report()
 {
     local test_out_dir=$(get_test_outdir)
-    local generate_html_report="${bin_dir}generate_html_report.sh"
+    local generate_html_report="$(get_tools_bin_dir)/generate_html_report.sh"
 
     local test_std_output="${test_out_dir}test.out"
     local test_err_output="${test_out_dir}test.err.out"

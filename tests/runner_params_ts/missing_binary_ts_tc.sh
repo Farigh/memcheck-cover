@@ -1,7 +1,5 @@
 # ! /bin/bash
 
-bin_dir=$1
-
 resolved_script_path=$(readlink -f $0)
 current_script_dir=$(dirname $resolved_script_path)
 current_full_path=$(readlink -e $current_script_dir)
@@ -16,7 +14,7 @@ source "${test_utils_import}"
 function test_missing_binary()
 {
     local test_out_dir=$(get_test_outdir)
-    local memcheck_runner="${bin_dir}memcheck_runner.sh"
+    local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
 
     # Create output dir if needed
     [ ! -d "${test_out_dir}" ] && mkdir -p "${test_out_dir}"

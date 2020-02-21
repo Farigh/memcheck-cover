@@ -1,7 +1,6 @@
 # ! /bin/bash
 
-bin_dir=$1
-test_parameter=$2
+test_parameter=$1
 
 resolved_script_path=$(readlink -f $0)
 current_script_dir=$(dirname $resolved_script_path)
@@ -23,11 +22,12 @@ list_test_cases_option "$1"
 ############
 ### TEST ###
 ############
+
 function test_ignore_param()
 {
     local param_to_test=$1
     local test_out_dir=$(get_test_outdir)
-    local memcheck_runner="${bin_dir}memcheck_runner.sh"
+    local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
 
     local definitely_lost_bin=$(get_definitely_lost_bin)
     local definitely_lost_ignore_file="${current_full_path}/definitely_lost.ignore"

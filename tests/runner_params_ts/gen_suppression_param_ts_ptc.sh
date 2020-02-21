@@ -1,7 +1,6 @@
 # ! /bin/bash
 
-bin_dir=$1
-test_parameter=$2
+test_parameter=$1
 
 resolved_script_path=$(readlink -f $0)
 current_script_dir=$(dirname $resolved_script_path)
@@ -9,12 +8,6 @@ current_full_path=$(readlink -e $current_script_dir)
 
 test_utils_import=$(readlink -e "${current_full_path}/../utils.test.sh")
 source "${test_utils_import}"
-
-bin_name="definitely_lost"
-definitely_lost_bin_dir=$(readlink -e "${current_full_path}/../bin/${bin_name}/")
-
-definitely_lost_bin="${definitely_lost_bin_dir}/out/${bin_name}"
-definitely_lost_ignore_file="${current_full_path}/${bin_name}.ignore"
 
 # List cases
 test_cases=(
@@ -31,7 +24,9 @@ function test_suppression_param()
 {
     local param_to_test=$1
     local test_out_dir=$(get_test_outdir)
-    local memcheck_runner="${bin_dir}memcheck_runner.sh"
+    local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
+
+    local definitely_lost_bin=$(get_definitely_lost_bin)
 
     # Create output dir if needed
     [ ! -d "${test_out_dir}" ] && mkdir -p "${test_out_dir}"

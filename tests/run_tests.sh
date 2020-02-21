@@ -121,7 +121,7 @@ function common_run_test()
     echo "** Running test ${to_print_common}"
 
     # Run test
-    "${test_runner}" "${bin_dir}/" "${param}"
+    "${test_runner}" "${param}"
     local test_result=$?
 
     if [ $test_result -eq 0 ]; then

@@ -1,7 +1,6 @@
 # ! /bin/bash
 
-bin_dir=$1
-test_parameter=$2
+test_parameter=$1
 
 resolved_script_path=$(readlink -f $0)
 current_script_dir=$(dirname $resolved_script_path)
@@ -40,7 +39,7 @@ function test_missing_mandatory_param()
 {
     local param_to_test=$1
     local test_out_dir=$(get_test_outdir)
-    local generate_html_report="${bin_dir}generate_html_report.sh"
+    local generate_html_report="$(get_tools_bin_dir)/generate_html_report.sh"
 
     # Create output dir if needed
     [ ! -d "${test_out_dir}" ] && mkdir -p "${test_out_dir}"

@@ -1,7 +1,6 @@
 # ! /bin/bash
 
-bin_dir=$1
-test_parameter=$2
+test_parameter=$1
 
 resolved_script_path=$(readlink -f $0)
 current_script_dir=$(dirname $resolved_script_path)
@@ -31,7 +30,7 @@ function test_unknown_param()
 {
     local param_to_test=$1
     local test_out_dir=$(get_test_outdir)
-    local memcheck_runner="${bin_dir}memcheck_runner.sh"
+    local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
 
     # Use true as it's a simple, 0 returning cmd
     local test_cmd="true"

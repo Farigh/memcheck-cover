@@ -1,12 +1,5 @@
 # ! /bin/bash
 
-# Enable colors only if in interactive shell
-if [ -t 1 ]; then
-    RESET_FORMAT=$(echo -e '\e[00m')
-    RED=$(echo -e '\e[31m')
-    CYAN=$(echo -e '\e[0;36m')
-fi
-
 function list_test_cases_option()
 {
     local script_opt=$1
@@ -61,6 +54,15 @@ function get_test_bin_dir()
     local current_test_full_path=$(readlink -e $current_test_dir)
 
     readlink -e "${current_test_full_path}/../bin"
+}
+
+function get_tools_bin_dir()
+{
+    local resolved_test_path=$(readlink -f $0)
+    local current_test_dir=$(dirname $resolved_test_path)
+    local current_test_full_path=$(readlink -e $current_test_dir)
+
+    readlink -e "${current_test_full_path}/../../bin"
 }
 
 function get_definitely_lost_bin()
@@ -119,16 +121,6 @@ function extract_param_part_from_str()
 ###       PRINT UTILS       ###
 ###############################
 
-function error()
-{
-    echo "${RED}Error: $1${RESET_FORMAT}" >&2
-}
-
-function info()
-{
-    echo "${CYAN}$1${RESET_FORMAT}"
-}
-
 function print_with_indent()
 {
     local indent_string=$1
@@ -148,7 +140,7 @@ function expect_output()
 
     local found_expected_line=$(grep --fixed-strings "${expected_content}" "${test_output_file}")
     if [ "${found_expected_line}" == "" ]; then
-        error "Expected output:"
+        error "${RED}Expected output:${RESET_FORMAT}"
         print_with_indent "    " "${expected_content}"
         echo "${CYAN}Could not be found in test output:${RESET_FORMAT}"
         print_with_indent "    " "$(cat ${test_output_file})"
@@ -161,7 +153,7 @@ function expect_file()
     local expected_file=$1
 
     if [ ! -f "${expected_file}" ]; then
-        error "Expected file not found: ${expected_file}"
+        error "${RED}Expected file not found:${RESET_FORMAT} ${expected_file}"
         error_occured=1
     fi
 }
@@ -175,7 +167,7 @@ function expect_dir_content_to_match()
     diff_output=$(diff -u "${reference_dir}" "${to_compare_dir}" 2>&1)
 
     if [ $? -ne 0 ]; then
-        error "Directory does not match ref:"
+        error "${RED}Directory does not match ref:${RESET_FORMAT}"
         local diff_output_with_special_char=$(echo "${diff_output}" | cat -A)
         print_with_indent "    " "${diff_output_with_special_char}"
         error_occured=1
@@ -189,7 +181,7 @@ function expect_file_content()
 
     local file_content_match=$(grep --fixed-strings "${expected_content}" "${file_to_check}")
     if [ "${file_content_match}" == "" ]; then
-        error "Expected ${file_to_check} content:"
+        error "${RED}Expected ${file_to_check} content:${RESET_FORMAT}"
         print_with_indent "    " "${expected_content}"
         echo "${CYAN}But found:${RESET_FORMAT}"
         file_content=$(cat "${file_to_check}")
@@ -218,7 +210,10 @@ function expect_exit_code()
     local expected_exit_code=$2
 
     if [ $test_exit_code -ne $expected_exit_code ]; then
-        error "Expected exit code ${expected_exit_code}, but got ${test_exit_code}"
+        error "${RED}Expected exit code ${PURPLE}${expected_exit_code}${RED}, but got ${PURPLE}${test_exit_code}${RESET_FORMAT}"
         error_occured=1
     fi
 }
+
+# Source common utils from tools bin directory
+source "$(get_tools_bin_dir)/utils.common.sh"
