@@ -2,5 +2,6 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="memcheck-cover.css">
+        <script type="text/javascript" src="memcheck-cover.js"></script>
     </head>
     <body>

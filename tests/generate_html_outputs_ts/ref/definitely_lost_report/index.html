@@ -2,16 +2,17 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="memcheck-cover.css">
+        <script type="text/javascript" src="memcheck-cover.js"></script>
     </head>
     <body>
         <div class="report_title">
             Valgrind's memcheck report
         </div>
         <div class="report_separator"></div>
-        <div class="memcheck_analysis_title">
-            &#9658; Command: definitely_lost
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result1');">
+            <span id="valgrind.result1.Arrow">&#9658;</span> Command: definitely_lost
         </div>
-        <div class="memcheck_analysis_content">
+        <div id="valgrind.result1.Report" class="memcheck_analysis_content hidden">
             ==1== Memcheck, a memory error detector<br />
             ==1== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.<br />
             ==1== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info<br />

@@ -13,6 +13,8 @@ awk_script_dir="${current_full_path}/awk/"
 
 html_res_dir="${current_full_path}/html_res/"
 
+last_analysis_result_id=0
+
 ################################################
 ###                 FUNCTIONS                ###
 ################################################
@@ -59,6 +61,8 @@ function generate_html_part()
     local memcheck_result=$3
 
     local content_indent="        "
+    ((last_analysis_result_id++))
+    local unique_analysis_id="valgrind.result${last_analysis_result_id}"
 
     local memcheck_result_sub_path="${memcheck_result:${memcheck_input_dir_len}}"
     info "Processing memcheck file '${memcheck_result_sub_path}' ..."
@@ -79,12 +83,15 @@ function generate_html_part()
     local html_part_output_fullpath="${current_part_output_dir}${current_part_filename}${html_part_ext}"
 
     # Add analysis title
-    print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_title\">" > "${html_part_output_fullpath}"
-    print_with_indent "${content_indent}    " "&#9658; Command: ${memcheck_report_title}" >> "${html_part_output_fullpath}"
+    local visibility_arrow="<span id=\"${unique_analysis_id}.Arrow\">&#9658;</span>"
+    local on_click_action="JavaScript: ToogleAnalysisResultVisibility('${unique_analysis_id}');"
+
+    print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_title\" onclick=\"${on_click_action}\">" > "${html_part_output_fullpath}"
+    print_with_indent "${content_indent}    " "${visibility_arrow} Command: ${memcheck_report_title}" >> "${html_part_output_fullpath}"
     print_with_indent "${content_indent}" "</div>" >> "${html_part_output_fullpath}"
 
     # Add analysis content
-    print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_content\">" >> "${html_part_output_fullpath}"
+    print_with_indent "${content_indent}" "<div id=\"${unique_analysis_id}.Report\" class=\"memcheck_analysis_content hidden\">" >> "${html_part_output_fullpath}"
 
     local memcheck_report_content=$(format_memcheck_report "${memcheck_result}")
     print_with_indent "${content_indent}    " "${memcheck_report_content}" >> "${html_part_output_fullpath}"
@@ -96,6 +103,12 @@ function deploy_css_stylesheet()
 {
     local output_dir=$1
     cp "${html_res_dir}memcheck-cover.css" "${output_dir}"
+}
+
+function deploy_javascript_script()
+{
+    local output_dir=$1
+    cp "${html_res_dir}memcheck-cover.js" "${output_dir}"
 }
 
 function generate_title()
@@ -164,6 +177,9 @@ function generate_html_report()
 
     # Deploy CSS stylesheet to output directory
     deploy_css_stylesheet "${html_output_dir}"
+
+    # Deploy JavaScript file to output directory
+    deploy_javascript_script "${html_output_dir}"
 }
 
 ################################################
