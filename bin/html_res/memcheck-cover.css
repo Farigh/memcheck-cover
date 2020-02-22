@@ -1,3 +1,7 @@
+/*************************\
+|**    Header styles    **|
+\*************************/
+
 /* HTML report title */
 .report_title {
     font-weight: bold;
@@ -17,6 +21,10 @@
     border-radius: 10px;
     background-color: #000084;
 }
+
+/*************************\
+|**   Analysis styles   **|
+\*************************/
 
 /* Memcheck analysis title */
 .memcheck_analysis_title {
@@ -47,3 +55,30 @@
 .hidden {
     display: none;
 }
+
+/*************************\
+|**    Results styles   **|
+\*************************/
+
+/* Valgrind's report has no error */
+.analysis_pass_status {
+    width: 100px;
+    display: inline-block;
+    text-align: center;
+    color: #00CF00;
+}
+
+/* Valgrind's report has at least one error */
+.analysis_error_status {
+    width: 100px;
+    display: inline-block;
+    text-align: center;
+    color: #FF0000;
+}
+
+/* Braces are a bit lower than other caracters, move it up */
+.brace_recenter {
+    position: relative;
+    bottom: 2px;
+}
+

@@ -46,12 +46,7 @@ function get_memcheck_analysis_title()
 {
     local memcheck_report_file=$1
 
-    # Get the command from the report, trim binary path
-    local valgrind_analysis_cmd=$(awk '/== Command: / { print gensub(/.*== Command: (.*\/)?(.*( .*)?)/, "\\2", 1); }' "${memcheck_report_file}")
-
-    local result_title=$valgrind_analysis_cmd
-
-    echo "${result_title}"
+    awk -f "${awk_script_dir}get_memcheck_analysis_title.awk" "${memcheck_report_file}"
 }
 
 function generate_html_part()
@@ -77,7 +72,7 @@ function generate_html_part()
     fi
 
     # Compute memcheck title
-    local memcheck_report_title=$(get_memcheck_analysis_title "${memcheck_result}")
+    local memcheck_result_title=$(get_memcheck_analysis_title "${memcheck_result}")
 
     # HTML part output
     local html_part_output_fullpath="${current_part_output_dir}${current_part_filename}${html_part_ext}"
@@ -87,7 +82,7 @@ function generate_html_part()
     local on_click_action="JavaScript: ToogleAnalysisResultVisibility('${unique_analysis_id}');"
 
     print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_title\" onclick=\"${on_click_action}\">" > "${html_part_output_fullpath}"
-    print_with_indent "${content_indent}    " "${visibility_arrow} Command: ${memcheck_report_title}" >> "${html_part_output_fullpath}"
+    print_with_indent "${content_indent}    " "${visibility_arrow} ${memcheck_result_title}" >> "${html_part_output_fullpath}"
     print_with_indent "${content_indent}" "</div>" >> "${html_part_output_fullpath}"
 
     # Add analysis content

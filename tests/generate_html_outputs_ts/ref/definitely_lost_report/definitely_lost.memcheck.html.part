@@ -1,5 +1,5 @@
         <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result1');">
-            <span id="valgrind.result1.Arrow">&#9658;</span> Command: definitely_lost
+            <span id="valgrind.result1.Arrow">&#9658;</span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> Command: definitely_lost
         </div>
         <div id="valgrind.result1.Report" class="memcheck_analysis_content hidden">
             ==1== Memcheck, a memory error detector<br />
