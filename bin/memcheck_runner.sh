@@ -148,6 +148,7 @@ valgrind_opts=(
     "--track-origins=yes"
     "--leak-check=full"
     "--show-reachable=yes"
+    "--show-leak-kinds=all"
     "--num-callers=50"
     "--fair-sched=yes"
     "--log-file=${memcheck_output_file}"

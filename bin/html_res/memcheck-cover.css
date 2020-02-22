@@ -49,6 +49,9 @@
     margin-left: 25px;
     padding: 5px 10px 7px 25px;
     border: solid thin #CCCCCC;
+
+    /* Use a monospace font to preserve valgrind report alignment */
+    font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace;
 }
 
 /* Don't display element inheriting this class */
@@ -82,3 +85,15 @@
     bottom: 2px;
 }
 
+/* Leak errors */
+.error_leak {
+    color: #FF0000;
+    font-weight: bold;
+}
+
+/* Leak file info */
+.leak_file_info {
+    color: #C017B2;
+    font-style: italic;
+    text-decoration: underline;
+}

@@ -26,7 +26,9 @@ function anonymize_memcheck_file()
     # Remove host specific dir path
     anonymize_sed_cmd+=";s# [^ ]*\(memcheck-cover/tests/bin/\)# \1#g"
 
-    sed -i "${anonymize_sed_cmd}" "${file_to_anonymize}"
+    # Replace all backtrace adresses
+    anonymize_sed_cmd+=";s/\( \(at\|by\) 0x\)[A-Fa-f0-9]*:/\110101042:/g"
+
     sed -i "${anonymize_sed_cmd}" "${file_to_anonymize}"
 }
 

@@ -1,4 +1,4 @@
-CXXFLAGS = -std=c++11 -Og -g3 -ggdb3
+CXXFLAGS = -std=c++11 -g3 -ggdb3 -Og
 
 # Don't print executed commands
 .SILENT:
