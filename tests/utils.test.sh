@@ -67,14 +67,19 @@ function get_tools_bin_dir()
     readlink -e "${current_test_full_path}/../../bin"
 }
 
-function get_definitely_lost_bin()
+function get_test_bin_fullpath()
 {
+    local test_bin_name=$1
     local test_bin_dir=$(get_test_bin_dir)
 
-    local bin_name="definitely_lost"
-    local definitely_lost_bin_dir="${test_bin_dir}/${bin_name}/"
+    local test_bin_source_dir="${test_bin_dir}/${test_bin_name}/"
 
-    echo "${definitely_lost_bin_dir}out/${bin_name}"
+    if [ ! -d "${test_bin_source_dir}" ]; then
+        error "Could not find test binary: '${test_bin_name}'"
+        exit 1
+    fi
+
+    echo "${test_bin_source_dir}out/${test_bin_name}"
 }
 
 ###############################

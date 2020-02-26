@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="memcheck-cover.css">
+        <script type="text/javascript" src="memcheck-cover.js"></script>
+    </head>
+    <body>
+        <div class="report_title">
+            Valgrind's memcheck report
+        </div>
+        <div class="report_separator"></div>
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result1');">
+            <span id="valgrind.result1.Arrow">&#9658;</span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> Command: mismatched_delete
+        </div>
+        <div id="valgrind.result1.Report" class="memcheck_analysis_content hidden">
+            ==1== Memcheck, a memory error detector<br />
+            ==1== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.<br />
+            ==1== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info<br />
+            ==1== Command: memcheck-cover/tests/bin/mismatched_delete/out/mismatched_delete<br />
+            ==1== Parent PID: 1<br />
+            ==1== <br />
+            ==1== <span class="error_leak">Mismatched free() / delete / delete []</span><br />
+            ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)<br />
+            ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_delete_int_array(int*) (<span class="leak_file_info">main.cpp:9</span>)<br />
+            ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:17</span>)<br />
+            ==1== <span class="leak_context_info">&nbsp;Address 0x5b7dc80 is 0 bytes inside a block of size 12 alloc'd</span><br />
+            ==1== &nbsp; &nbsp;at 0x10101042: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)<br />
+            ==1== &nbsp; &nbsp;by 0x10101042: breakage::alloc_int_array() (<span class="leak_file_info">main.cpp:4</span>)<br />
+            ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:15</span>)<br />
+            ==1== <br />
+            ==1== <br />
+            ==1== HEAP SUMMARY:<br />
+            ==1== &nbsp; &nbsp; in use at exit: 0 bytes in 0 blocks<br />
+            ==1== &nbsp; total heap usage: 2 allocs, 2 frees, 72,716 bytes allocated<br />
+            ==1== <br />
+            ==1== All heap blocks were freed -- no leaks are possible<br />
+            ==1== <br />
+            ==1== For counts of detected and suppressed errors, rerun with: -v<br />
+            ==1== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)<br />
+        </div>
+    </body>
+</html>

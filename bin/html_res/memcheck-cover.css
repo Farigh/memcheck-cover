@@ -68,7 +68,7 @@
     width: 100px;
     display: inline-block;
     text-align: center;
-    color: #00CF00;
+    color: #00CF00; /* Green */
 }
 
 /* Valgrind's report has at least one error */
@@ -76,7 +76,7 @@
     width: 100px;
     display: inline-block;
     text-align: center;
-    color: #FF0000;
+    color: #FF0000; /* Red */
 }
 
 /* Braces are a bit lower than other caracters, move it up */
@@ -87,13 +87,25 @@
 
 /* Leak errors */
 .error_leak {
-    color: #FF0000;
+    color: #FF0000; /* Red */
+    font-weight: bold;
+}
+
+/* Leak context info */
+.leak_context_info {
+    color: #13A8BA; /* Cyan */
     font-weight: bold;
 }
 
 /* Leak file info */
 .leak_file_info {
-    color: #C017B2;
+    color: #C017B2; /* Purple */
     font-style: italic;
     text-decoration: underline;
+}
+
+/* Leak program exit */
+.leak_program_exit {
+    font-style: italic;
+    font-weight: bold;
 }

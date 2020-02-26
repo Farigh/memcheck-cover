@@ -26,7 +26,7 @@ function test_suppression_param()
     local test_out_dir=$(get_test_outdir)
     local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
 
-    local definitely_lost_bin=$(get_definitely_lost_bin)
+    local definitely_lost_bin=$(get_test_bin_fullpath "definitely_lost")
 
     # Create output dir if needed
     [ ! -d "${test_out_dir}" ] && mkdir -p "${test_out_dir}"

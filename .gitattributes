@@ -2,7 +2,15 @@
 *.awk            eol=lf
 *.sh             eol=lf
 
+# Cpp
+*.cpp            eol=lf
+*.h              eol=lf
+
 # HTML files
 *.html           eol=lf
 *.html.part      eol=lf
 bin/html_res/*   eol=lf
+
+# Makefiles
+Makefile         eol=lf
+*.mk             eol=lf
