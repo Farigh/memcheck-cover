@@ -12,7 +12,7 @@
             ==1== &nbsp; &nbsp;at 0x10101042: breakage::evil_out_of_range_assignment() (<span class="leak_file_info">main.cpp:13</span>)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:27</span>)<br />
             ==1== <span class="leak_context_info">&nbsp;Address 0x5b7dc85 is 0 bytes after a block of size 5 alloc'd</span><br />
-            ==1== &nbsp; &nbsp;at 0x10101042: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)<br />
+            ==1== &nbsp; &nbsp;at 0x10101042: operator new[](unsigned long) (in a_host_lib.so)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_out_of_range_assignment() (<span class="leak_file_info">main.cpp:7</span>)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:27</span>)<br />
             ==1== <br />

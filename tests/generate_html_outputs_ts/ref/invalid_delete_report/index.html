@@ -20,21 +20,21 @@
             ==1== Parent PID: 1<br />
             ==1== <br />
             ==1== <span class="error_leak">Invalid free() / delete / delete[] / realloc()</span><br />
-            ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)<br />
+            ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in a_host_lib.so)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:18</span>)<br />
             ==1== <span class="leak_context_info">&nbsp;Address 0x1086f2 is in the Text segment of memcheck-cover/tests/bin/invalid_delete/out/invalid_delete</span><br />
             ==1== &nbsp; &nbsp;at 0x10101042: main (<span class="leak_file_info">main.cpp:16</span>)<br />
             ==1== <br />
             ==1== <span class="error_leak">Invalid free() / delete / delete[] / realloc()</span><br />
-            ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)<br />
+            ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in a_host_lib.so)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_double_free() (<span class="leak_file_info">main.cpp:11</span>)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:20</span>)<br />
             ==1== <span class="leak_context_info">&nbsp;Address 0x5b7dc80 is 0 bytes inside a block of size 4 free'd</span><br />
-            ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)<br />
+            ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in a_host_lib.so)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_double_free() (<span class="leak_file_info">main.cpp:10</span>)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:20</span>)<br />
             ==1== <span class="leak_context_info">&nbsp;Block was alloc'd at</span><br />
-            ==1== &nbsp; &nbsp;at 0x10101042: operator new(unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)<br />
+            ==1== &nbsp; &nbsp;at 0x10101042: operator new(unsigned long) (in a_host_lib.so)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_double_free() (<span class="leak_file_info">main.cpp:9</span>)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:20</span>)<br />
             ==1== <br />

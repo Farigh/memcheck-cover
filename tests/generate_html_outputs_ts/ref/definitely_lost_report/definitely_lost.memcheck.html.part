@@ -14,7 +14,7 @@
             ==1== &nbsp; total heap usage: 2 allocs, 1 frees, 72,708 bytes allocated<br />
             ==1== <br />
             ==1== <span class="error_leak">4 bytes in 1 blocks are definitely lost in loss record 1 of 1</span><br />
-            ==1== &nbsp; &nbsp;at 0x10101042: operator new(unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)<br />
+            ==1== &nbsp; &nbsp;at 0x10101042: operator new(unsigned long) (in a_host_lib.so)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_definitely_lost_func() (<span class="leak_file_info">main.cpp:4</span>)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:10</span>)<br />
             ==1== <br />
