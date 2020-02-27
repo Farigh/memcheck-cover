@@ -91,6 +91,12 @@
     font-weight: bold;
 }
 
+/* Leak warnings */
+.warning_leak {
+    color: #CC5500; /* Orange */
+    font-weight: bold;
+}
+
 /* Leak context info */
 .leak_context_info {
     color: #13A8BA; /* Cyan */

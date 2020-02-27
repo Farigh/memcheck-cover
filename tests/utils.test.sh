@@ -32,6 +32,9 @@ function anonymize_memcheck_file()
     # Replace all backtrace adresses
     anonymize_sed_cmd+=";s/\( \(at\|by\) 0x\)[A-Fa-f0-9]*:/\110101042:/g"
 
+    # Use of uninitialized value are CPU dependant (address size)
+    anonymize_sed_cmd+=";s#\(== Use of uninitialised value of size\) [0-9]*#\1 42#g"
+
     # Remove valgrind version and copyright lines
     anonymize_sed_cmd+=";s#\(== Copyright (C)\) [-0-9]*,#\1,#g"
     anonymize_sed_cmd+=";s#\(== Using Valgrind\)-[^ ]* #\1 #g"
