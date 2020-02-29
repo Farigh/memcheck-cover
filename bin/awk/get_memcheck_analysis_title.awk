@@ -6,7 +6,8 @@ BEGIN {
 }
 
 /==[0-9]*== Command: / {
-    analysis_cmd = gensub(/.*== Command: (.*\/)?(.*( .*)?)/, "\\2", 1);
+    line_without_html_tag = gensub(/<.*>/, "", "g");
+    analysis_cmd = gensub(/.*== Command: (.*\/)?(.*( .*)?)/, "\\2", 1, line_without_html_tag);
 }
 
 # Ensure no errors were reported

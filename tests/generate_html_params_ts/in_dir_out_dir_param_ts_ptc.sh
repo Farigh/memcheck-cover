@@ -96,10 +96,12 @@ function test_in_dir_out_dir_param()
         expect_file_content "${expected_index_html_file}" "<!doctype html>"
 
         # Dummy content 1 added
-        expect_multiline_file_content "${expected_index_html_file}" "${first_memcheck_content}"
+        expect_multiline_file_content "${report_out_dir}dummy.memcheck.html.part" "${first_memcheck_content}"
+        expect_multiline_file_content "${expected_index_html_file}" "<script src=\"dummy.memcheck.html.part\" async=\"async\"></script>"
 
         # Dummy content 2 added
-        expect_multiline_file_content "${expected_index_html_file}" "${second_memcheck_content}"
+        expect_multiline_file_content "${report_out_dir}subdir/dummy2.memcheck.html.part" "${second_memcheck_content}"
+        expect_multiline_file_content "${expected_index_html_file}" "<script src=\"subdir/dummy2.memcheck.html.part\" async=\"async\"></script>"
 
         # Footer generation occured
         expect_file_content "${expected_index_html_file}" "</html>"

@@ -14,6 +14,7 @@ awk_script_dir="${current_full_path}/awk/"
 html_res_dir="${current_full_path}/html_res/"
 
 last_analysis_result_id=0
+analysis_result_id_prefix="valgrind.result"
 
 ################################################
 ###                 FUNCTIONS                ###
@@ -55,10 +56,6 @@ function generate_html_part()
     local memcheck_input_dir_len=$2
     local memcheck_result=$3
 
-    local content_indent="        "
-    ((last_analysis_result_id++))
-    local unique_analysis_id="valgrind.result${last_analysis_result_id}"
-
     local memcheck_result_sub_path="${memcheck_result:${memcheck_input_dir_len}}"
     info "Processing memcheck file '${memcheck_result_sub_path}' ..."
 
@@ -71,27 +68,53 @@ function generate_html_part()
         mkdir -p "${current_part_output_dir}"
     fi
 
-    # Compute memcheck title
-    local memcheck_result_title=$(get_memcheck_analysis_title "${memcheck_result}")
-
     # HTML part output
     local html_part_output_fullpath="${current_part_output_dir}${current_part_filename}${html_part_ext}"
+
+    ((last_analysis_result_id++))
+    local unique_analysis_id="${analysis_result_id_prefix}${last_analysis_result_id}"
+
+    echo "async function updateContentOnceLoaded${last_analysis_result_id}()" > "${html_part_output_fullpath}"
+    echo "{" >> "${html_part_output_fullpath}"
+    echo "    var data =\`" >> "${html_part_output_fullpath}"
+
+    local memcheck_report_content=$(format_memcheck_report "${memcheck_result}")
+    print_with_indent "            " "${memcheck_report_content}" >> "${html_part_output_fullpath}"
+
+    echo "\`;" >> "${html_part_output_fullpath}"
+    echo "    var analysis_div = document.getElementById('${unique_analysis_id}.Report');" >> "${html_part_output_fullpath}"
+    echo "    analysis_div.innerHTML=data;" >> "${html_part_output_fullpath}"
+    echo "}" >> "${html_part_output_fullpath}"
+    echo "updateContentOnceLoaded${last_analysis_result_id}();" >> "${html_part_output_fullpath}"
+}
+
+function generate_html_part_integration()
+{
+    local memcheck_result_html_part=$1
+
+    local content_indent="        "
+    ((last_analysis_result_id++))
+    local unique_analysis_id="${analysis_result_id_prefix}${last_analysis_result_id}"
+
+    # Compute memcheck title
+    local memcheck_result_title=$(get_memcheck_analysis_title "${memcheck_result_html_part}")
 
     # Add analysis title
     local visibility_arrow="<span id=\"${unique_analysis_id}.Arrow\">&#9658;</span>"
     local on_click_action="JavaScript: ToogleAnalysisResultVisibility('${unique_analysis_id}');"
 
-    print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_title\" onclick=\"${on_click_action}\">" > "${html_part_output_fullpath}"
-    print_with_indent "${content_indent}    " "${visibility_arrow} ${memcheck_result_title}" >> "${html_part_output_fullpath}"
-    print_with_indent "${content_indent}" "</div>" >> "${html_part_output_fullpath}"
+    print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_title\" onclick=\"${on_click_action}\">"
+    print_with_indent "${content_indent}    " "${visibility_arrow} ${memcheck_result_title}"
+    print_with_indent "${content_indent}" "</div>"
 
     # Add analysis content
-    print_with_indent "${content_indent}" "<div id=\"${unique_analysis_id}.Report\" class=\"memcheck_analysis_content hidden\">" >> "${html_part_output_fullpath}"
+    print_with_indent "${content_indent}" "<div id=\"${unique_analysis_id}.Report\" class=\"memcheck_analysis_content hidden\">"
 
-    local memcheck_report_content=$(format_memcheck_report "${memcheck_result}")
-    print_with_indent "${content_indent}    " "${memcheck_report_content}" >> "${html_part_output_fullpath}"
+    # Add loader animation (will be displayed until the html part is fully loaded and replace it)
+    print_with_indent "${content_indent}    " "<span class=\"result_loader\"></span><span class=\"result_loader_text\"></span>"
 
-    print_with_indent "${content_indent}" "</div>" >> "${html_part_output_fullpath}"
+    # Close analysis content
+    print_with_indent "${content_indent}" "</div>"
 }
 
 function deploy_css_stylesheet()
@@ -123,9 +146,31 @@ function generate_title()
     print_with_indent "${print_indent}" '<div class="report_separator"></div>'
 }
 
+function resolve_placeholder()
+{
+    local placeholder=$1
+    local replacement=$2
+
+    awk -v placeholder="%{${placeholder}}" -v replacement="${replacement}" "{ print gensub(placeholder, replacement, 1) }"
+}
+
 function generate_html_header()
 {
-    cat "${html_res_dir}html_report.header"
+    local html_output_dir=$1
+    local imports_content=""
+
+    local html_output_dir_len=${#html_output_dir}
+
+    # Import html parts as asynchronous scripts
+    local memcheck_html_part
+    for memcheck_html_part in $(find "${html_output_dir}" -name "*${html_part_ext}" -type f | sort); do
+        local memcheck_html_part_subpath=${memcheck_html_part:${html_output_dir_len}}
+
+        # Add asynchronous scripts so the page content gets loaded first, then the report divs contents
+        imports_content+="\n        <script src=\"${memcheck_html_part_subpath}\" async=\"async\"></script>"
+    done
+
+    cat "${html_res_dir}html_report.header" | resolve_placeholder "html_part_imports" "${imports_content}"
 
     # Add report title part
     generate_title "        "
@@ -153,6 +198,9 @@ function generate_html_report()
         ((memcheck_count++))
     done
 
+    # Reset last_analysis_result_id so the id matches the async loading ones
+    last_analysis_result_id=0
+
     if [ $memcheck_count -eq 0 ]; then
         error "No file with the '.${memcheck_result_ext}' extension found in input directory"
         exit 1
@@ -162,10 +210,11 @@ function generate_html_report()
     local output_index_file="${html_output_dir}index.html"
     info "Generating index.html..."
 
-    generate_html_header > "${output_index_file}"
+    generate_html_header "${html_output_dir}" > "${output_index_file}"
 
+    local memcheck_html_part
     for memcheck_html_part in $(find "${html_output_dir}" -name "*${html_part_ext}" -type f | sort); do
-        cat "${memcheck_html_part}" >> "${output_index_file}"
+        generate_html_part_integration "${memcheck_html_part}" >> "${output_index_file}"
     done
 
     generate_html_footer >> "${output_index_file}"
