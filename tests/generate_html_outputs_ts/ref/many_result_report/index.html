@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="memcheck-cover.css">
+        <script type="text/javascript" src="memcheck-cover.js"></script>
+
+        <!-- Vagrind reports asynchronous loading parts -->
+        <script src="definitely_lost.memcheck.html.part" async="async"></script>
+        <script src="invalid_delete.memcheck.html.part" async="async"></script>
+        <script src="invalid_write.memcheck.html.part" async="async"></script>
+        <script src="mismatched_delete.memcheck.html.part" async="async"></script>
+        <script src="true.memcheck.html.part" async="async"></script>
+        <script src="uninitialized_value.memcheck.html.part" async="async"></script>
+    </head>
+    <body>
+        <div class="report_title">
+            Valgrind's memcheck report
+        </div>
+        <div class="report_separator"></div>
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result1');">
+            <span id="valgrind.result1.Arrow">&#9658;</span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> Command: definitely_lost
+        </div>
+        <div id="valgrind.result1.Report" class="memcheck_analysis_content hidden">
+            <span class="result_loader"></span><span class="result_loader_text"></span>
+        </div>
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result2');">
+            <span id="valgrind.result2.Arrow">&#9658;</span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> Command: invalid_delete
+        </div>
+        <div id="valgrind.result2.Report" class="memcheck_analysis_content hidden">
+            <span class="result_loader"></span><span class="result_loader_text"></span>
+        </div>
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result3');">
+            <span id="valgrind.result3.Arrow">&#9658;</span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> Command: invalid_write
+        </div>
+        <div id="valgrind.result3.Report" class="memcheck_analysis_content hidden">
+            <span class="result_loader"></span><span class="result_loader_text"></span>
+        </div>
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result4');">
+            <span id="valgrind.result4.Arrow">&#9658;</span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> Command: mismatched_delete
+        </div>
+        <div id="valgrind.result4.Report" class="memcheck_analysis_content hidden">
+            <span class="result_loader"></span><span class="result_loader_text"></span>
+        </div>
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result5');">
+            <span id="valgrind.result5.Arrow">&#9658;</span> <span class="brace_recenter">[</span><span class="analysis_pass_status">SUCCESS</span><span class="brace_recenter">]</span> Command: true can take useless params and still be one true self
+        </div>
+        <div id="valgrind.result5.Report" class="memcheck_analysis_content hidden">
+            <span class="result_loader"></span><span class="result_loader_text"></span>
+        </div>
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result6');">
+            <span id="valgrind.result6.Arrow">&#9658;</span> <span class="brace_recenter">[</span><span class="analysis_warning_status">WARNING</span><span class="brace_recenter">]</span> Command: uninitialized_value
+        </div>
+        <div id="valgrind.result6.Report" class="memcheck_analysis_content hidden">
+            <span class="result_loader"></span><span class="result_loader_text"></span>
+        </div>
+    </body>
+</html>
