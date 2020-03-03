@@ -22,27 +22,16 @@ list_test_cases_option "$1"
 ### TEST ###
 ############
 
-function generate_memcheck_report()
+function setup_test()
 {
     local binary_name=$1
     local test_out_dir=$(get_test_outdir)
-    local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
-    local test_bin_fullpath=$(get_test_bin_fullpath "${binary_name}")
-
-    local test_case_out_dir="${test_out_dir}${binary_name}/"
+    local testsuite_setup_out_dir=$(get_testsuite_setup_outdir)
 
     # Create output dir if needed
-    [ ! -d "${test_case_out_dir}" ] && mkdir -p "${test_case_out_dir}"
+    [ ! -d "${test_out_dir}${binary_name}/" ] && mkdir -p "${test_out_dir}${binary_name}/"
 
-    local test_std_output="${test_case_out_dir}${binary_name}.memcheck_gen.out"
-    local test_err_output="${test_case_out_dir}${binary_name}.memcheck_gen.err.out"
-
-    # Call the memcheck runner with it's output set to ${test_case_out_dir}${binary_name}.memcheck
-    $memcheck_runner -o${test_case_out_dir}${binary_name} -- ${test_bin_fullpath} > "${test_std_output}" 2> "${test_err_output}"
-
-    expect_file "${test_case_out_dir}${binary_name}.memcheck"
-
-    anonymize_memcheck_file "${test_case_out_dir}${binary_name}.memcheck"
+    cp "${testsuite_setup_out_dir}${binary_name}.memcheck" "${test_out_dir}${binary_name}/"
 }
 
 function test_error_report()
@@ -78,8 +67,8 @@ function test_error_report()
 # Init global
 error_occured=0
 
-# Prepare test
-generate_memcheck_report "${test_parameter}"
+# Setup test
+setup_test "${test_parameter}"
 
 # Run test
 test_error_report "${test_parameter}"

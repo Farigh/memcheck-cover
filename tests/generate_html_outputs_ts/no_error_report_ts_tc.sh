@@ -11,24 +11,15 @@ source "${test_utils_import}"
 ### TEST ###
 ############
 
-function generate_memcheck_report()
+function setup_test()
 {
     local test_out_dir=$(get_test_outdir)
-    local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
-    local no_error_bin="true can take useless params and still be one true self"
+    local testsuite_setup_out_dir=$(get_testsuite_setup_outdir)
 
     # Create output dir if needed
     [ ! -d "${test_out_dir}" ] && mkdir -p "${test_out_dir}"
 
-    local test_std_output="${test_out_dir}memcheck_gen.out"
-    local test_err_output="${test_out_dir}memcheck_gen.err.out"
-
-    # Call the memcheck runner with it's output set to ${test_out_dir}true.memcheck
-    $memcheck_runner -o${test_out_dir}true -- ${no_error_bin} > "${test_std_output}" 2> "${test_err_output}"
-
-    expect_file "${test_out_dir}true.memcheck"
-
-    anonymize_memcheck_file "${test_out_dir}true.memcheck"
+    cp "${testsuite_setup_out_dir}true.memcheck" "${test_out_dir}/"
 }
 
 function test_definitely_lost_report()
@@ -61,8 +52,8 @@ function test_definitely_lost_report()
 # Init global
 error_occured=0
 
-# Prepare test
-generate_memcheck_report
+# Setup test
+setup_test
 
 # Run test
 test_definitely_lost_report

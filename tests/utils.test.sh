@@ -232,5 +232,43 @@ function expect_exit_code()
     fi
 }
 
+###############################
+###    TEST-SUITE SETUP     ###
+###############################
+
+function get_testsuite_setup_outdir()
+{
+    local resolved_test_path=$(readlink -f $0)
+    local current_test_dir=$(dirname $resolved_test_path)
+    local test_base_dir=$(readlink -e "${current_test_dir}/../")
+
+    echo "${test_base_dir}/out/"
+}
+
+function testsuite_setup_begin()
+{
+    local current_testsuite=$(dirname $0)
+    local test_setup_outdir=$(get_testsuite_setup_outdir)
+
+    info "Setting up ${PURPLE}${current_testsuite%_ts}${RESET_FORMAT} test-suite..."
+
+    # Create out directory if needed
+    if [ ! -d "${test_setup_outdir}" ]; then
+        mkdir -p "${test_setup_outdir}"
+    fi
+}
+
+function testsuite_setup_end()
+{
+    local current_testsuite=$(dirname $0)
+    local test_setup_outdir=$(get_testsuite_setup_outdir)
+
+    # Produce an output file to prevent make from triggering the
+    # test-suite setup again if not needed
+    touch "${test_setup_outdir}${current_testsuite}.out"
+
+    info "Done"
+}
+
 # Source common utils from tools bin directory
 source "$(get_tools_bin_dir)/utils.common.sh"
