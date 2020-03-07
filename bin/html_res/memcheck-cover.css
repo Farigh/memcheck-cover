@@ -22,6 +22,113 @@
     background-color: #000084;
 }
 
+.report_summary {
+    margin-left: 20px;
+}
+
+/*************************\
+|**   Collapse/Expand   **|
+|**       Buttons       **|
+\*************************/
+
+.expand,
+.collapse {
+    position: relative;
+    display: inline-block;
+    padding-left: 6px;
+}
+
+.expandall,
+.collapseall {
+    position: relative;
+    padding: 2px;
+    margin: 6px;
+    display: inline-block;
+
+    /* Enable pointer on hover to inform the user it can be clicked */
+    cursor: pointer;
+}
+
+/* All sub-div are 10x10 squares, with white background */
+.expand > div,
+.collapse > div,
+.expandall > div,
+.collapseall > div {
+    width: 10px;
+    height: 10px;
+    background: #FFFFFF;
+    position: absolute;
+}
+
+/* All expand and 1st collapse sub-div have 1px light-blue solid border*/
+.expand > div,
+.collapse > div,
+.expandall > div,
+.collapseall div:nth-child(1) {
+    border: solid #8787ee 1px;
+}
+
+/* Other collapse sub-div have 1px blue dotted border*/
+.collapseall div:nth-child(2),
+.collapseall div:nth-child(3) {
+    border: dotted #0505ff 1px;
+}
+
+.expand div:nth-child(1),
+.collapse div:nth-child(1),
+.expandall div:nth-child(1),
+.collapseall div:nth-child(1) {
+    position: relative;
+    z-index: 12;
+}
+
+.expand div:nth-child(1):before,
+.expand div:nth-child(1):after,
+.collapse div:nth-child(1):before,
+.collapse div:nth-child(1):after,
+.expandall div:nth-child(1):before,
+.expandall div:nth-child(1):after,
+.collapseall div:nth-child(1):before,
+.collapseall div:nth-child(1):after {
+    content: "";
+    position: absolute;
+    background: #000000;
+}
+
+/* Draw the "minus" bar for both the collapse and expand 1st div */
+.expand div:nth-child(1):after,
+.collapse div:nth-child(1):after,
+.expandall div:nth-child(1):after,
+.collapseall div:nth-child(1):after {
+    left: 1px;
+    top: 40%;
+    height: 20%;
+    width: 80%;
+}
+
+/* Draw the vertical bar only for the expand 1st div */
+.expand div:nth-child(1):before,
+.expandall div:nth-child(1):before {
+    top: 1px;
+    left: 40%;
+    width: 20%;
+    height: 80%;
+}
+
+.expandall div:nth-child(2),
+.collapseall div:nth-child(2) {
+    z-index: 11;
+    top: 0px;
+    left: 4px;
+}
+
+.expandall div:nth-child(3),
+.collapseall div:nth-child(3) {
+    z-index: 10;
+    top: -2px;
+    left: 6px;
+}
+
 /*************************\
 |**   Analysis styles   **|
 \*************************/
@@ -77,7 +184,7 @@
   100% { transform: rotate(360deg); }
 }
 
-.result_loader_text:before{
+.result_loader_text:before {
     animation: head_anim 3s linear infinite;
     content: "";
     position: relative;

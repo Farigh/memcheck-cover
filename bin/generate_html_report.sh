@@ -100,11 +100,12 @@ function generate_html_part_integration()
     local memcheck_result_title=$(get_memcheck_analysis_title "${memcheck_result_html_part}")
 
     # Add analysis title
-    local visibility_arrow="<span id=\"${unique_analysis_id}.Arrow\">&#9658;</span>"
+    local expand_div='<div class="expand"><div></div></div>'
+    local visibility_icon="<span id=\"${unique_analysis_id}.VisibilityIcon\">${expand_div}</span>"
     local on_click_action="JavaScript: ToogleAnalysisResultVisibility('${unique_analysis_id}');"
 
     print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_title\" onclick=\"${on_click_action}\">"
-    print_with_indent "${content_indent}    " "${visibility_arrow} ${memcheck_result_title}"
+    print_with_indent "${content_indent}    " "${visibility_icon} ${memcheck_result_title}"
     print_with_indent "${content_indent}" "</div>"
 
     # Add analysis content
@@ -146,6 +147,23 @@ function generate_title()
     print_with_indent "${print_indent}" '<div class="report_separator"></div>'
 }
 
+function generate_result_summary()
+{
+    local print_indent=$1
+
+    # Open the report summary div tag
+    print_with_indent "${print_indent}" '<div class="report_summary">'
+
+    # Add expand all button
+    print_with_indent "${print_indent}    " '<div title="Expand all" onclick="JavaScript: ExpandAll();" class="expandall"><div></div><div></div><div></div></div>'
+
+    # Add collapse all button
+    print_with_indent "${print_indent}    " '<div title="Collapse all" onclick="JavaScript: CollapseAll();" class="collapseall"><div></div><div></div><div></div></div>'
+
+    # Close the report summary div tag
+    print_with_indent "${print_indent}" "</div>"
+}
+
 function resolve_placeholder()
 {
     local placeholder=$1
@@ -174,6 +192,9 @@ function generate_html_header()
 
     # Add report title part
     generate_title "        "
+
+    # Add result summary before details
+    generate_result_summary "        "
 }
 
 function generate_html_footer()

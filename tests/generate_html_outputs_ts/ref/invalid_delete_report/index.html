@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
     <head>
+        <meta charset="utf-8" />
         <link rel="stylesheet" type="text/css" href="memcheck-cover.css">
         <script type="text/javascript" src="memcheck-cover.js"></script>
 
@@ -12,8 +13,12 @@
             Valgrind's memcheck report
         </div>
         <div class="report_separator"></div>
+        <div class="report_summary">
+            <div title="Expand all" onclick="JavaScript: ExpandAll();" class="expandall"><div></div><div></div><div></div></div>
+            <div title="Collapse all" onclick="JavaScript: CollapseAll();" class="collapseall"><div></div><div></div><div></div></div>
+        </div>
         <div class="memcheck_analysis_title" onclick="JavaScript: ToogleAnalysisResultVisibility('valgrind.result1');">
-            <span id="valgrind.result1.Arrow">&#9658;</span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> Command: invalid_delete
+            <span id="valgrind.result1.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> Command: invalid_delete
         </div>
         <div id="valgrind.result1.Report" class="memcheck_analysis_content hidden">
             <span class="result_loader"></span><span class="result_loader_text"></span>

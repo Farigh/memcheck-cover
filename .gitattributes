@@ -1,3 +1,6 @@
+# Doc
+*.md             eol=lf
+
 # Scripts
 *.awk            eol=lf
 *.sh             eol=lf
