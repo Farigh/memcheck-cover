@@ -134,17 +134,23 @@ function generate_title()
 {
     local print_indent=$1
 
+    # Open the header div
+    print_with_indent "${print_indent}" '<div class="report_header">'
+
     # Open the title div tag
-    print_with_indent "${print_indent}" '<div class="report_title">'
+    print_with_indent "${print_indent}    " '<div class="report_title">'
 
     # Add title content
-    print_with_indent "${print_indent}    " "Valgrind's memcheck report"
+    print_with_indent "${print_indent}        " "Valgrind's memcheck report"
 
     # Close the title div tag
-    print_with_indent "${print_indent}" "</div>"
+    print_with_indent "${print_indent}    " "</div>"
 
     # Add a separator
-    print_with_indent "${print_indent}" '<div class="report_separator"></div>'
+    print_with_indent "${print_indent}    " '<div class="report_separator"></div>'
+
+    # Close the header div
+    print_with_indent "${print_indent}" '</div>'
 }
 
 function generate_result_summary()

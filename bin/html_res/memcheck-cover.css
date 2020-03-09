@@ -2,6 +2,11 @@
 |**    Header styles    **|
 \*************************/
 
+.report_header {
+    /* Prevent y scroll-bar recenter effect */
+    padding-left: calc(100vw - 100%);
+}
+
 /* HTML report title */
 .report_title {
     font-weight: bold;
