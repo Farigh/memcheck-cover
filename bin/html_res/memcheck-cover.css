@@ -204,6 +204,11 @@
     background-color: #F2F2FF;
 }
 
+/* Display the analysis reports type infos on hover */
+.memcheck_analysis_title:hover span:nth-last-child(1) {
+    display: inline-block;
+}
+
 /* Memcheck analysis content */
 .memcheck_analysis_content {
     margin-left: 25px;
@@ -277,6 +282,13 @@
     display: inline-block;
     text-align: center;
     color: #FF0000; /* Red */
+}
+
+/* The analysis reports type infos (Error, warning and info count) */
+.analysis_type_infos {
+    font-size: 0.7em;
+    font-weight: normal;
+    display: none;
 }
 
 /* Braces are a bit lower than other caracters, move it up */

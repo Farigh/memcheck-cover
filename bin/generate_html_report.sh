@@ -57,6 +57,13 @@ function get_memcheck_report_summary()
     awk -f "${awk_script_dir}get_memcheck_report_summary.awk" $(get_all_html_part_files_in_dir_ordered "${html_output_dir}")
 }
 
+function get_memcheck_report_type_infos()
+{
+    local memcheck_report_file=$1
+
+    awk -f "${awk_script_dir}get_memcheck_report_summary.awk" -v only_print_content_type_infos="true" "${memcheck_report_file}"
+}
+
 function get_memcheck_analysis_title()
 {
     local memcheck_report_file=$1
@@ -118,8 +125,12 @@ function generate_html_part_integration()
     local visibility_icon="<span id=\"${unique_analysis_id}.VisibilityIcon\">${expand_div}</span>"
     local on_click_action="JavaScript: ToogleAnalysisResultVisibility('${unique_analysis_id}');"
 
+    local memcheck_report_type_infos='<span class="analysis_type_infos">'
+    memcheck_report_type_infos+=$(get_memcheck_report_type_infos "${memcheck_result_html_part}")
+    memcheck_report_type_infos+="</span>"
+
     print_with_indent "${content_indent}" "<div class=\"memcheck_analysis_title\" onclick=\"${on_click_action}\">"
-    print_with_indent "${content_indent}    " "${visibility_icon} ${memcheck_result_title}"
+    print_with_indent "${content_indent}    " "${visibility_icon} ${memcheck_result_title} ${memcheck_report_type_infos}"
     print_with_indent "${content_indent}" "</div>"
 
     # Add analysis content

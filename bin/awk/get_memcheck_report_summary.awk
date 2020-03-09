@@ -1,4 +1,10 @@
 #! /bin/awk
+
+###
+# Input params:
+#   - only_print_content_type_infos (Optional) If set to "true", only the
+#                                   analysis report type infos are outputed
+
 BEGIN {
     total_error_count = 0
     total_warning_count = 0
@@ -97,10 +103,14 @@ END {
         summary_ratio_title = summary_ratio_title "Errors: " error_report_count
     }
 
-    print "<div class=\"report_summary_title\">Result summary:</div>"
-    print "<div class=\"report_summary_ratio\" title=\"" summary_ratio_title "\" style=\"" ratio_style "\">"
-    print "    Pass: " success_report_count " / " total_reports_count
-    print "</div>"
+    # Print report result
+    if (only_print_content_type_infos != "true")
+    {
+        print "<div class=\"report_summary_title\">Result summary:</div>"
+        print "<div class=\"report_summary_ratio\" title=\"" summary_ratio_title "\" style=\"" ratio_style "\">"
+        print "    Pass: " success_report_count " / " total_reports_count
+        print "</div>"
+    }
 
     if (total_error_count != 0)
     {
@@ -117,5 +127,8 @@ END {
         print "<div class=\"report_summary_infos\">Infos: " total_info_count "</div>"
     }
 
-    print "<br /><br />"
+    if (only_print_content_type_infos != "true")
+    {
+        print "<br /><br />"
+    }
 }
