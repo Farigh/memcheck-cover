@@ -29,6 +29,54 @@
 
 .report_summary {
     margin-left: 20px;
+    font-size: 1.1em;
+}
+
+.report_summary_title {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.report_summary_ratio,
+.report_summary_errors,
+.report_summary_warnings,
+.report_summary_infos {
+    text-align: center;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.report_summary_errors,
+.report_summary_warnings,
+.report_summary_infos {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.report_summary_ratio {
+    width: 300px;
+    color: #FFFFFF;
+
+    /* Add text shadow for improved readability (4 times to increase it's opacity) */
+    text-shadow:  1px  1px 3px #000000,
+                 -1px  1px 3px #000000,
+                  1px -1px 3px #000000,
+                 -1px -1px 3px #000000;
+}
+
+.report_summary_errors {
+    background-color: #FBD4D4; /* Light red */
+    color: #CE0000; /* Dark red */
+}
+
+.report_summary_warnings {
+    background-color: #FFECD8; /* Light orange */
+    color: #F08411; /* Dark orange */
+}
+
+.report_summary_infos {
+    background-color: #E8F0F9; /* Light blue */
+    color: #0966CA; /* Dark blue */
 }
 
 /*************************\
@@ -220,7 +268,7 @@
     width: 100px;
     display: inline-block;
     text-align: center;
-    color: #CC5500; /* Orange */
+    color: #F08411; /* Orange */
 }
 
 /* Valgrind's report has at least one error */
@@ -245,7 +293,7 @@
 
 /* Leak warnings */
 .warning_leak {
-    color: #CC5500; /* Orange */
+    color: #F08411; /* Orange */
     font-weight: bold;
 }
 

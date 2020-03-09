@@ -36,11 +36,25 @@ function print_usage()
     echo "                        where the HTML report will be produced."
 }
 
+function get_all_html_part_files_in_dir_ordered()
+{
+    local location_dir=$1
+
+    find "${location_dir}" -name "*${html_part_ext}" -type f | sort
+}
+
 function format_memcheck_report()
 {
     local report_to_format=$1
 
     awk -f "${awk_script_dir}format_memcheck_report.awk" "${report_to_format}"
+}
+
+function get_memcheck_report_summary()
+{
+    local html_output_dir=$1
+
+    awk -f "${awk_script_dir}get_memcheck_report_summary.awk" $(get_all_html_part_files_in_dir_ordered "${html_output_dir}")
 }
 
 function get_memcheck_analysis_title()
@@ -155,10 +169,15 @@ function generate_title()
 
 function generate_result_summary()
 {
-    local print_indent=$1
+    local html_output_dir=$1
+    local print_indent=$2
 
     # Open the report summary div tag
     print_with_indent "${print_indent}" '<div class="report_summary">'
+
+    # Add report summary infos
+    local report_summary_content=$(get_memcheck_report_summary "${html_output_dir}")
+    print_with_indent "${print_indent}    " "${report_summary_content}"
 
     # Add expand all button
     print_with_indent "${print_indent}    " '<div title="Expand all" onclick="JavaScript: ExpandAll();" class="expandall"><div></div><div></div><div></div></div>'
@@ -187,7 +206,7 @@ function generate_html_header()
 
     # Import html parts as asynchronous scripts
     local memcheck_html_part
-    for memcheck_html_part in $(find "${html_output_dir}" -name "*${html_part_ext}" -type f | sort); do
+    for memcheck_html_part in $(get_all_html_part_files_in_dir_ordered "${html_output_dir}"); do
         local memcheck_html_part_subpath=${memcheck_html_part:${html_output_dir_len}}
 
         # Add asynchronous scripts so the page content gets loaded first, then the report divs contents
@@ -200,7 +219,7 @@ function generate_html_header()
     generate_title "        "
 
     # Add result summary before details
-    generate_result_summary "        "
+    generate_result_summary "${html_output_dir}" "        "
 }
 
 function generate_html_footer()
@@ -240,7 +259,7 @@ function generate_html_report()
     generate_html_header "${html_output_dir}" > "${output_index_file}"
 
     local memcheck_html_part
-    for memcheck_html_part in $(find "${html_output_dir}" -name "*${html_part_ext}" -type f | sort); do
+    for memcheck_html_part in $(get_all_html_part_files_in_dir_ordered "${html_output_dir}"); do
         generate_html_part_integration "${memcheck_html_part}" >> "${output_index_file}"
     done
 
