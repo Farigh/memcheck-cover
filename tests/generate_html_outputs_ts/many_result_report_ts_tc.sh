@@ -19,9 +19,17 @@ function setup_test()
     local testsuite_setup_out_dir=$(get_testsuite_setup_outdir)
 
     # Create output dir if needed
-    [ ! -d "${test_out_dir}" ] && mkdir -p "${test_out_dir}"
+    [ ! -d "${test_out_dir}test/bin/" ] && mkdir -p "${test_out_dir}test/bin/"
 
-    cp "${testsuite_setup_out_dir}"*.memcheck "${test_out_dir}/"
+    cp "${testsuite_setup_out_dir}"*.memcheck "${test_out_dir}test/bin/"
+
+    # Move back the 'true' result to the root directory
+    mv "${test_out_dir}test/bin/true.memcheck" "${test_out_dir}"
+
+    # Move the 'invalid_delete' result to another sub-directory
+    [ ! -d "${test_out_dir}z/test/bin/" ] && mkdir -p "${test_out_dir}z/test/bin/"
+    mv "${test_out_dir}test/bin/invalid_delete.memcheck" "${test_out_dir}z/test/bin/"
+
 }
 
 function test_many_result_report()

@@ -36,11 +36,12 @@ function print_usage()
     echo "                        where the HTML report will be produced."
 }
 
-function get_all_html_part_files_in_dir_ordered()
+function get_files_with_ext_in_dir_ordered()
 {
-    local location_dir=$1
+    local file_extension=$1
+    local location_dir=$2
 
-    find "${location_dir}" -name "*${html_part_ext}" -type f | sort
+    find "${location_dir}" -name "*${file_extension}" -type f | sort | awk -f "${awk_script_dir}order_files_first.awk"
 }
 
 function format_memcheck_report()
@@ -54,7 +55,7 @@ function get_memcheck_report_summary()
 {
     local html_output_dir=$1
 
-    awk -f "${awk_script_dir}get_memcheck_report_summary.awk" $(get_all_html_part_files_in_dir_ordered "${html_output_dir}")
+    awk -f "${awk_script_dir}get_memcheck_report_summary.awk" $(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}")
 }
 
 function get_memcheck_report_type_infos()
@@ -64,11 +65,44 @@ function get_memcheck_report_type_infos()
     awk -f "${awk_script_dir}get_memcheck_report_summary.awk" -v only_print_content_type_infos="true" "${memcheck_report_file}"
 }
 
-function get_memcheck_analysis_title()
+function get_analysis_result_cmd()
 {
     local memcheck_report_file=$1
 
-    awk -f "${awk_script_dir}get_memcheck_analysis_title.awk" "${memcheck_report_file}"
+    awk "/==[0-9]*== Command: / { \
+             line_without_html_tag = gensub(/<.*>/, \"\", \"g\"); \
+             print \"Command: \" gensub(/.*== Command: (.*\\/)?(.*( .*)?)/, \"\\\\2\", 1, line_without_html_tag); \
+         }" "${memcheck_report_file}"
+}
+
+function get_memcheck_analysis_title()
+{
+    local unique_analysis_id=$1
+    local memcheck_report_file=$2
+
+    local analysis_result_status=$(awk -f "${awk_script_dir}get_memcheck_analysis_status.awk" "${memcheck_report_file}")
+    local analysis_result_cmd=$(get_analysis_result_cmd "${memcheck_report_file}")
+
+    local full_analysis_part_ext=".${memcheck_result_ext}${html_part_ext}"
+
+    # Trim output directory
+    local report_name="${memcheck_result_html_part:${#html_output_dir}}"
+
+    # Remove result ext
+    report_name="${report_name:0:-${#full_analysis_part_ext}}"
+
+    # Add spaces around /
+    report_name="${report_name//\// \/ }"
+
+    local result="${analysis_result_status} "
+    result+="<span id=\"${unique_analysis_id}.Title.Cmd\">"
+    result+="${analysis_result_cmd}"
+    result+="</span>"
+    result+="<span id=\"${unique_analysis_id}.Title.Name\" class=\"hidden\">"
+    result+="Analysis name: ${report_name}"
+    result+="</span>"
+
+    echo "${result}"
 }
 
 function generate_html_part()
@@ -111,19 +145,20 @@ function generate_html_part()
 
 function generate_html_part_integration()
 {
-    local memcheck_result_html_part=$1
+    local html_output_dir=$1
+    local memcheck_result_html_part=$2
 
     local content_indent="        "
     ((last_analysis_result_id++))
     local unique_analysis_id="${analysis_result_id_prefix}${last_analysis_result_id}"
 
     # Compute memcheck title
-    local memcheck_result_title=$(get_memcheck_analysis_title "${memcheck_result_html_part}")
+    local memcheck_result_title=$(get_memcheck_analysis_title "${unique_analysis_id}" "${memcheck_result_html_part}")
 
     # Add analysis title
     local expand_div='<div class="expand"><div></div></div>'
     local visibility_icon="<span id=\"${unique_analysis_id}.VisibilityIcon\">${expand_div}</span>"
-    local on_click_action="JavaScript: ToogleAnalysisResultVisibility('${unique_analysis_id}');"
+    local on_click_action="JavaScript: ToggleAnalysisResultVisibility('${unique_analysis_id}');"
 
     local memcheck_report_type_infos='<span class="analysis_type_infos">'
     memcheck_report_type_infos+=$(get_memcheck_report_type_infos "${memcheck_result_html_part}")
@@ -196,6 +231,11 @@ function generate_result_summary()
     # Add collapse all button
     print_with_indent "${print_indent}    " '<div title="Collapse all" onclick="JavaScript: CollapseAll();" class="collapseall"><div></div><div></div><div></div></div>'
 
+    # Add title type selection button (command or result file)
+    local toggle_title_type_button_content='<div onclick="JavaScript: ToggleAnalysisTitleType();" id="analysis_title_type_button"'
+    toggle_title_type_button_content+=' class="analysis_title_type_button">Toggle title: Analysis name</div>'
+    print_with_indent "${print_indent}    " "${toggle_title_type_button_content}"
+
     # Close the report summary div tag
     print_with_indent "${print_indent}" "</div>"
 }
@@ -217,7 +257,7 @@ function generate_html_header()
 
     # Import html parts as asynchronous scripts
     local memcheck_html_part
-    for memcheck_html_part in $(get_all_html_part_files_in_dir_ordered "${html_output_dir}"); do
+    for memcheck_html_part in $(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}"); do
         local memcheck_html_part_subpath=${memcheck_html_part:${html_output_dir_len}}
 
         # Add asynchronous scripts so the page content gets loaded first, then the report divs contents
@@ -248,7 +288,7 @@ function generate_html_report()
     # Process each memcheck result file
     local memcheck_count=0
     local memcheck_result
-    for memcheck_result in $(find "${memcheck_input_dir}" -name "*.${memcheck_result_ext}" -type f | sort); do
+    for memcheck_result in $(get_files_with_ext_in_dir_ordered ".${memcheck_result_ext}" "${memcheck_input_dir}"); do
 
         generate_html_part "${html_output_dir}" "${memcheck_input_dir_len}" "${memcheck_result}"
 
@@ -270,8 +310,8 @@ function generate_html_report()
     generate_html_header "${html_output_dir}" > "${output_index_file}"
 
     local memcheck_html_part
-    for memcheck_html_part in $(get_all_html_part_files_in_dir_ordered "${html_output_dir}"); do
-        generate_html_part_integration "${memcheck_html_part}" >> "${output_index_file}"
+    for memcheck_html_part in $(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}"); do
+        generate_html_part_integration "${html_output_dir}" "${memcheck_html_part}" >> "${output_index_file}"
     done
 
     generate_html_footer >> "${output_index_file}"

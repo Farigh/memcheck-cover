@@ -1,4 +1,4 @@
 out/
 
 # This test ref .html.part are auto-generated
-tests/generate_html_outputs_ts/ref/many_result_report/*.html.part
+tests/generate_html_outputs_ts/ref/many_result_report/**/*.html.part

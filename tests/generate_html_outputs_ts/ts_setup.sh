@@ -45,6 +45,9 @@ function generate_many_result_report_ref_report()
 
     echo -n "    > Generating ${CYAN}many_result_report${RESET_FORMAT} test ref report..."
 
+    [ ! -d "${test_ref_report_dir}test/bin/" ] && mkdir -p "${test_ref_report_dir}test/bin/"
+    [ ! -d "${test_ref_report_dir}z/test/bin/" ] && mkdir -p "${test_ref_report_dir}z/test/bin/"
+
     # Copy every other test's ref .html.part files
     local ref_path
     for ref_path in $(find ${current_full_path}/ref/ -mindepth 1 -maxdepth 1 -type d); do
@@ -53,14 +56,20 @@ function generate_many_result_report_ref_report()
             continue
         fi
 
-        cp "${ref_path}/"*.html.part "${test_ref_report_dir}"
+        cp "${ref_path}/"*.html.part "${test_ref_report_dir}test/bin/"
     done
+
+    # Move back the 'true' result to the root directory
+    mv "${test_ref_report_dir}test/bin/true.memcheck.html.part" "${test_ref_report_dir}"
+
+    # Move the 'invalid_delete' result to another sub-directory
+    mv "${test_ref_report_dir}test/bin/invalid_delete.memcheck.html.part" "${test_ref_report_dir}z/test/bin/"
 
     local last_report_id=0
 
     # Update the report id from those .html.part
     local html_part_file
-    for html_part_file in $(find ${test_ref_report_dir} -name "*.html.part" -type f | sort); do
+    for html_part_file in $(find ${test_ref_report_dir} -name "*.html.part" -type f | sort | awk -f "$(get_tools_bin_dir)/awk/order_files_first.awk"); do
         ((last_report_id++))
 
         awk -i inplace                                                                                                     \
