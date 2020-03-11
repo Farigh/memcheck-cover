@@ -24,7 +24,10 @@ function anonymize_memcheck_file()
     anonymize_sed_cmd+=";s/\(==1== Parent PID:\) [0-9]*/\1 1/g"
 
     # Remove host specific dir path
-    anonymize_sed_cmd+=";s# [^ ]*\(memcheck-cover/tests/bin/\)# \1#g"
+    local test_bin_dir=$(get_test_bin_dir)
+    anonymize_sed_cmd+=";s# ${test_bin_dir}# memcheck-cover/tests/bin#g"
+    local test_bin_dir_regex=$(echo "${test_bin_dir}" | sed 's/ /\\\\ /g')
+    anonymize_sed_cmd+=";s# ${test_bin_dir_regex}# memcheck-cover/tests/bin#g"
 
     # Remove host specific lib path and version
     anonymize_sed_cmd+=";s#(in \(.*/\)\?\(.*\.so\)\([.0-9]*\)\?)#(in a_host_lib.so)#g"
@@ -48,9 +51,9 @@ function anonymize_memcheck_file()
 
 function get_test_outdir()
 {
-    local resolved_test_path=$(readlink -f $0)
-    local current_test_dir=$(dirname $resolved_test_path)
-    local current_test_full_path=$(readlink -e $current_test_dir)
+    local resolved_test_path=$(readlink -f "$0")
+    local current_test_dir=$(dirname "${resolved_test_path}")
+    local current_test_full_path=$(readlink -e "${current_test_dir}")
 
     local current_test_name=$0
     current_test_name=${current_test_name##*/}
@@ -61,18 +64,18 @@ function get_test_outdir()
 
 function get_test_bin_dir()
 {
-    local resolved_test_path=$(readlink -f $0)
-    local current_test_dir=$(dirname $resolved_test_path)
-    local current_test_full_path=$(readlink -e $current_test_dir)
+    local resolved_test_path=$(readlink -f "$0")
+    local current_test_dir=$(dirname "${resolved_test_path}")
+    local current_test_full_path=$(readlink -e "${current_test_dir}")
 
     readlink -e "${current_test_full_path}/../bin"
 }
 
 function get_tools_bin_dir()
 {
-    local resolved_test_path=$(readlink -f $0)
-    local current_test_dir=$(dirname $resolved_test_path)
-    local current_test_full_path=$(readlink -e $current_test_dir)
+    local resolved_test_path=$(readlink -f "$0")
+    local current_test_dir=$(dirname "${resolved_test_path}")
+    local current_test_full_path=$(readlink -e "${current_test_dir}")
 
     readlink -e "${current_test_full_path}/../../bin"
 }
@@ -212,13 +215,10 @@ function expect_multiline_file_content()
     local file_to_check=$1
     local expected_multiline_content=$2
 
-    OLDIFS=$IFS
-    IFS=$'\n'
     local content_line
-    for content_line in $(echo -e "${expected_multiline_content}"); do
+    while read -r content_line; do
         expect_file_content "${file_to_check}" "${content_line}"
-    done
-    IFS=$OLDIFS
+    done < <(echo -e "${expected_multiline_content}")
 }
 
 function expect_exit_code()
@@ -238,8 +238,8 @@ function expect_exit_code()
 
 function get_testsuite_setup_outdir()
 {
-    local resolved_test_path=$(readlink -f $0)
-    local current_test_dir=$(dirname $resolved_test_path)
+    local resolved_test_path=$(readlink -f "$0")
+    local current_test_dir=$(dirname "${resolved_test_path}")
     local test_base_dir=$(readlink -e "${current_test_dir}/../")
 
     echo "${test_base_dir}/out/"
@@ -247,7 +247,7 @@ function get_testsuite_setup_outdir()
 
 function testsuite_setup_begin()
 {
-    local current_testsuite=$(dirname $0)
+    local current_testsuite=$(dirname "$0")
     local test_setup_outdir=$(get_testsuite_setup_outdir)
 
     info "Setting up ${PURPLE}${current_testsuite%_ts}${RESET_FORMAT} test-suite..."
@@ -260,7 +260,7 @@ function testsuite_setup_begin()
 
 function testsuite_setup_end()
 {
-    local current_testsuite=$(dirname $0)
+    local current_testsuite=$(dirname "$0")
     local test_setup_outdir=$(get_testsuite_setup_outdir)
 
     # Produce an output file to prevent make from triggering the

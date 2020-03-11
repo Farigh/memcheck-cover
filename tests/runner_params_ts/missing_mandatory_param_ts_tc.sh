@@ -1,8 +1,8 @@
 # ! /bin/bash
 
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 test_utils_import=$(readlink -e "${current_full_path}/../utils.test.sh")
 source "${test_utils_import}"
@@ -23,7 +23,7 @@ function test_missing_mandatory_param()
     local test_err_output="${test_out_dir}test.err.out"
 
     # Call the memcheck runner without the mandatory param
-    $memcheck_runner -- dummy test > "${test_std_output}" 2> "${test_err_output}"
+    "${memcheck_runner}" -- dummy test > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output

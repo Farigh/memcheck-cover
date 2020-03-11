@@ -1,8 +1,8 @@
 #! /bin/bash
 
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 bin_dir=$(readlink -e "${current_full_path}/../bin/")
 
@@ -25,7 +25,7 @@ parameterized_test_case_suffix="_ts_ptc.sh"
 
 function get_testsuite_dirs_ordered()
 {
-    find ${current_full_path} -mindepth 1 -maxdepth 1 -name "*${test_suite_suffix}" -type d | sort
+    find "${current_full_path}" -mindepth 1 -maxdepth 1 -name "*${test_suite_suffix}" -type d | sort
 }
 
 function get_test_runners_ordered()
@@ -180,13 +180,14 @@ function run_testsuite()
     echo "**** Beginning of suite ${PURPLE}${test_suite_name}${RESET_FORMAT}"
 
     # Run all tests in testsuite
-    for test_runner in $(get_test_runners_ordered "${testsuite_dir}"); do
+    local test_runner
+    while read -r test_runner; do
         if is_parameterized_test "${test_runner}"; then
             run_parameterized_test "${test_suite_name}" "${test_runner}"
         else
             run_single_test "${test_suite_name}" "${test_runner}"
         fi
-    done
+    done < <(get_test_runners_ordered "${testsuite_dir}")
 
     # Print suite summary
     echo "**** Results:"
@@ -224,14 +225,16 @@ function print_usage()
 function list_tests()
 {
     # For each test-suite
-    for testsuite_dir in $(get_testsuite_dirs_ordered); do
+    local testsuite_dir
+    while read -r testsuite_dir; do
         local test_suite_name=$(get_testsuite_name_from_dir "${testsuite_dir}")
 
         echo ""
         echo "   Test-suite ${PURPLE}${test_suite_name}${RESET_FORMAT}"
 
         # For each test
-        for test_runner in $(get_test_runners_ordered "${testsuite_dir}"); do
+        local test_runner
+        while read -r test_runner; do
             local test_name=$(get_test_name_from_script "${test_runner}")
 
             local test_name_only="${PURPLE}${test_suite_name}${RESET_FORMAT}:${CYAN}${test_name}${RESET_FORMAT}"
@@ -239,12 +242,13 @@ function list_tests()
             echo "      - Test ${test_name_only}"
             if is_parameterized_test "${test_runner}"; then
                 # For each test-case
+                local test_case
                 for test_case in $("${test_runner}" --list-cases); do
                     echo "         - Test-case ${test_name_only}${CYAN}(${RESET_FORMAT}${test_case}${CYAN})${RESET_FORMAT}"
                 done
             fi
-        done
-    done
+        done < <(get_test_runners_ordered "${testsuite_dir}")
+    done < <(get_testsuite_dirs_ordered)
 }
 
 function add_test_to_run()
@@ -352,9 +356,9 @@ fi
 ################################################
 
 # Run each directories tests
-for testsuite_dir in $(get_testsuite_dirs_ordered); do
+while read -r testsuite_dir; do
     run_testsuite "${testsuite_dir}"
-done
+done < <(get_testsuite_dirs_ordered)
 
 echo ""
 # Print overall summary

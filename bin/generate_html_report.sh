@@ -1,8 +1,8 @@
 #! /bin/bash
 
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 # Import common utils
 source "${current_full_path}/utils.common.sh"
@@ -55,7 +55,11 @@ function get_memcheck_report_summary()
 {
     local html_output_dir=$1
 
-    awk -f "${awk_script_dir}get_memcheck_report_summary.awk" $(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}")
+    local file
+    while read -r file; do
+        cat "${file}"
+    done < <(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}") | \
+    awk -f "${awk_script_dir}get_memcheck_report_summary.awk"
 }
 
 function get_memcheck_report_type_infos()
@@ -257,12 +261,12 @@ function generate_html_header()
 
     # Import html parts as asynchronous scripts
     local memcheck_html_part
-    for memcheck_html_part in $(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}"); do
+    while read -r memcheck_html_part; do
         local memcheck_html_part_subpath=${memcheck_html_part:${html_output_dir_len}}
 
         # Add asynchronous scripts so the page content gets loaded first, then the report divs contents
         imports_content+="\n        <script src=\"${memcheck_html_part_subpath}\" async=\"async\"></script>"
-    done
+    done < <(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}")
 
     cat "${html_res_dir}html_report.header" | resolve_placeholder "html_part_imports" "${imports_content}"
 
@@ -288,12 +292,12 @@ function generate_html_report()
     # Process each memcheck result file
     local memcheck_count=0
     local memcheck_result
-    for memcheck_result in $(get_files_with_ext_in_dir_ordered ".${memcheck_result_ext}" "${memcheck_input_dir}"); do
+    while read -r memcheck_result; do
 
         generate_html_part "${html_output_dir}" "${memcheck_input_dir_len}" "${memcheck_result}"
 
         ((memcheck_count++))
-    done
+    done < <(get_files_with_ext_in_dir_ordered ".${memcheck_result_ext}" "${memcheck_input_dir}")
 
     # Reset last_analysis_result_id so the id matches the async loading ones
     last_analysis_result_id=0
@@ -310,9 +314,9 @@ function generate_html_report()
     generate_html_header "${html_output_dir}" > "${output_index_file}"
 
     local memcheck_html_part
-    for memcheck_html_part in $(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}"); do
+    while read -r memcheck_html_part; do
         generate_html_part_integration "${html_output_dir}" "${memcheck_html_part}" >> "${output_index_file}"
-    done
+    done < <(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}")
 
     generate_html_footer >> "${output_index_file}"
 

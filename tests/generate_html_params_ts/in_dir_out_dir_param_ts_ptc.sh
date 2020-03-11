@@ -2,9 +2,9 @@
 
 test_parameter=$1
 
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 test_utils_import=$(readlink -e "${current_full_path}/../utils.test.sh")
 source "${test_utils_import}"
@@ -61,16 +61,16 @@ function test_in_dir_out_dir_param()
 
     # Create a dummy memcheck file
     local first_memcheck_content="1st dummy file\nand a 2nd line for it"
-    echo -e "${first_memcheck_content}" > ${test_out_dir}dummy.memcheck
+    echo -e "${first_memcheck_content}" > "${test_out_dir}dummy.memcheck"
 
     # Create a 2nd dummy memcheck file
     local second_memcheck_content="2nd dummy file\nand a 2nd line for it too"
     [ ! -d "${test_out_dir}subdir/" ] && mkdir "${test_out_dir}subdir/"
-    echo -e "${second_memcheck_content}" > ${test_out_dir}subdir/dummy2.memcheck
+    echo -e "${second_memcheck_content}" > "${test_out_dir}subdir/dummy2.memcheck"
 
     # Call the html report generator with the ${test_out_dir} as input directory
     # and the ${report_out_dir} as output directory
-    $generate_html_report ${in_dir_param}${test_out_dir} ${out_dir_param}${report_out_dir} > "${test_std_output}" 2> "${test_err_output}"
+    "${generate_html_report}" ${in_dir_param}"${test_out_dir}" ${out_dir_param}"${report_out_dir}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output

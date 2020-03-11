@@ -1,8 +1,8 @@
 #! /bin/bash
 
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 # Import common utils
 source "${current_full_path}/utils.common.sh"

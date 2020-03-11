@@ -2,9 +2,9 @@
 
 test_parameter=$1
 
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 test_utils_import=$(readlink -e "${current_full_path}/../utils.test.sh")
 source "${test_utils_import}"
@@ -43,7 +43,7 @@ function test_output_param()
 
     # Call the memcheck runner with it's output set to ${test_output_prefix}/test.memcheck
     local output_file_prefix="${test_output_prefix}/test"
-    $memcheck_runner ${param_to_test}${output_file_prefix} -- ${test_cmd} > "${test_std_output}" 2> "${test_err_output}"
+    "${memcheck_runner}" ${param_to_test}"${output_file_prefix}" -- ${test_cmd} > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output

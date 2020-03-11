@@ -2,9 +2,9 @@
 
 test_parameter=$1
 
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 test_utils_import=$(readlink -e "${current_full_path}/../utils.test.sh")
 source "${test_utils_import}"
@@ -58,7 +58,7 @@ function test_missing_mandatory_param()
     fi
 
     # Call the html report generator with the other mandatory option only
-    $generate_html_report ${other_mandatory_param} ${test_out_dir} > "${test_std_output}" 2> "${test_err_output}"
+    "${generate_html_report}" ${other_mandatory_param} "${test_out_dir}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output

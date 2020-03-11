@@ -7,7 +7,7 @@ CXXFLAGS ?= -std=c++11 -g3 -ggdb3 -Og
 .PRECIOUS: out/%
 
 project_SRC := main.cpp
-project_BIN := $(shell basename $(CURDIR))
+project_BIN := $(shell basename "$(CURDIR)")
 
 all: $(addprefix out/,$(project_BIN))
 

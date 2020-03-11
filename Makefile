@@ -1,6 +1,8 @@
 # Don't print executed commands
 .SILENT:
 
+all: test_compile
+
 test_compile:
 	$(MAKE) -C tests bin_compile
 

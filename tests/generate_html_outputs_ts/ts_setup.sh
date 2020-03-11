@@ -1,8 +1,7 @@
 #! /bin/bash
-
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 test_utils_import=$(readlink -e "${current_full_path}/../utils.test.sh")
 source "${test_utils_import}"
@@ -14,11 +13,12 @@ function generate_memcheck_report()
     local binary_name=$1
     local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
 
-    local test_bin_fullpath=$binary_name
-    if [ "${test_bin_fullpath}" == "true" ]; then
-        test_bin_fullpath="true can take useless params and still be one true self"
+    local test_bin_fullpath
+    if [ "${binary_name}" == "true" ]; then
+        test_bin_fullpath=(true can take useless params and still be one true self)
     else
-        test_bin_fullpath=$(get_test_bin_fullpath "${binary_name}")
+        local non_escaped_test_bin_fullpath=$(get_test_bin_fullpath "${binary_name}")
+        test_bin_fullpath=("${non_escaped_test_bin_fullpath}")
     fi
 
     echo -n "    > Generating memcheck report for '${binary_name}'..."
@@ -30,7 +30,7 @@ function generate_memcheck_report()
     local test_err_output="${test_out_dir}${binary_name}.memcheck_gen.err.out"
 
     # Call the memcheck runner with it's output set to ${test_out_dir}${binary_name}.memcheck
-    $memcheck_runner -o${test_out_dir}${binary_name} -- ${test_bin_fullpath} > "${test_std_output}" 2> "${test_err_output}"
+    "${memcheck_runner}" -o"${test_out_dir}${binary_name}" -- "${test_bin_fullpath[@]}" > "${test_std_output}" 2> "${test_err_output}"
 
     expect_file "${test_out_dir}${binary_name}.memcheck"
 
@@ -50,14 +50,14 @@ function generate_many_result_report_ref_report()
 
     # Copy every other test's ref .html.part files
     local ref_path
-    for ref_path in $(find ${current_full_path}/ref/ -mindepth 1 -maxdepth 1 -type d); do
+    while read -r ref_path; do
         # Skip current test ref directory
         if [[ "${ref_path}" == *"many_result_report" ]]; then
             continue
         fi
 
         cp "${ref_path}/"*.html.part "${test_ref_report_dir}test/bin/"
-    done
+    done < <(find "${current_full_path}/ref/" -mindepth 1 -maxdepth 1 -type d)
 
     # Move back the 'true' result to the root directory
     mv "${test_ref_report_dir}test/bin/true.memcheck.html.part" "${test_ref_report_dir}"
@@ -69,7 +69,7 @@ function generate_many_result_report_ref_report()
 
     # Update the report id from those .html.part
     local html_part_file
-    for html_part_file in $(find ${test_ref_report_dir} -name "*.html.part" -type f | sort | awk -f "$(get_tools_bin_dir)/awk/order_files_first.awk"); do
+    while read -r html_part_file; do
         ((last_report_id++))
 
         awk -i inplace                                                                                                     \
@@ -83,7 +83,7 @@ function generate_many_result_report_ref_report()
                 };                                                                                                         \
                 print output;                                                                                              \
             }" "${html_part_file}"
-    done
+    done < <(find "${test_ref_report_dir}" -name "*.html.part" -type f | sort | awk -f "$(get_tools_bin_dir)/awk/order_files_first.awk")
 
     echo "Done"
 }
@@ -91,10 +91,11 @@ function generate_many_result_report_ref_report()
 testsuite_setup_begin
 
     # Generate test bins memcheck reports
-    for binary_path in $(find $(get_test_bin_dir) -mindepth 1 -maxdepth 1 -type d); do
+    test_bin_dir=$(get_test_bin_dir)
+    while read -r binary_path; do
         binary_name=$(basename "${binary_path}")
         generate_memcheck_report "${binary_name}"
-    done
+    done < <(find "${test_bin_dir}" -mindepth 1 -maxdepth 1 -type d)
 
     # Generate one with true (so we have a successful representative output)
     generate_memcheck_report "true"

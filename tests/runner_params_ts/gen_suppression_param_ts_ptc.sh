@@ -2,9 +2,9 @@
 
 test_parameter=$1
 
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 test_utils_import=$(readlink -e "${current_full_path}/../utils.test.sh")
 source "${test_utils_import}"
@@ -38,7 +38,7 @@ function test_suppression_param()
 
     # Call the memcheck runner with it's output set to ${test_output_prefix}.memcheck
     # and the selected form of suppression generation param
-    $memcheck_runner -o${test_output_prefix} ${param_to_test} -- ${definitely_lost_bin} > "${test_std_output}" 2> "${test_err_output}"
+    "${memcheck_runner}" -o"${test_output_prefix}" ${param_to_test} -- "${definitely_lost_bin}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output
@@ -49,7 +49,8 @@ function test_suppression_param()
     local expected_file="${test_output_prefix}.memcheck"
     expect_file "${expected_file}"
     if [ $error_occured -eq 0 ]; then
-        expect_file_content "${expected_file}" "== Command: ${definitely_lost_bin}"
+        local definitely_lost_bin_escaped=$(echo "${definitely_lost_bin}" | sed 's/ /\\ /g')
+        expect_file_content "${expected_file}" "== Command: ${definitely_lost_bin_escaped}"
 
         # Expect suppression generation
         expect_file_content "${expected_file}" "   <insert_a_suppression_name_here>"

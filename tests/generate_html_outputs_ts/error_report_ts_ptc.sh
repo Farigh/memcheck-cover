@@ -2,19 +2,19 @@
 
 test_parameter=$1
 
-resolved_script_path=$(readlink -f $0)
-current_script_dir=$(dirname $resolved_script_path)
-current_full_path=$(readlink -e $current_script_dir)
+resolved_script_path=$(readlink -f "$0")
+current_script_dir=$(dirname "${resolved_script_path}")
+current_full_path=$(readlink -e "${current_script_dir}")
 
 test_utils_import=$(readlink -e "${current_full_path}/../utils.test.sh")
 source "${test_utils_import}"
 
 # List all available test bin as test-cases
 test_cases=()
-for binary_path in $(find $(get_test_bin_dir) -mindepth 1 -maxdepth 1 -type d); do
+while read -r binary_path; do
     binary_name=$(basename "${binary_path}")
     test_cases+=("${binary_name}")
-done
+done < <(find "$(get_test_bin_dir)" -mindepth 1 -maxdepth 1 -type d)
 
 list_test_cases_option "$1"
 
@@ -50,7 +50,7 @@ function test_error_report()
 
     # Call the html report generator with the ${test_case_out_dir} as input directory
     # and the ${report_out_dir} as output directory
-    $generate_html_report -i ${test_case_out_dir} -o ${report_out_dir} > "${test_std_output}" 2> "${test_err_output}"
+    "${generate_html_report}" -i "${test_case_out_dir}" -o "${report_out_dir}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output
