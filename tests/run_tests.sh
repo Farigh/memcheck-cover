@@ -110,7 +110,7 @@ function common_run_test()
 
     # Is test skipped ?
     if is_test_skipped "${test_full_name}"; then
-        echo "** [${test_skipped_status}] ${to_print_common}"
+        [ $display_skipped_tests -eq 1 ] && echo "** [${test_skipped_status}] ${to_print_common}"
 
         # Test skipped
         ((local_test_skipped++))
@@ -190,14 +190,15 @@ function run_testsuite()
     done < <(get_test_runners_ordered "${testsuite_dir}")
 
     # Print suite summary
+    local local_total_test=$((local_test_passed + local_test_failed + local_test_skipped))
     echo "**** Results:"
-    echo "**    Suite test count: $((local_test_passed + local_test_failed + local_test_skipped))"
+    echo "**    Suite test count: ${local_total_test}"
     echo "** Suite success count: ${local_test_passed}"
     echo "** Suite failure count: ${local_test_failed}"
     echo "** Suite skipped count: ${local_test_skipped}"
     echo "****"
     local suite_result_status=""
-    if is_test_skipped "${test_suite_name}" || [ $((local_test_passed + local_test_failed)) -eq 0 ]; then
+    if [ $local_total_test -eq $local_test_skipped ]; then
         suite_result_status=$test_skipped_status
     else
         suite_result_status=$(get_test_result_status $local_test_failed)
@@ -215,6 +216,7 @@ function print_usage()
     echo "  -l|--list            Lists all available test-suites, tests and test-cases"
     echo "  -r|--run-test=TEST   TEST can either be a test-suite, a test or a test-case."
     echo "                       Available TESTs can be obtained using the -l parameter."
+    echo "  -s|--hide-skipped    If used, the skipped tests are not outputed to console."
     echo ""
     echo "${CYAN}Note:${RESET_FORMAT} - Adding a test-suite using the -r parameter will add all tests and"
     echo "        test-cases available in the test-suite."
@@ -283,8 +285,10 @@ function add_test_to_run()
 ###                  GETOPT                  ###
 ################################################
 
+display_skipped_tests=1
+
 declare -A tests_to_run
-while getopts ":hlr:-:" parsed_option; do
+while getopts ":hlr:s-:" parsed_option; do
     case "${parsed_option}" in
         # Long options
         -)
@@ -297,6 +301,9 @@ while getopts ":hlr:-:" parsed_option; do
                 run-test=*)
                     check_param "--run-test" "${OPTARG#*=}"
                     add_test_to_run "${OPTARG#*=}"
+                ;;
+                hide-skipped)
+                    display_skipped_tests=0
                 ;;
                 help)
                     print_usage
@@ -325,6 +332,9 @@ while getopts ":hlr:-:" parsed_option; do
         r)
             check_param "-r" "${OPTARG}"
             add_test_to_run "${OPTARG}"
+        ;;
+        s)
+            display_skipped_tests=0
         ;;
         :)
             error "Option '-${OPTARG}' requires a value"
