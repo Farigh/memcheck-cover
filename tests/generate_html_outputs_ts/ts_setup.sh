@@ -88,6 +88,25 @@ function generate_many_result_report_ref_report()
     echo "Done"
 }
 
+function generate_criticality_config()
+{
+    local all_criticality_level=$1
+    local generate_html_report="$(get_tools_bin_dir)/generate_html_report.sh"
+
+    echo -n "    > Generating all ${all_criticality_level} criticality config file..."
+
+    # Generate default config file
+    local result_config_file="${test_out_dir}memcheck-cover.${all_criticality_level}.config"
+    local useless_result=$(cd "${test_out_dir}" && "${generate_html_report}" -g)
+    mv "${test_out_dir}memcheck-cover.config" "${result_config_file}"
+
+    # Replace all config values with the selected one
+    # (uppercase the 1st char to check the case insensitivity works properly)
+    sed -i "s/=\"[^\"]*\"/=\"${all_criticality_level^}\"/g" "${result_config_file}"
+
+    echo "Done"
+}
+
 testsuite_setup_begin
 
     # Generate test bins memcheck reports
@@ -96,6 +115,9 @@ testsuite_setup_begin
         binary_name=$(basename "${binary_path}")
         generate_memcheck_report "${binary_name}"
     done < <(find "${test_bin_dir}" -mindepth 1 -maxdepth 1 -type d)
+
+    generate_criticality_config "error"
+    generate_criticality_config "warning"
 
     # Generate one with true (so we have a successful representative output)
     generate_memcheck_report "true"

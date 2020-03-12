@@ -16,6 +16,14 @@ html_res_dir="${current_full_path}/html_res/"
 last_analysis_result_id=0
 analysis_result_id_prefix="valgrind.result"
 
+default_config_output="memcheck-cover.config"
+
+declare -A memcheck_violation_criticality
+declare -A memcheck_summary_criticality
+declare -A memcheck_violation_criticality_example
+declare -A memcheck_summary_criticality_example
+declare -a awk_memcheck_format_opt
+
 ################################################
 ###                 FUNCTIONS                ###
 ################################################
@@ -28,12 +36,193 @@ function print_usage()
     echo ""
     echo "Options:"
     echo "  -h|--help             Displays this help message."
+    echo "  -g|--generate-config  Generates a '${default_config_output}' file in the current"
+    echo "                        directory, containing the default configuration values."
+    echo ""
+    echo "  -c|--config=FILE      Loads the configuration from FILE. A sample configuration"
+    echo "                        file can be generated using the --generate-config option."
+    echo "                        If this option is not set, or values are missing in FILE,"
+    echo "                        the default values will be used."
     echo "  -i|--input-dir=DIR    [${RED}MANDATORY${RESET_FORMAT}] Defines the input directory"
     echo "                        where the .${memcheck_result_ext} files are."
     echo "                        The files will be searched in directories"
     echo "                        recursivly."
     echo "  -o|--output-dir=DIR   [${RED}MANDATORY${RESET_FORMAT}] Defines the output directory"
     echo "                        where the HTML report will be produced."
+}
+
+function init_criticality_levels()
+{
+    ################################
+    ##  Default error violations  ##
+    ################################
+
+    # Definitely lost
+    memcheck_violation_criticality['definitely_lost']="error"
+    memcheck_violation_criticality_example['definitely_lost']="4 bytes in 1 blocks are definitely lost in loss record 1 of 1"
+
+    # Invalid write
+    memcheck_violation_criticality['invalid_write']="error"
+    memcheck_violation_criticality_example['invalid_write']="Invalid write of size 4"
+
+    ################################
+    ## Default warning violations ##
+    ################################
+
+    # Invalid dealloc
+    memcheck_violation_criticality['dealloc_invalid']="warning"
+    memcheck_violation_criticality_example['dealloc_invalid']="Invalid free() / delete / delete[] / realloc()"
+
+    # Mismatched dealloc
+    memcheck_violation_criticality['dealloc_mismatched']="warning"
+    memcheck_violation_criticality_example['dealloc_mismatched']="Mismatched free() / delete / delete []"
+
+    # Uninitialized value conditionnal jump or move
+    memcheck_violation_criticality['uninitialized_value_jump_move']="warning"
+    memcheck_violation_criticality_example['uninitialized_value_jump_move']="Conditional jump or move depends on uninitialised value(s)"
+
+    # Uninitialized value use
+    memcheck_violation_criticality['uninitialized_value_use']="warning"
+    memcheck_violation_criticality_example['uninitialized_value_use']="Use of uninitialised value of size 8"
+
+    ################################
+    ##    Default leak summary    ##
+    ################################
+
+    # Definitely lost
+    memcheck_summary_criticality['definitely_lost']="error"
+    memcheck_summary_criticality_example['definitely_lost']="definitely lost: 4 bytes in 1 blocks"
+
+    # Indirectly lost
+    memcheck_summary_criticality['indirectly_lost']="error"
+    memcheck_summary_criticality_example['indirectly_lost']="indirectly lost: 4 bytes in 1 blocks"
+
+    # Possibly lost
+    memcheck_summary_criticality['possibly_lost']="error"
+    memcheck_summary_criticality_example['possibly_lost']="possibly lost: 4 bytes in 1 blocks"
+
+    # Still reachable
+    memcheck_summary_criticality['still_reachable']="error"
+    memcheck_summary_criticality_example['still_reachable']="still reachable: 4 bytes in 1 blocks"
+}
+
+function load_configuration()
+{
+    # Initialise default values
+    init_criticality_levels
+
+    # Load provided config, if any
+    if [ "${config_file}" != "" ]; then
+
+        # Ensure config file exists
+        if [ ! -f "${config_file}" ]; then
+            error "Configuration file '${config_file}' not found."
+            exit 1
+        fi
+
+        declare -A memcheck_valid_violation_criticality_keys
+        declare -A memcheck_valid_summary_criticality_keys
+
+        # List all valid keys from the default values
+        local valid_key
+        for valid_key in "${!memcheck_violation_criticality[@]}"; do
+            memcheck_valid_violation_criticality_keys[$valid_key]="valid"
+        done
+        for valid_key in "${!memcheck_summary_criticality[@]}"; do
+            memcheck_valid_summary_criticality_keys[$valid_key]="valid"
+        done
+
+        info "Loading configuration from file '${config_file}'..."
+
+        # Ensure the file can be sourced safely
+        local try_source=$(source "${config_file}" 2>&1)
+        if [ "${try_source}" != "" ]; then
+            error "Loading configuration file '${config_file}' failed with errors:"
+            echo "${try_source}"
+            exit 1
+        fi
+
+        # Source the configuration
+        source "${config_file}"
+
+        local config_error_occured=0
+
+        # Ensure the provided key from the configuration are valid
+        local key_to_check
+        for key_to_check in "${!memcheck_violation_criticality[@]}"; do
+            # Ensure the key is valid
+            if [ "${memcheck_valid_violation_criticality_keys[${key_to_check}]}" == "" ]; then
+                error "Invalid configuration parameter: memcheck_violation_criticality['${key_to_check}']"
+                ((++config_error_occured))
+            # Ensure the value is valid
+            elif [ "${memcheck_violation_criticality[${key_to_check}],,}" != "error" ] \
+              && [ "${memcheck_violation_criticality[${key_to_check}],,}" != "warning" ]; then
+                error "Invalid configuration value '${memcheck_violation_criticality[${key_to_check}]}' for parameter: memcheck_violation_criticality['${key_to_check}']"
+                ((++config_error_occured))
+            fi
+        done
+        for key_to_check in "${!memcheck_summary_criticality[@]}"; do
+            # Ensure the key is valid
+            if [ "${memcheck_valid_summary_criticality_keys[${key_to_check}]}" == "" ]; then
+                error "Invalid configuration parameter: memcheck_summary_criticality['${key_to_check}']"
+                ((++config_error_occured))
+            # Ensure the value is valid
+            elif [ "${memcheck_summary_criticality[${key_to_check}],,}" != "error" ] \
+              && [ "${memcheck_summary_criticality[${key_to_check}],,}" != "warning" ]; then
+                error "Invalid configuration value '${memcheck_summary_criticality[${key_to_check}]}' for parameter: memcheck_summary_criticality['${key_to_check}']"
+                ((++config_error_occured))
+            fi
+        done
+
+        unset memcheck_valid_violation_criticality_keys
+        unset memcheck_valid_summary_criticality_keys
+
+        if [ $config_error_occured -ne 0 ]; then
+            exit 1
+        fi
+    fi
+}
+
+function generate_default_config()
+{
+    # Initialise default values
+    init_criticality_levels
+
+    info "Generating configuration with default values: '${default_config_output}'..."
+
+    # Add information header
+    echo "# Memcheck-cover configuration values." > $default_config_output
+    echo "# Each violation criticality can be set to one of those values:" >> $default_config_output
+    echo "#    - warning" >> $default_config_output
+    echo "#    - error" >> $default_config_output
+    echo "# Case does not matter." >> $default_config_output
+
+    # Add each default values, alphabetically ordered, with example comment
+    local opt
+    for opt in $(echo "${!memcheck_violation_criticality[@]}" | xargs -n1 | sort -g | xargs); do
+        echo "" >> $default_config_output
+        echo "# Criticality for the following violations type:" >> $default_config_output
+        echo "#    ${memcheck_violation_criticality_example[${opt}]}" >> $default_config_output
+        echo "memcheck_violation_criticality['${opt}']=\"${memcheck_violation_criticality[${opt}]}\"" >> $default_config_output
+    done
+
+    # Add leak summary header
+    echo "" >> $default_config_output
+    echo "" >> $default_config_output
+    echo "# The following configuration values changes the level of valgrind's report" >> $default_config_output
+    echo "# LEAK SUMMARY section." >> $default_config_output
+
+    # Add each default values, alphabetically ordered, with example comment
+    local opt
+    for opt in $(echo "${!memcheck_summary_criticality[@]}" | xargs -n1 | sort -g | xargs); do
+        echo "" >> $default_config_output
+        echo "# Criticality for the following leak summary type: ${memcheck_violation_criticality_example[${opt}]}" >> $default_config_output
+        echo "memcheck_summary_criticality['${opt}']=\"${memcheck_summary_criticality[${opt}]}\"" >> $default_config_output
+    done
+
+    echo "Done. The generated configuration can be modified and then loaded"
+    echo "by the current script using the --config option."
+    echo "If a violation is not set, the default value will be used."
 }
 
 function get_files_with_ext_in_dir_ordered()
@@ -48,7 +237,7 @@ function format_memcheck_report()
 {
     local report_to_format=$1
 
-    awk -f "${awk_script_dir}format_memcheck_report.awk" "${report_to_format}"
+    awk -f "${awk_script_dir}format_memcheck_report.awk"  "${awk_memcheck_format_opt[@]}" "${report_to_format}"
 }
 
 function get_memcheck_report_summary()
@@ -287,6 +476,17 @@ function generate_html_report()
     local memcheck_input_dir=$1
     local html_output_dir=$2
 
+    # Populate awk "format memcheck report" script options
+    local opt
+    for opt in "${!memcheck_violation_criticality[@]}"; do
+        # Add violation criticality config, lower cased
+        awk_memcheck_format_opt+=(-v ${opt}_criticality="${memcheck_violation_criticality[${opt}],,}")
+    done
+    for opt in "${!memcheck_summary_criticality[@]}"; do
+        # Add violation criticality config, lower cased
+        awk_memcheck_format_opt+=(-v ${opt}_summary_criticality="${memcheck_summary_criticality[${opt}],,}")
+    done
+
     local memcheck_input_dir_len=${#memcheck_input_dir}
 
     # Process each memcheck result file
@@ -331,13 +531,22 @@ function generate_html_report()
 ###                  GETOPT                  ###
 ################################################
 
+config_file=""
 html_output_dir=""
 memcheck_input_dir=""
-while getopts ":hi:o:-:" parsed_option; do
+while getopts ":c:ghi:o:-:" parsed_option; do
     case "${parsed_option}" in
         # Long options
         -)
             case "${OPTARG}" in
+                config=*)
+                    config_file=${OPTARG#*=}
+                    check_param "--config" "${config_file}"
+                ;;
+                config)
+                    config_file="${!OPTIND}"; ((OPTIND++))
+                    check_param "--config" "${config_file}"
+                ;;
                 input-dir)
                     memcheck_input_dir="${!OPTIND}"; ((OPTIND++))
                     check_param "--input-dir" "${memcheck_input_dir}"
@@ -355,6 +564,10 @@ while getopts ":hi:o:-:" parsed_option; do
                     check_param "--output-dir" "${html_output_dir}"
                     shift
                 ;;
+                generate-config)
+                    generate_default_config
+                    exit 0
+                ;;
                 help)
                     print_usage
                     exit 0
@@ -367,6 +580,10 @@ while getopts ":hi:o:-:" parsed_option; do
             esac
         ;;
         # Short options
+        c)
+            config_file="${OPTARG}"
+            check_param "-c" "${config_file}"
+        ;;
         i)
             memcheck_input_dir="${OPTARG}"
             check_param "-i" "${memcheck_input_dir}"
@@ -374,6 +591,10 @@ while getopts ":hi:o:-:" parsed_option; do
         o)
             html_output_dir="${OPTARG}"
             check_param "-o" "${html_output_dir}"
+        ;;
+        g)
+            generate_default_config
+            exit 0
         ;;
         h)
             print_usage
@@ -418,5 +639,7 @@ fi
 info "Input directory set to: '${memcheck_input_dir}'"
 
 create_outdir_if_necessary "${html_output_dir}"
+
+load_configuration
 
 generate_html_report "${memcheck_input_dir}" "${html_output_dir}"

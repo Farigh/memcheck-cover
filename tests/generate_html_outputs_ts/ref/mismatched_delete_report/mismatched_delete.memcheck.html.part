@@ -7,7 +7,7 @@ async function updateContentOnceLoaded1()
             ==1== Command: memcheck-cover/tests/bin/mismatched_delete/out/mismatched_delete<br />
             ==1== Parent PID: 1<br />
             ==1== <br />
-            ==1== <span class="error_leak">Mismatched free() / delete / delete []</span><br />
+            ==1== <span class="warning_leak">Mismatched free() / delete / delete []</span><br />
             ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in a_host_lib.so)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_delete_int_array(int*) (<span class="leak_file_info">main.cpp:9</span>)<br />
             ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:17</span>)<br />
