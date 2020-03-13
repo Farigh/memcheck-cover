@@ -32,6 +32,9 @@ function anonymize_memcheck_file()
     # Remove host specific lib path and version
     anonymize_sed_cmd+=";s#(in \(.*/\)\?\(.*\.so\)\([.0-9]*\)\?)#(in a_host_lib.so)#g"
 
+    # Remove glibc version specific addr (templates from headers)
+    anonymize_sed_cmd+=";s#(unique_ptr\.h:[0-9]*)#(unique_ptr\.h:42)#g"
+
     # Replace all backtrace adresses
     anonymize_sed_cmd+=";s/\( \(at\|by\) 0x\)[A-Fa-f0-9]*:/\110101042:/g"
 

@@ -16,7 +16,7 @@ while read -r binary_path; do
     test_cases+=("${binary_name},default_criticality")
     test_cases+=("${binary_name},all_warnings_criticality")
     test_cases+=("${binary_name},all_errors_criticality")
-done < <(find "$(get_test_bin_dir)" -mindepth 1 -maxdepth 1 -type d)
+done < <(find "$(get_test_bin_dir)" -mindepth 1 -maxdepth 1 -type d | sort)
 
 list_test_cases_option "$1"
 

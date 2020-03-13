@@ -61,6 +61,10 @@ function init_criticality_levels()
     memcheck_violation_criticality['definitely_lost']="error"
     memcheck_violation_criticality_example['definitely_lost']="4 bytes in 1 blocks are definitely lost in loss record 1 of 1"
 
+    # Invalid read
+    memcheck_violation_criticality['invalid_read']="error"
+    memcheck_violation_criticality_example['invalid_read']="Invalid read of size 8"
+
     # Invalid write
     memcheck_violation_criticality['invalid_write']="error"
     memcheck_violation_criticality_example['invalid_write']="Invalid write of size 4"

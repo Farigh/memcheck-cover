@@ -7,7 +7,7 @@ testsuite_setup_OUTS := $(addprefix out/,$(testsuite_setup_DIRS:/=.out))
 
 all: bin_compile setup_tests
 
-out/%.out: %/ts_setup.sh $(test_BINS) utils.test.sh
+out/%.out: %/ts_setup.sh $(test_BINS) utils.test.sh ../bin/generate_html_report.sh
 	$<
 
 setup_tests: $(testsuite_setup_OUTS)
