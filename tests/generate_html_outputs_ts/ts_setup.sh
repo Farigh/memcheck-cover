@@ -73,7 +73,7 @@ function generate_many_result_report_ref_report()
     while read -r html_part_file; do
         ((last_report_id++))
 
-        awk -i inplace                                                                                                     \
+        gawk -i inplace                                                                                                    \
            "{                                                                                                              \
                 output = \$0;                                                                                              \
                                                                                                                            \
@@ -84,7 +84,7 @@ function generate_many_result_report_ref_report()
                 };                                                                                                         \
                 print output;                                                                                              \
             }" "${html_part_file}"
-    done < <(find "${test_ref_report_dir}" -name "*.html.part" -type f | sort | awk -f "$(get_tools_bin_dir)/awk/order_files_first.awk")
+    done < <(find "${test_ref_report_dir}" -name "*.html.part" -type f | sort | gawk -f "$(get_tools_bin_dir)/awk/order_files_first.awk")
 
     echo "Done"
 }

@@ -53,9 +53,8 @@ function test_ignore_param()
 
     local expected_file="${test_output_prefix}.memcheck"
     expect_file "${expected_file}"
-    if [ $error_occured -eq 0 ]; then
-        local definitely_lost_bin_escaped=$(echo "${definitely_lost_bin}" | sed 's/ /\\ /g')
-        expect_file_content "${expected_file}" "== Command: ${definitely_lost_bin_escaped}"
+    if [ "${error_occured}" -eq 0 ]; then
+        expect_file_content "${expected_file}" "== Command: ${definitely_lost_bin// /\\ }"
 
         # Expect suppression to have occured
         expect_file_content "${expected_file}" "== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)"

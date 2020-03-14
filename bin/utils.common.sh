@@ -59,9 +59,17 @@ function print_with_indent()
     local indent_string=$1
     local to_print=$2
 
-    echo "${to_print}" | awk '{ print "'"${indent_string}"'" $0; }'
+    echo "${to_print}" | gawk '{ print "'"${indent_string}"'" $0; }'
 }
 
+function require_bin_or_die()
+{
+    local required_bin_name=$1
+    if ! which "${required_bin_name}" > /dev/null; then
+        error "Could not find 'gawk' in PATH, please install it first."
+        exit 1
+    fi
+}
 function check_param()
 {
     local opt_name=$1
@@ -97,8 +105,8 @@ function create_outdir_if_necessary()
     local dir_to_create=$1
     if [ ! -d "${dir_to_create}" ]; then
         info "Creating output directory '${dir_to_create}'"
-        mkdir -p "${dir_to_create}"
-        if [ $? -ne 0 ]; then
+
+        if ! mkdir -p "${dir_to_create}"; then
             error "Could not create output dir '${dir_to_create}'"
             exit 1
         fi

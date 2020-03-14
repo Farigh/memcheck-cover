@@ -54,7 +54,7 @@ function test_generate_config_param()
     expect_file "${output_config_file}"
 
     # Check config file content
-    if [ $error_occured -eq 0 ]; then
+    if [ "${error_occured}" -eq 0 ]; then
         # Expect information header
         expect_file_content "${output_config_file}" "# Memcheck-cover configuration values."
         expect_file_content "${output_config_file}" "# Each violation criticality can be set to one of those values:"

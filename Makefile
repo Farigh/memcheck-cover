@@ -11,3 +11,6 @@ setup_tests:
 
 test: test_compile setup_tests
 	tests/run_tests.sh
+
+shellcheck:
+	tests/run_shellcheck.sh

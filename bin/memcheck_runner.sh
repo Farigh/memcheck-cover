@@ -57,8 +57,8 @@ function print_usage()
 function print_args()
 {
     while [ $# -gt 0 ]; do
-        local param=$(echo $1 | sed 's/"/\\"/g')
-        echo -n "\"${param}\" "
+        local param="$1"
+        echo -n "\"${param//\"/\\\"}\" "
         shift
     done
 }
@@ -138,7 +138,7 @@ done
 # OPTIND - 1 points to the last processed opt (should be --), shift that -1, so we have "--" as first arg
 # Only do that if we processed at least 1 arg
 if [ $OPTIND -gt 1 ]; then
-    shift $(($OPTIND - 2))
+    shift $((OPTIND - 2))
 fi
 
 if [ "$1" == "--" ]; then

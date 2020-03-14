@@ -48,9 +48,8 @@ function test_suppression_param()
 
     local expected_file="${test_output_prefix}.memcheck"
     expect_file "${expected_file}"
-    if [ $error_occured -eq 0 ]; then
-        local definitely_lost_bin_escaped=$(echo "${definitely_lost_bin}" | sed 's/ /\\ /g')
-        expect_file_content "${expected_file}" "== Command: ${definitely_lost_bin_escaped}"
+    if [ "${error_occured}" -eq 0 ]; then
+        expect_file_content "${expected_file}" "== Command: ${definitely_lost_bin// /\\ }"
 
         # Expect suppression generation
         expect_file_content "${expected_file}" "   <insert_a_suppression_name_here>"

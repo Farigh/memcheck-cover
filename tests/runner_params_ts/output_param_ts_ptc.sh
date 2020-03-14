@@ -43,7 +43,8 @@ function test_output_param()
 
     # Call the memcheck runner with it's output set to ${test_output_prefix}/test.memcheck
     local output_file_prefix="${test_output_prefix}/test"
-    "${memcheck_runner}" ${param_to_test}"${output_file_prefix}" -- ${test_cmd} > "${test_std_output}" 2> "${test_err_output}"
+
+    "${memcheck_runner}" ${param_to_test}"${output_file_prefix}" -- "${test_cmd}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output
@@ -57,7 +58,7 @@ function test_output_param()
     expect_output "${test_std_output}" "Info: Running the following cmd with valgrind:"
 
     expect_file "${expected_file}"
-    if [ $error_occured -eq 0 ]; then
+    if [ "${error_occured}" -eq 0 ]; then
         expect_file_content "${expected_file}" "== Command: ${test_cmd}"
     fi
 

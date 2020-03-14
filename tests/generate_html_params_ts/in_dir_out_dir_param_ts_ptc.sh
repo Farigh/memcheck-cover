@@ -91,7 +91,7 @@ function test_in_dir_out_dir_param()
     # Check index.html content
     local expected_index_html_file="${report_out_dir}index.html"
     expect_file "${expected_index_html_file}"
-    if [ $error_occured -eq 0 ]; then
+    if [ "${error_occured}" -eq 0 ]; then
         # Header generation occured
         expect_file_content "${expected_index_html_file}" "<!doctype html>"
 

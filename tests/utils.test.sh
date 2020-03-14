@@ -44,8 +44,7 @@ function anonymize_memcheck_file()
     # Remove host specific dir path
     local test_bin_dir=$(get_test_bin_dir)
     anonymize_sed_cmd+=";s# ${test_bin_dir}# memcheck-cover/tests/bin#g"
-    local test_bin_dir_regex=$(echo "${test_bin_dir}" | sed 's/ /\\\\ /g')
-    anonymize_sed_cmd+=";s# ${test_bin_dir_regex}# memcheck-cover/tests/bin#g"
+    anonymize_sed_cmd+=";s# ${test_bin_dir// /\\\\ }# memcheck-cover/tests/bin#g"
 
     # Remove host specific lib path and version
     anonymize_sed_cmd+=";s#(in \(.*/\)\?\(.*\.so\)\([.0-9]*\)\?)#(in a_host_lib.so)#g"
@@ -167,7 +166,7 @@ function print_with_indent()
     local indent_string=$1
     local to_print=$2
 
-    echo "${to_print}" | awk '{ print "'"${indent_string}"'" $0; }'
+    echo "${to_print}" | gawk '{ print "'"${indent_string}"'" $0; }'
 }
 
 ###############################
@@ -184,7 +183,8 @@ function expect_output()
         error "${RED}Expected output:${RESET_FORMAT}"
         print_with_indent "    " "${expected_content}"
         echo "${CYAN}Could not be found in test output:${RESET_FORMAT}"
-        print_with_indent "    " "$(cat ${test_output_file})"
+        local file_content=$(cat "${test_output_file}")
+        print_with_indent "    " "${file_content}"
         error_occured=1
     fi
 }
@@ -206,8 +206,9 @@ function expect_dir_content_to_match()
 
     local diff_output
     diff_output=$(diff -u "${reference_dir}" "${to_compare_dir}" 2>&1)
+    local cmd_exit_code=$?
 
-    if [ $? -ne 0 ]; then
+    if [ "${cmd_exit_code}" -ne 0 ]; then
         error "${RED}Directory does not match ref:${RESET_FORMAT}"
         local diff_output_with_special_char=$(echo "${diff_output}" | cat -A)
         print_with_indent "    " "${diff_output_with_special_char}"
@@ -247,7 +248,7 @@ function expect_exit_code()
     local test_exit_code=$1
     local expected_exit_code=$2
 
-    if [ $test_exit_code -ne $expected_exit_code ]; then
+    if [ "${test_exit_code}" -ne "${expected_exit_code}" ]; then
         error "${RED}Expected exit code ${PURPLE}${expected_exit_code}${RED}, but got ${PURPLE}${test_exit_code}${RESET_FORMAT}"
         error_occured=1
     fi

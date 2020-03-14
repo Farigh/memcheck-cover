@@ -45,10 +45,10 @@ function convert_ref()
 
     # Convert ref HTML parts
     local new_criticality_css_class="${new_criticality_level}_leak"
-    awk -i inplace "{                                                                         \
+    gawk -i inplace "{                                                                        \
                         print gensub(/class=\"[^\"]*_leak\"/,                                 \
                                      \"class=\\\"${new_criticality_css_class}\\\"\", \"g\");  \
-                    }"                                                                        \
+                     }"                                                                       \
         "${test_ref_report_dir}"*.html.part
 
     ####

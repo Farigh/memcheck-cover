@@ -58,7 +58,7 @@ function test_missing_mandatory_param()
     fi
 
     # Call the html report generator with the other mandatory option only
-    "${generate_html_report}" ${other_mandatory_param} "${test_out_dir}" > "${test_std_output}" 2> "${test_err_output}"
+    "${generate_html_report}" "${other_mandatory_param}" "${test_out_dir}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output

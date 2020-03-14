@@ -73,7 +73,7 @@ function get_test_name_from_script()
 function get_test_result_status()
 {
     local test_failed=$1
-    if [ $test_failed -eq 0 ]; then
+    if [ "${test_failed}" -eq 0 ]; then
         echo "${BOLD}${GREEN}PASS${RESET_FORMAT}"
     else
         echo "${BOLD}${RED}FAIL${RESET_FORMAT}"
@@ -128,7 +128,7 @@ function common_run_test()
 
     # Is test skipped ?
     if is_test_skipped "${test_full_name}"; then
-        [ $display_skipped_tests -eq 1 ] && echo "** [${test_skipped_status}] ${to_print_common}"
+        [ "${display_skipped_tests}" -eq 1 ] && echo "** [${test_skipped_status}] ${to_print_common}"
 
         # Test skipped
         ((local_test_skipped++))
@@ -374,7 +374,7 @@ if [ $OPTIND -gt 1 ]; then
 fi
 
 if [ "$1" != "" ]; then
-    error "Unexpected params: $@"
+    error "Unexpected params: $*"
     print_usage
     exit 1
 fi
@@ -382,6 +382,12 @@ fi
 ################################################
 ###                   MAIN                   ###
 ################################################
+
+# Check bin requirement
+require_bin_or_die "make"
+require_bin_or_die "gcc"
+require_bin_or_die "gawk"
+require_bin_or_die "sed"
 
 # Run each directories tests
 while read -r testsuite_dir; do

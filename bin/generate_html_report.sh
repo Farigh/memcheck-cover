@@ -214,35 +214,37 @@ function generate_default_config()
 
     info "Generating configuration with default values: '${default_config_output}'..."
 
-    # Add information header
-    echo "# Memcheck-cover configuration values." > $default_config_output
-    echo "# Each violation criticality can be set to one of those values:" >> $default_config_output
-    echo "#    - warning" >> $default_config_output
-    echo "#    - error" >> $default_config_output
-    echo "# Case does not matter." >> $default_config_output
+    {
+        # Add information header
+        echo "# Memcheck-cover configuration values."
+        echo "# Each violation criticality can be set to one of those values:"
+        echo "#    - warning"
+        echo "#    - error"
+        echo "# Case does not matter."
 
-    # Add each default values, alphabetically ordered, with example comment
-    local opt
-    for opt in $(echo "${!memcheck_violation_criticality[@]}" | xargs -n1 | sort -g | xargs); do
-        echo "" >> $default_config_output
-        echo "# Criticality for the following violations type:" >> $default_config_output
-        echo "#    ${memcheck_violation_criticality_example[${opt}]}" >> $default_config_output
-        echo "memcheck_violation_criticality['${opt}']=\"${memcheck_violation_criticality[${opt}]}\"" >> $default_config_output
-    done
+        # Add each default values, alphabetically ordered, with example comment
+        local opt
+        for opt in $(echo "${!memcheck_violation_criticality[@]}" | xargs -n1 | sort -g | xargs); do
+            echo ""
+            echo "# Criticality for the following violations type:"
+            echo "#    ${memcheck_violation_criticality_example[${opt}]}"
+            echo "memcheck_violation_criticality['${opt}']=\"${memcheck_violation_criticality[${opt}]}\""
+        done
 
-    # Add leak summary header
-    echo "" >> $default_config_output
-    echo "" >> $default_config_output
-    echo "# The following configuration values changes the level of valgrind's report" >> $default_config_output
-    echo "# LEAK SUMMARY section." >> $default_config_output
+        # Add leak summary header
+        echo ""
+        echo ""
+        echo "# The following configuration values changes the level of valgrind's report"
+        echo "# LEAK SUMMARY section."
 
-    # Add each default values, alphabetically ordered, with example comment
-    local opt
-    for opt in $(echo "${!memcheck_summary_criticality[@]}" | xargs -n1 | sort -g | xargs); do
-        echo "" >> $default_config_output
-        echo "# Criticality for the following leak summary type: ${memcheck_violation_criticality_example[${opt}]}" >> $default_config_output
-        echo "memcheck_summary_criticality['${opt}']=\"${memcheck_summary_criticality[${opt}]}\"" >> $default_config_output
-    done
+        # Add each default values, alphabetically ordered, with example comment
+        local opt
+        for opt in $(echo "${!memcheck_summary_criticality[@]}" | xargs -n1 | sort -g | xargs); do
+            echo ""
+            echo "# Criticality for the following leak summary type: ${memcheck_summary_criticality_example[${opt}]}"
+            echo "memcheck_summary_criticality['${opt}']=\"${memcheck_summary_criticality[${opt}]}\""
+        done
+    } > "${default_config_output}"
 
     echo "Done. The generated configuration can be modified and then loaded"
     echo "by the current script using the --config option."
@@ -254,14 +256,14 @@ function get_files_with_ext_in_dir_ordered()
     local file_extension=$1
     local location_dir=$2
 
-    find "${location_dir}" -name "*${file_extension}" -type f | sort | awk -f "${awk_script_dir}order_files_first.awk"
+    find "${location_dir}" -name "*${file_extension}" -type f | sort | gawk -f "${awk_script_dir}order_files_first.awk"
 }
 
 function format_memcheck_report()
 {
     local report_to_format=$1
 
-    awk -f "${awk_script_dir}format_memcheck_report.awk"  "${awk_memcheck_format_opt[@]}" "${report_to_format}"
+    gawk -f "${awk_script_dir}format_memcheck_report.awk"  "${awk_memcheck_format_opt[@]}" "${report_to_format}"
 }
 
 function get_memcheck_report_summary()
@@ -272,21 +274,21 @@ function get_memcheck_report_summary()
     while read -r file; do
         cat "${file}"
     done < <(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}") | \
-    awk -f "${awk_script_dir}get_memcheck_report_summary.awk"
+    gawk -f "${awk_script_dir}get_memcheck_report_summary.awk"
 }
 
 function get_memcheck_report_type_infos()
 {
     local memcheck_report_file=$1
 
-    awk -f "${awk_script_dir}get_memcheck_report_summary.awk" -v only_print_content_type_infos="true" "${memcheck_report_file}"
+    gawk -f "${awk_script_dir}get_memcheck_report_summary.awk" -v only_print_content_type_infos="true" "${memcheck_report_file}"
 }
 
 function get_analysis_result_cmd()
 {
     local memcheck_report_file=$1
 
-    awk "/==[0-9]*== Command: / { \
+    gawk "/==[0-9]*== Command: / { \
              line_without_html_tag = gensub(/<.*>/, \"\", \"g\"); \
              print \"Command: \" gensub(/.*== Command: (.*\\/)?(.*( .*)?)/, \"\\\\2\", 1, line_without_html_tag); \
          }" "${memcheck_report_file}"
@@ -297,7 +299,7 @@ function get_memcheck_analysis_title()
     local unique_analysis_id=$1
     local memcheck_report_file=$2
 
-    local analysis_result_status=$(awk -f "${awk_script_dir}get_memcheck_analysis_status.awk" "${memcheck_report_file}")
+    local analysis_result_status=$(gawk -f "${awk_script_dir}get_memcheck_analysis_status.awk" "${memcheck_report_file}")
     local analysis_result_cmd=$(get_analysis_result_cmd "${memcheck_report_file}")
 
     local full_analysis_part_ext=".${memcheck_result_ext}${html_part_ext}"
@@ -346,18 +348,21 @@ function generate_html_part()
     ((last_analysis_result_id++))
     local unique_analysis_id="${analysis_result_id_prefix}${last_analysis_result_id}"
 
-    echo "async function updateContentOnceLoaded${last_analysis_result_id}()" > "${html_part_output_fullpath}"
-    echo "{" >> "${html_part_output_fullpath}"
-    echo "    var data =\`" >> "${html_part_output_fullpath}"
+    # Generate .html.part file
+    {
+        echo "async function updateContentOnceLoaded${last_analysis_result_id}()"
+        echo "{"
+        echo "    var data =\`"
 
-    local memcheck_report_content=$(format_memcheck_report "${memcheck_result}")
-    print_with_indent "            " "${memcheck_report_content}" >> "${html_part_output_fullpath}"
+        local memcheck_report_content=$(format_memcheck_report "${memcheck_result}")
+        print_with_indent "            " "${memcheck_report_content}"
 
-    echo "\`;" >> "${html_part_output_fullpath}"
-    echo "    var analysis_div = document.getElementById('${unique_analysis_id}.Report');" >> "${html_part_output_fullpath}"
-    echo "    analysis_div.innerHTML=data;" >> "${html_part_output_fullpath}"
-    echo "}" >> "${html_part_output_fullpath}"
-    echo "updateContentOnceLoaded${last_analysis_result_id}();" >> "${html_part_output_fullpath}"
+        echo "\`;"
+        echo "    var analysis_div = document.getElementById('${unique_analysis_id}.Report');"
+        echo "    analysis_div.innerHTML=data;"
+        echo "}"
+        echo "updateContentOnceLoaded${last_analysis_result_id}();"
+    } > "${html_part_output_fullpath}"
 }
 
 function generate_html_part_integration()
@@ -459,10 +464,11 @@ function generate_result_summary()
 
 function resolve_placeholder()
 {
-    local placeholder=$1
-    local replacement=$2
+    local file_to_process=$1
+    local placeholder=$2
+    local replacement=$3
 
-    awk -v placeholder="%{${placeholder}}" -v replacement="${replacement}" "{ print gensub(placeholder, replacement, 1) }"
+    gawk -v placeholder="%{${placeholder}}" -v replacement="${replacement}" "{ print gensub(placeholder, replacement, 1) }" "${file_to_process}"
 }
 
 function generate_html_header()
@@ -481,7 +487,7 @@ function generate_html_header()
         imports_content+="\n        <script src=\"${memcheck_html_part_subpath}\" async=\"async\"></script>"
     done < <(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}")
 
-    cat "${html_res_dir}html_report.header" | resolve_placeholder "html_part_imports" "${imports_content}"
+    resolve_placeholder "${html_res_dir}html_report.header" "html_part_imports" "${imports_content}"
 
     # Add report title part
     generate_title "        "
@@ -504,11 +510,11 @@ function generate_html_report()
     local opt
     for opt in "${!memcheck_violation_criticality[@]}"; do
         # Add violation criticality config, lower cased
-        awk_memcheck_format_opt+=(-v ${opt}_criticality="${memcheck_violation_criticality[${opt}],,}")
+        awk_memcheck_format_opt+=(-v "${opt}_criticality=${memcheck_violation_criticality[${opt}],,}")
     done
     for opt in "${!memcheck_summary_criticality[@]}"; do
         # Add violation criticality config, lower cased
-        awk_memcheck_format_opt+=(-v ${opt}_summary_criticality="${memcheck_summary_criticality[${opt}],,}")
+        awk_memcheck_format_opt+=(-v "${opt}_summary_criticality=${memcheck_summary_criticality[${opt}],,}")
     done
 
     local memcheck_input_dir_len=${#memcheck_input_dir}
@@ -659,6 +665,9 @@ fi
 ################################################
 ###                   MAIN                   ###
 ################################################
+
+# Check bin requirement
+require_bin_or_die "gawk"
 
 info "Input directory set to: '${memcheck_input_dir}'"
 
