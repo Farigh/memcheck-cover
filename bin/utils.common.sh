@@ -1,4 +1,22 @@
-#! /bin/bash
+#! /usr/bin/env bash
+
+######
+# Memcheck-cover is an HTML report generator on top of valgrind's memcheck
+# Copyright (C) 2020  GARCIN David <https://github.com/Farigh/memcheck-cover>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+######
 
 # Enable colors only if in interactive shell
 if [ -t 1 ]; then
@@ -25,6 +43,15 @@ function error()
 function info()
 {
     echo "${CYAN}Info:${RESET_FORMAT} $1"
+}
+
+function print_copyright_notice()
+{
+    echo ""
+    echo "Memcheck-cover  Copyright (C) 2020 GARCIN David"
+    echo "This program comes with ABSOLUTELY NO WARRANTY."
+    echo "This is free software, and you are welcome to redistribute it"
+    echo "under certain conditions."
 }
 
 function print_with_indent()

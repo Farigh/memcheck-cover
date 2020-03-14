@@ -1,4 +1,5 @@
-#! /bin/bash
+#! /usr/bin/env bash
+
 resolved_script_path=$(readlink -f "$0")
 current_script_dir=$(dirname "${resolved_script_path}")
 current_full_path=$(readlink -e "${current_script_dir}")
