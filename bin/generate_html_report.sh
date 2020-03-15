@@ -101,6 +101,10 @@ function init_criticality_levels()
     memcheck_violation_criticality['dealloc_mismatched']="warning"
     memcheck_violation_criticality_example['dealloc_mismatched']="Mismatched free() / delete / delete []"
 
+    # Fishy argument value
+    memcheck_violation_criticality['fishy_argument_value']="warning"
+    memcheck_violation_criticality_example['dealloc_mismatched']="Argument 'size' of function malloc has a fishy (possibly negative) value: -1"
+
     # Uninitialized value conditionnal jump or move
     memcheck_violation_criticality['uninitialized_value_jump_move']="warning"
     memcheck_violation_criticality_example['uninitialized_value_jump_move']="Conditional jump or move depends on uninitialised value(s)"

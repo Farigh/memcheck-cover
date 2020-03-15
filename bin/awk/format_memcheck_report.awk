@@ -49,6 +49,10 @@
     output=gensub(/^(==[0-9]*== )(Mismatched free.*)/,
                   "\\1<span class=\"" dealloc_mismatched_criticality "_leak\">\\2</span>", 1, output)
 
+    # Fishy argument value
+    output=gensub(/^(==[0-9]*== )(Argument .* of function .* has a fishy \(possibly negative\) value:.*)/,
+                  "\\1<span class=\"" fishy_argument_value_criticality "_leak\">\\2</span>", 1, output)
+
     # Invalid read
     output=gensub(/^(==[0-9]*== )(Invalid read of size .*)/,
                   "\\1<span class=\"" invalid_read_criticality "_leak\">\\2</span>", 1, output)
