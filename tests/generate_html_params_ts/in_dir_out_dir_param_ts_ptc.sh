@@ -107,6 +107,8 @@ function test_in_dir_out_dir_param()
         expect_file_content "${expected_index_html_file}" "</html>"
     fi
 
+    expect_empty_file "${test_err_output}"
+
     expect_exit_code $test_exit_code 0
 }
 

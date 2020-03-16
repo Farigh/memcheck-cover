@@ -199,6 +199,18 @@ function expect_file()
     fi
 }
 
+function expect_empty_file()
+{
+    local file_to_check=$1
+
+    local file_content=$(cat "${file_to_check}")
+    if [ "${file_content}" != "" ]; then
+        error "Expected empty file but got:"
+        print_with_indent "    " "${file_content}"
+        error_occured=1
+    fi
+}
+
 function expect_dir_content_to_match()
 {
     local reference_dir=$1

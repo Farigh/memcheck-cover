@@ -38,7 +38,7 @@
     #############
 
     # Definitely lost
-    output=gensub(/^(==[0-9]*== )(.*definitely lost .*)/,
+    output=gensub(/^(==[0-9]*== )(.* blocks are definitely lost in loss record.*)/,
                   "\\1<span class=\"" definitely_lost_criticality "_leak\">\\2</span>", 1, output)
 
     # Invalid dealloc
@@ -84,14 +84,31 @@
                   "\\1<span class=\"" still_reachable_summary_criticality "_leak\">\\2</span>", 1, output)
 
     #############
+    ## Valgrind's warnings
+    #############
+
+    output=gensub(/^(==[0-9]*== )(Warning: invalid file descriptor [-0-9]+ in syscall .*)/,
+                  "\\1<span class=\"valgrind_warning\">\\2</span>", 1, output)
+
+    # Sigaction warnings
+    output=gensub(/^(==[0-9]*== )(Warning: bad signal number [0-9]+ in sigaction\(\))/,
+                  "\\1<span class=\"valgrind_warning\">\\2</span>", 1, output)
+    output=gensub(/^(==[0-9]*== )(Warning: ignored attempt to set .* handler in sigaction\(\);)/,
+                  "\\1<span class=\"valgrind_warning\">\\2</span>", 1, output)
+    output=gensub(/^(==[0-9]*==( \&nbsp;)+)(the .* signal is used internally by Valgrind)/,
+                  "\\1<span class=\"valgrind_warning_context\">\\3</span>", 1, output)
+    output=gensub(/^(==[0-9]*==( \&nbsp;)+)(the .* signal is uncatchable)/,
+                  "\\1<span class=\"valgrind_warning_context\">\\3</span>", 1, output)
+
+    #############
     ## Context
     #############
 
     # Highlight context headlines
-    output=gensub(/^(==[0-9]*== )(\&nbsp;Address 0x[0-9A-Fa-f]* is .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output=gensub(/^(==[0-9]*== )(\&nbsp;Address 0x[0-9A-Fa-f]+ is .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
     output=gensub(/^(==[0-9]*== )(\&nbsp;Block was alloc'd at)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
     output=gensub(/^(==[0-9]*== )(\&nbsp;Access not within mapped region.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output=gensub(/^(==[0-9]*== )(\&nbsp;Uninitialised value was created by a.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output=gensub(/^(==[0-9]*== )(\&nbsp;Uninitialised value was created.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
 
     # Highlight file and line
     output=gensub(/^(==[0-9]*== .* \()([^:]*:[0-9]*)\)$/, "\\1<span class=\"leak_file_info\">\\2</span>)", 1, output)

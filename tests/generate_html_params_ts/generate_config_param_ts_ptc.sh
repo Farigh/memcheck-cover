@@ -67,6 +67,8 @@ function test_generate_config_param()
         expect_file_content "${output_config_file}" "memcheck_violation_criticality['"
     fi
 
+    expect_empty_file "${test_err_output}"
+
     expect_exit_code $test_exit_code 0
 }
 

@@ -61,6 +61,8 @@ function test_config_param()
     # Expect the output file to be print
     expect_output "${test_std_output}" "Info: Loading configuration from file '${config_file}'..."
 
+    expect_empty_file "${test_err_output}"
+
     expect_exit_code $test_exit_code 0
 }
 

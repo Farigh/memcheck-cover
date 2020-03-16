@@ -13,9 +13,14 @@ source "${test_utils_import}"
 test_cases=()
 while read -r binary_path; do
     binary_name=$(basename "${binary_path}")
+
     test_cases+=("${binary_name},default_criticality")
-    test_cases+=("${binary_name},all_warnings_criticality")
-    test_cases+=("${binary_name},all_errors_criticality")
+
+    # Only the default is relevent for valgrind's warning (since it's not configurable)
+    if [ "${binary_name}" != "valgrind_warnings" ]; then
+        test_cases+=("${binary_name},all_warnings_criticality")
+        test_cases+=("${binary_name},all_errors_criticality")
+    fi
 done < <(find "$(get_test_bin_dir)" -mindepth 1 -maxdepth 1 -type d | sort)
 
 list_test_cases_option "$1"

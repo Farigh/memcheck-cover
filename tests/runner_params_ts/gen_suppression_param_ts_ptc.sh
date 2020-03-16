@@ -57,6 +57,8 @@ function test_suppression_param()
         expect_file_content "${expected_file}" "   fun:_ZN8breakage25evil_definitely_lost_funcEv"
     fi
 
+    expect_empty_file "${test_err_output}"
+
     expect_exit_code $test_exit_code 0
 }
 

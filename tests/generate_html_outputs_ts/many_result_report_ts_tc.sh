@@ -51,6 +51,8 @@ function test_many_result_report()
     # Compare report output with reference reports
     expect_dir_content_to_match "${test_ref_report_dir}" "${report_out_dir}"
 
+    expect_empty_file "${test_err_output}"
+
     expect_exit_code $test_exit_code 0
 }
 

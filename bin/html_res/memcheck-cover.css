@@ -357,6 +357,13 @@
     font-weight: bold;
 }
 
+/* Vagrind warnings */
+.valgrind_warning, .valgrind_warning_context {
+    color: #F08411; /* Orange */
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 /* Leak warnings */
 .warning_leak {
     color: #F08411; /* Orange */

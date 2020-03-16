@@ -28,7 +28,7 @@ BEGIN {
     ++error_count
 }
 
-/class="warning_leak"/ {
+/class="warning_leak"/ || /class="valgrind_warning"/ {
     ++warning_count
 }
 

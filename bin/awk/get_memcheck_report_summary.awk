@@ -66,7 +66,7 @@ function endOfPreviousReport()
     current_report_level = "E"
 }
 
-/class="warning_leak"/ {
+/class="warning_leak"/ || /class="valgrind_warning"/ {
     ++total_warning_count
 
     # Only update the status if the report is still successful
@@ -85,9 +85,17 @@ END {
 
     total_reports_count = success_report_count + warning_report_count + error_report_count
 
-    success_percent = 100 * success_report_count / total_reports_count
-    warning_percent = 100 * warning_report_count / total_reports_count
-    warning_percent = warning_percent + success_percent
+    if (total_reports_count > 0)
+    {
+        success_percent = 100 * success_report_count / total_reports_count
+        warning_percent = 100 * warning_report_count / total_reports_count
+        warning_percent = warning_percent + success_percent
+    }
+    else
+    {
+        success_percent = 100
+        warning_percent = 100
+    }
 
     green_color = "#00CF00"
 

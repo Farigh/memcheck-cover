@@ -60,6 +60,8 @@ function test_ignore_param()
         expect_file_content "${expected_file}" "== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)"
     fi
 
+    expect_empty_file "${test_err_output}"
+
     expect_exit_code $test_exit_code 0
 }
 
