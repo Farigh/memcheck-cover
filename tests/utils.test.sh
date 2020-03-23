@@ -52,7 +52,7 @@ function anonymize_memcheck_file()
     # Remove glibc version specific addr (templates from headers)
     anonymize_sed_cmd+=";s#(unique_ptr\.h:[0-9]*)#(unique_ptr\.h:42)#g"
 
-    # Replace all backtrace adresses
+    # Replace all backtrace addresses
     anonymize_sed_cmd+=";s/\( \(at\|by\) 0x\)[A-Fa-f0-9]*:/\110101042:/g"
 
     # Use of uninitialized value are CPU dependant (address size)

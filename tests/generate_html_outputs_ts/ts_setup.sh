@@ -124,6 +124,10 @@ testsuite_setup_begin
     while read -r binary_path; do
         binary_name=$(basename "${binary_path}")
         generate_memcheck_report "${binary_name}"
+
+        if [ "${binary_name}" == "unaddressable_bytes" ]; then
+            gawk -i inplace -f "$(get_test_bin_dir)/../awk/update_unaddressable_bytes_report.awk" "${test_out_dir}${binary_name}.memcheck"
+        fi
     done < <(find "${test_bin_dir}" -mindepth 1 -maxdepth 1 -type d)
 
     generate_criticality_config "error"
