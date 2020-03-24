@@ -37,8 +37,10 @@ analysis_result_id_prefix="valgrind.result"
 default_config_output="memcheck-cover.config"
 
 declare -A memcheck_violation_criticality
+declare -A memcheck_client_check_criticality
 declare -A memcheck_summary_criticality
 declare -A memcheck_violation_criticality_example
+declare -A memcheck_client_check_criticality_example
 declare -A memcheck_summary_criticality_example
 declare -a awk_memcheck_format_opt
 
@@ -73,9 +75,9 @@ function print_usage()
 
 function init_criticality_levels()
 {
-    ################################
-    ##  Default error violations  ##
-    ################################
+    #############################################
+    ##        Default error violations         ##
+    #############################################
 
     # Definitely lost
     memcheck_violation_criticality['definitely_lost']="error"
@@ -97,9 +99,9 @@ function init_criticality_levels()
     memcheck_violation_criticality['contains_unaddressable']="error"
     memcheck_violation_criticality_example['contains_unaddressable']="Syscall param write(buf) contains unaddressable byte(s)"
 
-    ################################
-    ## Default warning violations ##
-    ################################
+    #############################################
+    ##       Default warning violations        ##
+    #############################################
 
     # Invalid dealloc
     memcheck_violation_criticality['dealloc_invalid']="warning"
@@ -111,7 +113,7 @@ function init_criticality_levels()
 
     # Fishy argument value
     memcheck_violation_criticality['fishy_argument_value']="warning"
-    memcheck_violation_criticality_example['dealloc_mismatched']="Argument 'size' of function malloc has a fishy (possibly negative) value: -1"
+    memcheck_violation_criticality_example['fishy_argument_value']="Argument 'size' of function malloc has a fishy (possibly negative) value: -1"
 
     # Uninitialized value conditionnal jump or move
     memcheck_violation_criticality['uninitialized_value_jump_move']="warning"
@@ -120,6 +122,18 @@ function init_criticality_levels()
     # Uninitialized value use
     memcheck_violation_criticality['uninitialized_value_use']="warning"
     memcheck_violation_criticality_example['uninitialized_value_use']="Use of uninitialised value of size 8"
+
+    #############################################
+    ##  Default client check error violations  ##
+    #############################################
+
+    # Unaddressable byte(s) found during client check request
+    memcheck_client_check_criticality['unaddressable_found']="error"
+    memcheck_client_check_criticality_example['unaddressable_found']="Unaddressable byte(s) found during client check request"
+
+    # Uninitialised byte(s) found during client check request
+    memcheck_client_check_criticality['uninitialised_found']="error"
+    memcheck_client_check_criticality_example['uninitialised_found']="Uninitialised byte(s) found during client check request"
 
     ################################
     ##    Default leak summary    ##
@@ -158,6 +172,7 @@ function load_configuration()
 
         declare -A memcheck_valid_violation_criticality_keys
         declare -A memcheck_valid_summary_criticality_keys
+        declare -A memcheck_valid_client_check_criticality_keys
 
         # List all valid keys from the default values
         local valid_key
@@ -166,6 +181,9 @@ function load_configuration()
         done
         for valid_key in "${!memcheck_summary_criticality[@]}"; do
             memcheck_valid_summary_criticality_keys[$valid_key]="valid"
+        done
+        for valid_key in "${!memcheck_client_check_criticality[@]}"; do
+            memcheck_valid_client_check_criticality_keys[$valid_key]="valid"
         done
 
         info "Loading configuration from file '${config_file}'..."
@@ -209,9 +227,22 @@ function load_configuration()
                 ((++config_error_occured))
             fi
         done
+        for key_to_check in "${!memcheck_client_check_criticality[@]}"; do
+            # Ensure the key is valid
+            if [ "${memcheck_valid_client_check_criticality_keys[${key_to_check}]}" == "" ]; then
+                error "Invalid configuration parameter: memcheck_client_check_criticality['${key_to_check}']"
+                ((++config_error_occured))
+            # Ensure the value is valid
+            elif [ "${memcheck_client_check_criticality[${key_to_check}],,}" != "error" ] \
+              && [ "${memcheck_client_check_criticality[${key_to_check}],,}" != "warning" ]; then
+                error "Invalid configuration value '${memcheck_client_check_criticality[${key_to_check}]}' for parameter: memcheck_client_check_criticality['${key_to_check}']"
+                ((++config_error_occured))
+            fi
+        done
 
         unset memcheck_valid_violation_criticality_keys
         unset memcheck_valid_summary_criticality_keys
+        unset memcheck_valid_client_check_criticality_keys
 
         if [ $config_error_occured -ne 0 ]; then
             exit 1
@@ -228,29 +259,49 @@ function generate_default_config()
 
     {
         # Add information header
+        echo "######"
         echo "# Memcheck-cover configuration values."
         echo "# Each violation criticality can be set to one of those values:"
         echo "#    - warning"
         echo "#    - error"
         echo "# Case does not matter."
+        echo "######"
 
         # Add each default values, alphabetically ordered, with example comment
         local opt
         for opt in $(echo "${!memcheck_violation_criticality[@]}" | xargs -n1 | sort -g | xargs); do
             echo ""
-            echo "# Criticality for the following violations type:"
+            echo "# Criticality for the following violation type:"
             echo "#    ${memcheck_violation_criticality_example[${opt}]}"
             echo "memcheck_violation_criticality['${opt}']=\"${memcheck_violation_criticality[${opt}]}\""
+        done
+
+        # Add client check default values
+        echo ""
+        echo ""
+        echo "######"
+        echo "# The following configuration values changes the level of **client check request** valgrind's report."
+        echo "# Such checks are provided by valgrind's header <memcheck.h>"
+        echo "# (see: https://valgrind.org/docs/manual/mc-manual.html#mc-manual.clientreqs)"
+        echo "######"
+
+        # Add each default values, alphabetically ordered, with example comment
+        for opt in $(echo "${!memcheck_client_check_criticality[@]}" | xargs -n1 | sort -g | xargs); do
+            echo ""
+            echo "# Criticality for the following violation type:"
+            echo "#    ${memcheck_client_check_criticality_example[${opt}]}"
+            echo "memcheck_client_check_criticality['${opt}']=\"${memcheck_client_check_criticality[${opt}]}\""
         done
 
         # Add leak summary header
         echo ""
         echo ""
+        echo "######"
         echo "# The following configuration values changes the level of valgrind's report"
         echo "# LEAK SUMMARY section."
+        echo "######"
 
         # Add each default values, alphabetically ordered, with example comment
-        local opt
         for opt in $(echo "${!memcheck_summary_criticality[@]}" | xargs -n1 | sort -g | xargs); do
             echo ""
             echo "# Criticality for the following leak summary type: ${memcheck_summary_criticality_example[${opt}]}"
@@ -527,6 +578,10 @@ function generate_html_report()
     for opt in "${!memcheck_summary_criticality[@]}"; do
         # Add violation criticality config, lower cased
         awk_memcheck_format_opt+=(-v "${opt}_summary_criticality=${memcheck_summary_criticality[${opt}],,}")
+    done
+    for opt in "${!memcheck_client_check_criticality[@]}"; do
+        # Add violation criticality config, lower cased
+        awk_memcheck_format_opt+=(-v "${opt}_client_check_criticality=${memcheck_client_check_criticality[${opt}],,}")
     done
 
     local memcheck_input_dir_len=${#memcheck_input_dir}

@@ -78,6 +78,18 @@
                   "\\1<span class=\"" contains_unaddressable_criticality "_leak\">\\2</span>", 1, output)
 
     #############
+    ## Customizable client check violations criticality
+    #############
+
+    # Unaddressable byte(s) found during client check request
+    output=gensub(/^(==[0-9]*== )(Unaddressable byte\(s\) found during client check request)/,
+                  "\\1<span class=\"" unaddressable_found_client_check_criticality "_leak\">\\2</span>", 1, output)
+
+    # Uninitialised byte(s) found during client check request
+    output=gensub(/^(==[0-9]*== )(Uninitialised byte\(s\) found during client check request)/,
+                  "\\1<span class=\"" uninitialised_found_client_check_criticality "_leak\">\\2</span>", 1, output)
+
+    #############
     ## Customizable summary criticality
     #############
 

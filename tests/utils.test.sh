@@ -211,13 +211,13 @@ function expect_empty_file()
     fi
 }
 
-function expect_dir_content_to_match()
+function expect_content_to_match()
 {
-    local reference_dir=$1
-    local to_compare_dir=$2
+    local reference_input=$1
+    local to_compare_input=$2
 
     local diff_output
-    diff_output=$(diff -u "${reference_dir}" "${to_compare_dir}" 2>&1)
+    diff_output=$(diff -u "${reference_input}" "${to_compare_input}" 2>&1)
     local cmd_exit_code=$?
 
     if [ "${cmd_exit_code}" -ne 0 ]; then

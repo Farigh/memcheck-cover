@@ -125,7 +125,7 @@ function test_error_report()
     expect_file "${report_out_dir}${binary_name}.memcheck.html.part"
 
     # Compare report output with reference reports
-    expect_dir_content_to_match "${test_ref_report_dir}" "${report_out_dir}"
+    expect_content_to_match "${test_ref_report_dir}" "${report_out_dir}"
 
     expect_exit_code $test_exit_code 0
 }

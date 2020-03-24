@@ -61,7 +61,7 @@ function print_buffers()
     # `memcheck_result_ext` is set by utils.common.sh
     else if (($0 ~ /\^-- SC2154: memcheck_result_ext is referenced but not assigned\./) \
              && ((previous_lines[0] ~ /bin\/memcheck_runner\.sh line 50:/) \
-                 || (previous_lines[0] ~ /bin\/generate_html_report\.sh line 52:/)))
+                 || (previous_lines[0] ~ /bin\/generate_html_report\.sh line 54:/)))
     {
     }
     # Those elements are defined in utils.common.sh but used by the ones importing it

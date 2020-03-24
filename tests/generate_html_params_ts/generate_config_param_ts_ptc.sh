@@ -51,21 +51,8 @@ function test_generate_config_param()
 
     # Expect config file
     local output_config_file="${test_out_dir}memcheck-cover.config"
-    expect_file "${output_config_file}"
-
-    # Check config file content
-    if [ "${error_occured}" -eq 0 ]; then
-        # Expect information header
-        expect_file_content "${output_config_file}" "# Memcheck-cover configuration values."
-        expect_file_content "${output_config_file}" "# Each violation criticality can be set to one of those values:"
-        expect_file_content "${output_config_file}" "#    - warning"
-        expect_file_content "${output_config_file}" "#    - error"
-        expect_file_content "${output_config_file}" "# Case does not matter."
-
-        # Expect at least one criticality value
-        expect_file_content "${output_config_file}" "# Criticality for the following violations type:"
-        expect_file_content "${output_config_file}" "memcheck_violation_criticality['"
-    fi
+    # Expect information header
+    expect_content_to_match "${output_config_file}" "${current_full_path}/ref/default-memcheck-cover.config"
 
     expect_empty_file "${test_err_output}"
 
