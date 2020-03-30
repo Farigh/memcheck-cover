@@ -69,13 +69,21 @@
     output=gensub(/^(==[0-9]*== )(Use of uninitialised value .*)/,
                   "\\1<span class=\"" uninitialized_value_use_criticality "_leak\">\\2</span>", 1, output)
 
-    # Syscall param points to unaddressable byte
+    # Syscall param points to unaddressable byte(s)
     output=gensub(/^(==[0-9]*== )(Syscall param .* points to unaddressable byte.*)/,
                   "\\1<span class=\"" points_to_unaddressable_criticality "_leak\">\\2</span>", 1, output)
 
-    # (Syscall param ?) contains unaddressable byte
+    # (Syscall param ?) contains unaddressable byte(s)
     output=gensub(/^(==[0-9]*== )(.* contains unaddressable byte.*)/,
                   "\\1<span class=\"" contains_unaddressable_criticality "_leak\">\\2</span>", 1, output)
+
+    # Syscall param contains uninitialised byte(s)
+    output=gensub(/^(==[0-9]*== )(Syscall param .* contains uninitialised byte.*)/,
+                  "\\1<span class=\"" contains_uninitialized_criticality "_leak\">\\2</span>", 1, output)
+
+    # Syscall param points to uninitialised byte(s)
+    output=gensub(/^(==[0-9]*== )(Syscall param .* points to uninitialised byte.*)/,
+                  "\\1<span class=\"" points_to_uninitialized_criticality "_leak\">\\2</span>", 1, output)
 
     #############
     ## Customizable client check violations criticality

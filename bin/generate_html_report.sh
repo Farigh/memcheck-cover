@@ -91,13 +91,21 @@ function init_criticality_levels()
     memcheck_violation_criticality['invalid_write']="error"
     memcheck_violation_criticality_example['invalid_write']="Invalid write of size 4"
 
-    # Syscall param points to unaddressable byte
+    # Syscall param points to unaddressable byte(s)
     memcheck_violation_criticality['points_to_unaddressable']="error"
     memcheck_violation_criticality_example['points_to_unaddressable']="Syscall param read(buf) points to unaddressable byte(s)"
 
-    # (Syscall param ?) contains unaddressable byte
+    # (Syscall param ?) contains unaddressable byte(s)
     memcheck_violation_criticality['contains_unaddressable']="error"
     memcheck_violation_criticality_example['contains_unaddressable']="Syscall param write(buf) contains unaddressable byte(s)"
+
+    # Syscall param contains uninitialised byte(s)
+    memcheck_violation_criticality['contains_uninitialized']="error"
+    memcheck_violation_criticality_example['contains_uninitialized']="Syscall param exit_group(status) contains uninitialised byte(s)"
+
+    # Syscall param points to uninitialised byte(s)
+    memcheck_violation_criticality['points_to_uninitialized']="error"
+    memcheck_violation_criticality_example['points_to_uninitialized']="Syscall param write(buf) points to uninitialised byte(s)"
 
     #############################################
     ##       Default warning violations        ##

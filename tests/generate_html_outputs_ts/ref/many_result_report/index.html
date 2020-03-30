@@ -12,6 +12,8 @@
         <script src="test/bin/invalid_read.memcheck.html.part" async="async"></script>
         <script src="test/bin/invalid_write.memcheck.html.part" async="async"></script>
         <script src="test/bin/mismatched_delete.memcheck.html.part" async="async"></script>
+        <script src="test/bin/syscall_param_contains_uninitialized_bytes.memcheck.html.part" async="async"></script>
+        <script src="test/bin/syscall_param_points_to_uninitialized_bytes.memcheck.html.part" async="async"></script>
         <script src="test/bin/unaddressable_bytes.memcheck.html.part" async="async"></script>
         <script src="test/bin/uninitialized_value.memcheck.html.part" async="async"></script>
         <script src="test/bin/valgrind_client_checks.memcheck.html.part" async="async"></script>
@@ -27,12 +29,12 @@
         </div>
         <div class="report_summary">
             <div class="report_summary_title">Result summary:</div>
-            <div class="report_summary_ratio" title="Success: 1   |   Warnings: 5   |   Errors: 5" style="background-image: linear-gradient(to right, #00CF00 9.09091%, orange 9.09091%, orange 54.5455%, red 54.5455%, red 100%);">
-                Pass: 1 / 11
+            <div class="report_summary_ratio" title="Success: 1   |   Warnings: 5   |   Errors: 7" style="background-image: linear-gradient(to right, #00CF00 7.69231%, orange 7.69231%, orange 46.1538%, red 46.1538%, red 100%);">
+                Pass: 1 / 13
             </div>
-            <div class="report_summary_errors">Errors: 9</div>
+            <div class="report_summary_errors">Errors: 11</div>
             <div class="report_summary_warnings">Warnings: 13</div>
-            <div class="report_summary_infos">Infos: 19</div>
+            <div class="report_summary_infos">Infos: 22</div>
             <br /><br />
             <div title="Expand all" onclick="JavaScript: ExpandAll();" class="expandall"><div></div><div></div><div></div></div>
             <div title="Collapse all" onclick="JavaScript: CollapseAll();" class="collapseall"><div></div><div></div><div></div></div>
@@ -78,37 +80,51 @@
             <span class="result_loader"></span><span class="result_loader_text"></span>
         </div>
         <div class="memcheck_analysis_title" onclick="JavaScript: ToggleAnalysisResultVisibility('valgrind.result7');">
-            <span id="valgrind.result7.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> <span id="valgrind.result7.Title.Cmd">Command: unaddressable_bytes</span><span id="valgrind.result7.Title.Name" class="hidden">Analysis name: test / bin / unaddressable_bytes</span> <span class="analysis_type_infos"><div class="report_summary_errors">Errors: 2</div>
-            <div class="report_summary_infos">Infos: 2</div></span>
+            <span id="valgrind.result7.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> <span id="valgrind.result7.Title.Cmd">Command: syscall_param_contains_uninitialized_bytes</span><span id="valgrind.result7.Title.Name" class="hidden">Analysis name: test / bin / syscall_param_contains_uninitialized_bytes</span> <span class="analysis_type_infos"><div class="report_summary_errors">Errors: 1</div>
+            <div class="report_summary_infos">Infos: 1</div></span>
         </div>
         <div id="valgrind.result7.Report" class="memcheck_analysis_content hidden">
             <span class="result_loader"></span><span class="result_loader_text"></span>
         </div>
         <div class="memcheck_analysis_title" onclick="JavaScript: ToggleAnalysisResultVisibility('valgrind.result8');">
-            <span id="valgrind.result8.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_warning_status">WARNING</span><span class="brace_recenter">]</span> <span id="valgrind.result8.Title.Cmd">Command: uninitialized_value</span><span id="valgrind.result8.Title.Name" class="hidden">Analysis name: test / bin / uninitialized_value</span> <span class="analysis_type_infos"><div class="report_summary_warnings">Warnings: 5</div>
-            <div class="report_summary_infos">Infos: 5</div></span>
+            <span id="valgrind.result8.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> <span id="valgrind.result8.Title.Cmd">Command: syscall_param_points_to_uninitialized_bytes</span><span id="valgrind.result8.Title.Name" class="hidden">Analysis name: test / bin / syscall_param_points_to_uninitialized_bytes</span> <span class="analysis_type_infos"><div class="report_summary_errors">Errors: 1</div>
+            <div class="report_summary_infos">Infos: 2</div></span>
         </div>
         <div id="valgrind.result8.Report" class="memcheck_analysis_content hidden">
             <span class="result_loader"></span><span class="result_loader_text"></span>
         </div>
         <div class="memcheck_analysis_title" onclick="JavaScript: ToggleAnalysisResultVisibility('valgrind.result9');">
-            <span id="valgrind.result9.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> <span id="valgrind.result9.Title.Cmd">Command: valgrind_client_checks</span><span id="valgrind.result9.Title.Name" class="hidden">Analysis name: test / bin / valgrind_client_checks</span> <span class="analysis_type_infos"><div class="report_summary_errors">Errors: 2</div>
-            <div class="report_summary_infos">Infos: 3</div></span>
+            <span id="valgrind.result9.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> <span id="valgrind.result9.Title.Cmd">Command: unaddressable_bytes</span><span id="valgrind.result9.Title.Name" class="hidden">Analysis name: test / bin / unaddressable_bytes</span> <span class="analysis_type_infos"><div class="report_summary_errors">Errors: 2</div>
+            <div class="report_summary_infos">Infos: 2</div></span>
         </div>
         <div id="valgrind.result9.Report" class="memcheck_analysis_content hidden">
             <span class="result_loader"></span><span class="result_loader_text"></span>
         </div>
         <div class="memcheck_analysis_title" onclick="JavaScript: ToggleAnalysisResultVisibility('valgrind.result10');">
-            <span id="valgrind.result10.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_warning_status">WARNING</span><span class="brace_recenter">]</span> <span id="valgrind.result10.Title.Cmd">Command: valgrind_warnings</span><span id="valgrind.result10.Title.Name" class="hidden">Analysis name: test / bin / valgrind_warnings</span> <span class="analysis_type_infos"><div class="report_summary_warnings">Warnings: 4</div></span>
+            <span id="valgrind.result10.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_warning_status">WARNING</span><span class="brace_recenter">]</span> <span id="valgrind.result10.Title.Cmd">Command: uninitialized_value</span><span id="valgrind.result10.Title.Name" class="hidden">Analysis name: test / bin / uninitialized_value</span> <span class="analysis_type_infos"><div class="report_summary_warnings">Warnings: 5</div>
+            <div class="report_summary_infos">Infos: 5</div></span>
         </div>
         <div id="valgrind.result10.Report" class="memcheck_analysis_content hidden">
             <span class="result_loader"></span><span class="result_loader_text"></span>
         </div>
         <div class="memcheck_analysis_title" onclick="JavaScript: ToggleAnalysisResultVisibility('valgrind.result11');">
-            <span id="valgrind.result11.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_warning_status">WARNING</span><span class="brace_recenter">]</span> <span id="valgrind.result11.Title.Cmd">Command: invalid_delete</span><span id="valgrind.result11.Title.Name" class="hidden">Analysis name: z / test / bin / invalid_delete</span> <span class="analysis_type_infos"><div class="report_summary_warnings">Warnings: 2</div>
+            <span id="valgrind.result11.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> <span id="valgrind.result11.Title.Cmd">Command: valgrind_client_checks</span><span id="valgrind.result11.Title.Name" class="hidden">Analysis name: test / bin / valgrind_client_checks</span> <span class="analysis_type_infos"><div class="report_summary_errors">Errors: 2</div>
             <div class="report_summary_infos">Infos: 3</div></span>
         </div>
         <div id="valgrind.result11.Report" class="memcheck_analysis_content hidden">
+            <span class="result_loader"></span><span class="result_loader_text"></span>
+        </div>
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToggleAnalysisResultVisibility('valgrind.result12');">
+            <span id="valgrind.result12.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_warning_status">WARNING</span><span class="brace_recenter">]</span> <span id="valgrind.result12.Title.Cmd">Command: valgrind_warnings</span><span id="valgrind.result12.Title.Name" class="hidden">Analysis name: test / bin / valgrind_warnings</span> <span class="analysis_type_infos"><div class="report_summary_warnings">Warnings: 4</div></span>
+        </div>
+        <div id="valgrind.result12.Report" class="memcheck_analysis_content hidden">
+            <span class="result_loader"></span><span class="result_loader_text"></span>
+        </div>
+        <div class="memcheck_analysis_title" onclick="JavaScript: ToggleAnalysisResultVisibility('valgrind.result13');">
+            <span id="valgrind.result13.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_warning_status">WARNING</span><span class="brace_recenter">]</span> <span id="valgrind.result13.Title.Cmd">Command: invalid_delete</span><span id="valgrind.result13.Title.Name" class="hidden">Analysis name: z / test / bin / invalid_delete</span> <span class="analysis_type_infos"><div class="report_summary_warnings">Warnings: 2</div>
+            <div class="report_summary_infos">Infos: 3</div></span>
+        </div>
+        <div id="valgrind.result13.Report" class="memcheck_analysis_content hidden">
             <span class="result_loader"></span><span class="result_loader_text"></span>
         </div>
     </body>
