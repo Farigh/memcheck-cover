@@ -41,6 +41,10 @@
     output=gensub(/^(==[0-9]*== )(.* blocks are definitely lost in loss record.*)/,
                   "\\1<span class=\"" definitely_lost_criticality "_leak\">\\2</span>", 1, output)
 
+    # Indirectly lost
+    output=gensub(/^(==[0-9]*== )(.* blocks are indirectly lost in loss record.*)/,
+                  "\\1<span class=\"" indirectly_lost_criticality "_leak\">\\2</span>", 1, output)
+
     # Invalid dealloc
     output=gensub(/^(==[0-9]*== )(Invalid free.*)/,
                   "\\1<span class=\"" dealloc_invalid_criticality "_leak\">\\2</span>", 1, output)
