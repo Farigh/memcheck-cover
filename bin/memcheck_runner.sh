@@ -40,10 +40,10 @@ fi
 
 function print_usage()
 {
-    info "Usage: $0 [OPTIONS]... -- [BIN] [BIN_ARG]..."
+    echo "${CYAN}Usage:${RESET_FORMAT} $0 [OPTIONS]... -- [BIN] [BIN_ARG]..."
     echo "Runs the BIN with the BIN_ARGs through valgrind memcheck analyser."
     echo ""
-    echo "Options:"
+    echo "${CYAN}Options:${RESET_FORMAT}"
     echo "  -h|--help               Displays this help message."
     echo "  -i|--ignore=FILE        Provides valgrind FILE as the suppression file."
     echo "  -o|--output-name=NAME   [${RED}MANDATORY${RESET_FORMAT}] Defines the output file name"

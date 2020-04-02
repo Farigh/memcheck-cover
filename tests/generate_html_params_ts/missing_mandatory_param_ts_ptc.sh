@@ -67,7 +67,7 @@ function test_missing_mandatory_param()
     expect_output "${test_err_output}" "Error: Mandatory parameter '${expected_option_error}' not provided"
 
     # Followed by the usage
-    expect_output "${test_std_output}" "Info: Usage: ${generate_html_report} [OPTIONS]..."
+    expect_output "${test_std_output}" "Usage: ${generate_html_report} [OPTIONS]..."
 
     expect_exit_code $test_exit_code 1
 }

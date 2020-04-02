@@ -35,6 +35,7 @@ last_analysis_result_id=0
 analysis_result_id_prefix="valgrind.result"
 
 default_config_output="memcheck-cover.config"
+base_html_indent="                "
 
 declare -A memcheck_violation_criticality
 declare -A memcheck_client_check_criticality
@@ -50,11 +51,11 @@ declare -a awk_memcheck_format_opt
 
 function print_usage()
 {
-    info "Usage: $0 [OPTIONS]..."
+    echo "${CYAN}Usage:${RESET_FORMAT} $0 [OPTIONS]..."
     echo "Parses all .${memcheck_result_ext} files from a given directory and generates an HTML"
     echo "report."
     echo ""
-    echo "Options:"
+    echo "${CYAN}Options:${RESET_FORMAT}"
     echo "  -h|--help             Displays this help message."
     echo "  -g|--generate-config  Generates a '${default_config_output}' file in the current"
     echo "                        directory, containing the default configuration values."
@@ -430,7 +431,7 @@ function generate_html_part()
         echo "    var data =\`"
 
         local memcheck_report_content=$(format_memcheck_report "${memcheck_result}")
-        print_with_indent "            " "${memcheck_report_content}"
+        echo "${memcheck_report_content}"
 
         echo "\`;"
         echo "    var analysis_div = document.getElementById('${unique_analysis_id}.Report');"
@@ -445,7 +446,7 @@ function generate_html_part_integration()
     local html_output_dir=$1
     local memcheck_result_html_part=$2
 
-    local content_indent="        "
+    local content_indent="${base_html_indent}"
     ((last_analysis_result_id++))
     local unique_analysis_id="${analysis_result_id_prefix}${last_analysis_result_id}"
 
@@ -485,29 +486,6 @@ function deploy_javascript_script()
 {
     local output_dir=$1
     cp "${html_res_dir}memcheck-cover.js" "${output_dir}"
-}
-
-function generate_title()
-{
-    local print_indent=$1
-
-    # Open the header div
-    print_with_indent "${print_indent}" '<div class="report_header">'
-
-    # Open the title div tag
-    print_with_indent "${print_indent}    " '<div class="report_title">'
-
-    # Add title content
-    print_with_indent "${print_indent}        " "Valgrind's memcheck report"
-
-    # Close the title div tag
-    print_with_indent "${print_indent}    " "</div>"
-
-    # Add a separator
-    print_with_indent "${print_indent}    " '<div class="report_separator"></div>'
-
-    # Close the header div
-    print_with_indent "${print_indent}" '</div>'
 }
 
 function generate_result_summary()
@@ -562,18 +540,16 @@ function generate_html_header()
         imports_content+="\n        <script src=\"${memcheck_html_part_subpath}\" async=\"async\"></script>"
     done < <(get_files_with_ext_in_dir_ordered "${html_part_ext}" "${html_output_dir}")
 
-    resolve_placeholder "${html_res_dir}html_report.header" "html_part_imports" "${imports_content}"
-
-    # Add report title part
-    generate_title "        "
+    resolve_placeholder "${html_res_dir}html_report.header" "html_part_imports" "${imports_content}" | \
+    resolve_placeholder "" "html_report_title" "Valgrind's memcheck report"
 
     # Add result summary before details
-    generate_result_summary "${html_output_dir}" "        "
+    generate_result_summary "${html_output_dir}" "${base_html_indent}"
 }
 
 function generate_html_footer()
 {
-    cat "${html_res_dir}html_report.footer"
+    resolve_placeholder "${html_res_dir}html_report.footer" "html_generation_tool_version" "$(get_memcheck_cover_version)"
 }
 
 function generate_html_report()

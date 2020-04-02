@@ -52,7 +52,7 @@ function test_unknown_param()
     expect_output "${test_err_output}" "Error: Unknown option '${expected_opt_error}'"
 
     # Followed by the usage
-    expect_output "${test_std_output}" "Info: Usage: ${memcheck_runner} [OPTIONS]... -- [BIN] [BIN_ARG]..."
+    expect_output "${test_std_output}" "Usage: ${memcheck_runner} [OPTIONS]... -- [BIN] [BIN_ARG]..."
 
     expect_exit_code $test_exit_code 1
 }

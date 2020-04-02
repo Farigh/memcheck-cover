@@ -8,3 +8,11 @@
         <!-- Vagrind reports asynchronous loading parts -->%{html_part_imports}
     </head>
     <body>
+        <div class="report_container">
+            <div class="report_header">
+                <div class="report_title">
+                    %{html_report_title}
+                </div>
+                <div class="report_separator"></div>
+            </div>
+            <div class="report_content">

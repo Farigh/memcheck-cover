@@ -52,7 +52,7 @@ function test_unknown_param()
     expect_output "${test_err_output}" "Error: Unknown option '${expected_opt_error}'"
 
     # Followed by the usage
-    expect_output "${test_std_output}" "Info: Usage: ${generate_html_report} [OPTIONS]..."
+    expect_output "${test_std_output}" "Usage: ${generate_html_report} [OPTIONS]..."
 
     expect_exit_code $test_exit_code 1
 }

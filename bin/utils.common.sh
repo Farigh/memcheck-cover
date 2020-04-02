@@ -45,10 +45,15 @@ function info()
     echo "${CYAN}Info:${RESET_FORMAT} $1"
 }
 
+function get_memcheck_cover_version()
+{
+    echo "1.0"
+}
+
 function print_copyright_notice()
 {
     echo ""
-    echo "Memcheck-cover  Copyright (C) 2020 GARCIN David"
+    echo "Memcheck-cover, version $(get_memcheck_cover_version)  Copyright (C) 2020 GARCIN David"
     echo "This program comes with ABSOLUTELY NO WARRANTY."
     echo "This is free software, and you are welcome to redistribute it"
     echo "under certain conditions."
