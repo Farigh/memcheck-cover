@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="memcheck-cover.css">
+        <script type="text/javascript" src="memcheck-cover.js"></script>
+
+        <!-- Vagrind reports asynchronous loading parts -->
+        <script src="possibly_lost.memcheck.html.part" async="async"></script>
+    </head>
+    <body>
+        <div class="report_container">
+            <div class="report_header">
+                <div class="report_title">
+                    Valgrind's memcheck report
+                </div>
+                <div class="report_separator"></div>
+            </div>
+            <div class="report_content">
+                <div class="report_summary">
+                    <div class="report_summary_title">Result summary:</div>
+                    <div class="report_summary_ratio" title="Warnings: 1" style="background-image: linear-gradient(to right, #00CF00 0%, orange 0%, orange 100%, red 100%, red 100%);">
+                        Pass: 0 / 1
+                    </div>
+                    <div class="report_summary_warnings">Warnings: 2</div>
+                    <br /><br />
+                    <div title="Expand all" onclick="JavaScript: ExpandAll();" class="expandall"><div></div><div></div><div></div></div>
+                    <div title="Collapse all" onclick="JavaScript: CollapseAll();" class="collapseall"><div></div><div></div><div></div></div>
+                    <div onclick="JavaScript: ToggleAnalysisTitleType();" id="analysis_title_type_button" class="analysis_title_type_button">Toggle title: Analysis name</div>
+                </div>
+                <div class="memcheck_analysis_title" onclick="JavaScript: ToggleAnalysisResultVisibility('valgrind.result1');">
+                    <span id="valgrind.result1.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_warning_status">WARNING</span><span class="brace_recenter">]</span> <span id="valgrind.result1.Title.Cmd">Command: possibly_lost</span><span id="valgrind.result1.Title.Name" class="hidden">Analysis name: possibly_lost</span> <span class="analysis_type_infos"><div class="report_summary_warnings">Warnings: 2</div></span>
+                </div>
+                <div id="valgrind.result1.Report" class="memcheck_analysis_content hidden">
+                    <span class="result_loader"></span><span class="result_loader_text"></span>
+                </div>
+            </div>
+            <div class="report_footer">
+                <div class="generation_tool_version">
+                    This report was generated using <a href="https://github.com/Farigh/memcheck-cover">memcheck-cover</a> v1.0
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -116,6 +116,10 @@ function init_criticality_levels()
     ##       Default warning violations        ##
     #############################################
 
+    # Possibly lost
+    memcheck_violation_criticality['possibly_lost']="warning"
+    memcheck_violation_criticality_example['possibly_lost']="6 bytes in 1 blocks are possibly lost in loss record 1 of 1"
+
     # Invalid dealloc
     memcheck_violation_criticality['dealloc_invalid']="warning"
     memcheck_violation_criticality_example['dealloc_invalid']="Invalid free() / delete / delete[] / realloc()"
@@ -161,7 +165,7 @@ function init_criticality_levels()
     memcheck_summary_criticality_example['indirectly_lost']="indirectly lost: 4 bytes in 1 blocks"
 
     # Possibly lost
-    memcheck_summary_criticality['possibly_lost']="error"
+    memcheck_summary_criticality['possibly_lost']="warning"
     memcheck_summary_criticality_example['possibly_lost']="possibly lost: 4 bytes in 1 blocks"
 
     # Still reachable
