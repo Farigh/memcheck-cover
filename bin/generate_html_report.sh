@@ -88,6 +88,10 @@ function init_criticality_levels()
     memcheck_violation_criticality['indirectly_lost']="error"
     memcheck_violation_criticality_example['indirectly_lost']="48 bytes in 1 blocks are indirectly lost in loss record 1 of 2"
 
+    # Still reachable
+    memcheck_violation_criticality['still_reachable']="error"
+    memcheck_violation_criticality_example['still_reachable']="10 bytes in 1 blocks are still reachable in loss record 1 of 1"
+
     # Invalid read
     memcheck_violation_criticality['invalid_read']="error"
     memcheck_violation_criticality_example['invalid_read']="Invalid read of size 8"
