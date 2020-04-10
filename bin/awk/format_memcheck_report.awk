@@ -101,6 +101,10 @@
     output=gensub(/^(==[0-9]*== )(Illegal memory pool address.*)/,
                   "\\1<span class=\"" illegal_mem_pool_addr_criticality "_leak\">\\2</span>", 1, output)
 
+    # Jump to the invalid address
+    output=gensub(/^(==[0-9]*== )(Jump to the invalid address.*)/,
+                  "\\1<span class=\"" jump_to_invalid_addr_criticality "_leak\">\\2</span>", 1, output)
+
     #############
     ## Customizable client check violations criticality
     #############
@@ -153,6 +157,7 @@
     output=gensub(/^(==[0-9]*== )(\&nbsp;Block was alloc'd at)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
     output=gensub(/^(==[0-9]*== )(\&nbsp;Access not within mapped region.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
     output=gensub(/^(==[0-9]*== )(\&nbsp;Uninitialised value was created.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output=gensub(/^(==[0-9]*== )(\&nbsp;Bad permissions for mapped region.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
 
     # Highlight file and line
     output=gensub(/^(==[0-9]*== .* \()([^:]*:[0-9]*)\)$/, "\\1<span class=\"leak_file_info\">\\2</span>)", 1, output)

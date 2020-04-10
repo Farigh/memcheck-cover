@@ -90,7 +90,7 @@ function print_buffers()
     }
     # `useless_result` in only set to prevent evaluation of it's assigned sub-shell output
     else if (($0 ~ /\^-- SC2034: useless_result appears unused./) \
-             && (previous_lines[0] ~ /tests\/generate_html_outputs_ts\/ts_setup\.sh line 110:/))
+             && (previous_lines[0] ~ /tests\/generate_html_outputs_ts\/ts_setup\.sh line 111:/))
     {
     }
     # In tests, `test_cases` variable is declared and then processed by a function from utils.test.sh

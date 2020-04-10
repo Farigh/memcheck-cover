@@ -35,8 +35,9 @@ function generate_memcheck_report()
 
     expect_file "${test_out_dir}${binary_name}.memcheck"
 
-    # Except for invalid_write (which segfaults), the error out file should be empty
-    if [ "${binary_name}" != "invalid_write" ]; then
+    # Except for invalid_write and jump_to_invalid_addr (which segfaults),
+    # the error out file should be empty
+    if [ "${binary_name}" != "invalid_write" ] && [ "${binary_name}" != "jump_to_invalid_addr" ]; then
         error_occured=0
         expect_empty_file "${test_err_output}"
         if [ "${error_occured}" -ne 0 ]; then
