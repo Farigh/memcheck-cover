@@ -97,6 +97,10 @@
     output=gensub(/^(==[0-9]*== )(Syscall param .* points to uninitialised byte.*)/,
                   "\\1<span class=\"" points_to_uninitialized_criticality "_leak\">\\2</span>", 1, output)
 
+    # Illegal memory pool address
+    output=gensub(/^(==[0-9]*== )(Illegal memory pool address.*)/,
+                  "\\1<span class=\"" illegal_mem_pool_addr_criticality "_leak\">\\2</span>", 1, output)
+
     #############
     ## Customizable client check violations criticality
     #############

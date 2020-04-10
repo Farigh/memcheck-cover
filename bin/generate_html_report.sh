@@ -116,6 +116,10 @@ function init_criticality_levels()
     memcheck_violation_criticality['points_to_uninitialized']="error"
     memcheck_violation_criticality_example['points_to_uninitialized']="Syscall param write(buf) points to uninitialised byte(s)"
 
+    # Illegal memory pool address
+    memcheck_violation_criticality['illegal_mem_pool_addr']="error"
+    memcheck_violation_criticality_example['illegal_mem_pool_addr']="Illegal memory pool address"
+
     #############################################
     ##       Default warning violations        ##
     #############################################
