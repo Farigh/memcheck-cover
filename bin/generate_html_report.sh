@@ -120,6 +120,10 @@ function init_criticality_levels()
     memcheck_violation_criticality['illegal_mem_pool_addr']="error"
     memcheck_violation_criticality_example['illegal_mem_pool_addr']="Illegal memory pool address"
 
+    # Overlapping source and destination
+    memcheck_violation_criticality['overlapping_src_dest']="error"
+    memcheck_violation_criticality_example['overlapping_src_dest']="Source and destination overlap in strncpy(0x1fff000375, 0x1fff000389, 21)"
+
     # Jump to the invalid address
     memcheck_violation_criticality['jump_to_invalid_addr']="error"
     memcheck_violation_criticality_example['jump_to_invalid_addr']="Jump to the invalid address stated on the next line"

@@ -101,6 +101,10 @@
     output=gensub(/^(==[0-9]*== )(Illegal memory pool address.*)/,
                   "\\1<span class=\"" illegal_mem_pool_addr_criticality "_leak\">\\2</span>", 1, output)
 
+    # Overlapping source and destination
+    output=gensub(/^(==[0-9]*== )(Source and destination overlap in .*)/,
+                  "\\1<span class=\"" overlapping_src_dest_criticality "_leak\">\\2</span>", 1, output)
+
     # Jump to the invalid address
     output=gensub(/^(==[0-9]*== )(Jump to the invalid address.*)/,
                   "\\1<span class=\"" jump_to_invalid_addr_criticality "_leak\">\\2</span>", 1, output)
