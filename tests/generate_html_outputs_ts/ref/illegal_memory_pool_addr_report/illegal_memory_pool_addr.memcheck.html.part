@@ -11,7 +11,7 @@ async function updateContentOnceLoaded1()
 ==1== &nbsp; &nbsp;at 0x10101042: breakage::evil_illegal_memory_pool_address() (<span class="leak_file_info">main.cpp:16</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:22</span>)<br />
 ==1== <span class="leak_context_info">&nbsp;Address 0x1fff000350 is on thread 1's stack</span><br />
-==1== &nbsp;in frame #0, created by breakage::evil_illegal_memory_pool_address() (<span class="leak_file_info">main.cpp:9</span>)<br />
+==1== &nbsp; &nbsp;in frame #0, created by breakage::evil_illegal_memory_pool_address() (<span class="leak_file_info">main.cpp:9</span>)<br />
 ==1== <br />
 ==1== <br />
 ==1== HEAP SUMMARY:<br />

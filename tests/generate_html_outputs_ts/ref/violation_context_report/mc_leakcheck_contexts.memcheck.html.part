@@ -1,0 +1,33 @@
+async function updateContentOnceLoaded4()
+{
+    var data =`
+==1== Memcheck, a memory error detector<br />
+==1== Copyright (C), and GNU GPL'd, by Julian Seward et al.<br />
+==1== Using Valgrind and LibVEX; rerun with -h for copyright info<br />
+==1== Command: memcheck-cover/tests/mc_leakcheck_contexts<br />
+==1== Parent PID: 1<br />
+==1== <br />
+==1== <br />
+==1== HEAP SUMMARY:<br />
+==1== &nbsp; &nbsp; in use at exit: 0 bytes in 0 blocks<br />
+==1== &nbsp; total heap usage: 25 allocs, 25 frees, 72,708 bytes allocated<br />
+==1== <br />
+==1== LEAK SUMMARY:<br />
+==1== &nbsp; &nbsp;definitely lost: 0 bytes in 0 blocks<br />
+==1== &nbsp; &nbsp;indirectly lost: 0 bytes in 0 blocks<br />
+==1== &nbsp; &nbsp; &nbsp;possibly lost: 0 bytes in 0 blocks<br />
+==1== <span class="error_leak">&nbsp; &nbsp;still reachable: 95 bytes in 6 blocks</span><br />
+==1==<span class="leak_context_info"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; of which reachable via heuristic:</span><br />
+==1== &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; stdstring &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: 56 bytes in 2 blocks<br />
+==1== &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; length64 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : 16 bytes in 1 blocks<br />
+==1== &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; newarray &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : 7 bytes in 1 blocks<br />
+==1== &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multipleinheritance: 8 bytes in 1 blocks<br />
+==1== &nbsp; &nbsp; &nbsp; &nbsp; suppressed: 0 bytes in 0 blocks<br />
+==1== <br />
+==1== For counts of detected and suppressed errors, rerun with: -v<br />
+==1== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)<br />
+`;
+    var analysis_div = document.getElementById('valgrind.result4.Report');
+    analysis_div.innerHTML=data;
+}
+updateContentOnceLoaded4();
