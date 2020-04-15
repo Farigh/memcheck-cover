@@ -48,15 +48,22 @@ function anonymize_memcheck_file()
 
     # Remove host specific lib path and version
     anonymize_sed_cmd+=";s#(in \(.*/\)\?\(.*\.so\)\([.0-9]*\)\?)#(in a_host_lib.so)#g"
+    anonymize_sed_cmd+=";s#\( at 0x[A-Fa-f0-9]*: ??? (in\) [-/a-z0-9]*)#\1 /path/to/memcheck)#g"
 
-    # Remove glibc version specific addr (templates from headers)
+    # Remove glibc version specific file line (templates from headers)
     anonymize_sed_cmd+=";s#(unique_ptr\.h:[0-9]*)#(unique_ptr\.h:42)#g"
+
+    # Remove valgrind version specific file line
+    anonymize_sed_cmd+=";s#\(Memcheck: mc_leakcheck.c:\)[0-9]* #\12121 #g"
 
     # Replace all backtrace addresses
     anonymize_sed_cmd+=";s/\( \(at\|by\) 0x\)[A-Fa-f0-9]*:/\110101042:/g"
 
     # Replace some errors addresses
     anonymize_sed_cmd+=";s/\(Source and destination overlap in [^(]*(0x\)[A-Fa-f0-9]*, 0x[A-Fa-f0-9]*/\1abcdef42, 0xabcdef43/g"
+
+    anonymize_sed_cmd+=";s/Block 0x[A-Fa-f0-9]*\.\.0x[A-Fa-f0-9]* overlaps with block 0x[A-Fa-f0-9]*\.\.0x[A-Fa-f0-9]*/"
+    anonymize_sed_cmd+="Block 0xabcdef42..0xabcdef58 overlaps with block 0xabcdef50..0xabcdef70/g"
 
     # Use of uninitialized value are CPU dependant (address size)
     anonymize_sed_cmd+=";s#\(== Use of uninitialised value of size\) [0-9]*#\1 42#g"

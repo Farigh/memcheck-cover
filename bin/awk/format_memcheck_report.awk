@@ -101,6 +101,10 @@
     output=gensub(/^(==[0-9]*== )(Illegal memory pool address.*)/,
                   "\\1<span class=\"" illegal_mem_pool_addr_criticality "_leak\">\\2</span>", 1, output)
 
+    # Overlapping memory pool blocks
+    output=gensub(/^(==[0-9]*== )(Block 0x[0-9a-fA-F]+\.\.0x[0-9a-fA-F]+ overlaps with block 0x[0-9a-fA-F]+\.\.0x[0-9a-fA-F]+)$/,
+                  "\\1<span class=\"" overlapping_mem_pool_blocks_criticality "_leak\">\\2</span>", 1, output)
+
     # Overlapping source and destination
     output=gensub(/^(==[0-9]*== )(Source and destination overlap in .*)/,
                   "\\1<span class=\"" overlapping_src_dest_criticality "_leak\">\\2</span>", 1, output)
@@ -191,11 +195,26 @@
     ## Highlight context headlines from valgrind's source file 'memcheck/mc_errors.c'
     output=gensub(/^(==[0-9]*== )(\&nbsp;Uninitialised value was created.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
 
+    # Highlight context headlines from valgrind's source file 'memcheck/mc_leakcheck.c'
+    output=gensub(/^(==[0-9]*== )(Blocks allocation contexts:)/,
+                  "\\1\\&nbsp;<span class=\"leak_context_info\">\\2</span>", 1, output)
+
+    #############
+    ## Additionnal infos
+    #############
+
+    # Vagrind hint message for some errors
+    output=gensub(/^(==[0-9]*== )(This is usually caused by using VALGRIND_MALLOCLIKE_BLOCK in an inappropriate way.)/,
+                  "\\1<span class=\"valgrind_hint\">\\2</span>", 1, output)
+
     # Highlight file and line
     output=gensub(/^(==[0-9]*== .* )\(([^:]*:[0-9]*)\)((<[^>]*>))?$/, "\\1\\3(<span class=\"leak_file_info\">\\2</span>)", 1, output)
 
     # Highlight program exit
     output=gensub(/^(==[0-9]*== )(Process terminating with .*)/, "\\1<span class=\"leak_program_exit\">\\2</span>", 1, output)
+
+    # Highlight valgrind crash stacktrace
+    output=gensub(/^(host stacktrace:)$/, "<span class=\"host_program_stacktrace\">\\1</span>", 1, output)
 
     # Add HTML end of line tag
     print output "<br />"

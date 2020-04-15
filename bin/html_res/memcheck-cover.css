@@ -406,6 +406,12 @@ body {
     font-weight: bold;
 }
 
+/* Vagrind hint message for some errors */
+.valgrind_hint {
+    color: #F08411; /* Orange */
+    font-weight: bold;
+}
+
 /* Leak file info */
 .leak_file_info {
     color: #C017B2; /* Purple */
@@ -413,8 +419,8 @@ body {
     text-decoration: underline;
 }
 
-/* Leak program exit */
-.leak_program_exit {
+/* Leak program exit and valgrind program stacktrace */
+.leak_program_exit, .host_program_stacktrace {
     font-style: italic;
     font-weight: bold;
 }
