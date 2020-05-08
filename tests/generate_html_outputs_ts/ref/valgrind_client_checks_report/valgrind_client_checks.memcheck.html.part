@@ -10,7 +10,7 @@ async function updateContentOnceLoaded1()
 ==1== <span class="error_leak">Uninitialised byte(s) found during client check request</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: breakage::client_check_unaddressable_uninitialised_byte() (<span class="leak_file_info">main.cpp:30</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:38</span>)<br />
-==1== <span class="leak_context_info">&nbsp;Address 0x5b7dc84 is 4 bytes inside a block of size 8 alloc'd</span><br />
+==1== <span class="leak_context_info">&nbsp;Address 0xabcdef1234 is 4 bytes inside a block of size 8 alloc'd</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: operator new[](unsigned long) (in a_host_lib.so)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: breakage::client_check_unaddressable_uninitialised_byte() (<span class="leak_file_info">main.cpp:15</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:38</span>)<br />
@@ -22,7 +22,7 @@ async function updateContentOnceLoaded1()
 ==1== <span class="error_leak">Unaddressable byte(s) found during client check request</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: breakage::client_check_unaddressable_uninitialised_byte() (<span class="leak_file_info">main.cpp:30</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:38</span>)<br />
-==1== <span class="leak_context_info">&nbsp;Address 0x5b7dc88 is 0 bytes after a block of size 8 alloc'd</span><br />
+==1== <span class="leak_context_info">&nbsp;Address 0xabcdef1234 is 0 bytes after a block of size 8 alloc'd</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: operator new[](unsigned long) (in a_host_lib.so)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: breakage::client_check_unaddressable_uninitialised_byte() (<span class="leak_file_info">main.cpp:15</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:38</span>)<br />

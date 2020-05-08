@@ -71,7 +71,7 @@ function require_bin_or_die()
 {
     local required_bin_name=$1
     if ! which "${required_bin_name}" > /dev/null; then
-        error "Could not find 'gawk' in PATH, please install it first."
+        error "Could not find '${required_bin_name}' in PATH, please install it first."
         exit 1
     fi
 }

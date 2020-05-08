@@ -11,7 +11,7 @@ async function updateContentOnceLoaded1()
 ==1== &nbsp; &nbsp;at 0x10101042: write (<span class="leak_file_info">write.c:27</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_syscall_param_points_to_uninitialized_byte() (<span class="leak_file_info">main.cpp:13</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:21</span>)<br />
-==1== <span class="leak_context_info">&nbsp;Address 0x5b7dc80 is 0 bytes inside a block of size 4 alloc'd</span><br />
+==1== <span class="leak_context_info">&nbsp;Address 0xabcdef1234 is 0 bytes inside a block of size 4 alloc'd</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: operator new(unsigned long) (in a_host_lib.so)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_syscall_param_points_to_uninitialized_byte() (<span class="leak_file_info">main.cpp:10</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:21</span>)<br />

@@ -11,7 +11,7 @@ async function updateContentOnceLoaded1()
 ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in a_host_lib.so)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_delete_int_array(int*) (<span class="leak_file_info">main.cpp:9</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:17</span>)<br />
-==1== <span class="leak_context_info">&nbsp;Address 0x5b7dc80 is 0 bytes inside a block of size 12 alloc'd</span><br />
+==1== <span class="leak_context_info">&nbsp;Address 0xabcdef1234 is 0 bytes inside a block of size 12 alloc'd</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: operator new[](unsigned long) (in a_host_lib.so)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: breakage::alloc_int_array() (<span class="leak_file_info">main.cpp:4</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:15</span>)<br />

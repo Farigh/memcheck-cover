@@ -10,7 +10,7 @@ async function updateContentOnceLoaded1()
 ==1== <span class="error_leak">Invalid read of size 4</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: breakage::evil_invalid_read() (<span class="leak_file_info">main.cpp:25</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:31</span>)<br />
-==1== <span class="leak_context_info">&nbsp;Address 0x5b7dc80 is 0 bytes inside a block of size 4 free'd</span><br />
+==1== <span class="leak_context_info">&nbsp;Address 0xabcdef1234 is 0 bytes inside a block of size 4 free'd</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: operator delete(void*) (in a_host_lib.so)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: operator() (<span class="leak_file_info">unique_ptr.h:42</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: ~unique_ptr (<span class="leak_file_info">unique_ptr.h:42</span>)<br />
