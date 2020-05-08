@@ -10,8 +10,9 @@ The `memcheck_runner.sh` script is a wrapper that will run a binary under Valgri
 
 #### Prerequisites
 
-For the `memcheck_runner.sh` script to work, `bash` must be installed and accessible using the PATH environment variable.\
-Bash version 4 and upper only are supported.
+For the `generate_html_report.sh` script to work, the following tools must be installed and accessible using the PATH environment variable:
+  - `bash` Bash version 4 and upper only are supported.
+  - `valgrind` Valgrind version 3.13 was tested, older version might not work as intended
 
 #### Memcheck runner usage
 

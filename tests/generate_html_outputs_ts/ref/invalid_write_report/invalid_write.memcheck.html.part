@@ -10,7 +10,7 @@ async function updateContentOnceLoaded1()
 ==1== <span class="error_leak">Invalid write of size 1</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: breakage::evil_out_of_range_assignment() (<span class="leak_file_info">main.cpp:13</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:27</span>)<br />
-==1== <span class="leak_context_info">&nbsp;Address 0x5b7dc85 is 0 bytes after a block of size 5 alloc'd</span><br />
+==1== <span class="leak_context_info">&nbsp;Address 0xabcdef1234 is 0 bytes after a block of size 5 alloc'd</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: operator new[](unsigned long) (in a_host_lib.so)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: breakage::evil_out_of_range_assignment() (<span class="leak_file_info">main.cpp:7</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:27</span>)<br />
@@ -18,7 +18,7 @@ async function updateContentOnceLoaded1()
 ==1== <span class="error_leak">Invalid write of size 4</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: breakage::evil_null_pointer_assignment() (<span class="leak_file_info">main.cpp:21</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: main (<span class="leak_file_info">main.cpp:28</span>)<br />
-==1== <span class="leak_context_info">&nbsp;Address 0x0 is not stack'd, malloc'd or (recently) free'd</span><br />
+==1== <span class="leak_context_info">&nbsp;Address 0xabcdef1234 is not stack'd, malloc'd or (recently) free'd</span><br />
 ==1== <br />
 ==1== <br />
 ==1== <span class="leak_program_exit">Process terminating with default action of signal 11 (SIGSEGV)</span><br />

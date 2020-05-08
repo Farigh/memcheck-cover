@@ -162,6 +162,9 @@ check_mandatory_param "-o|--output-name" "${memcheck_output_name}"
 ###                   MAIN                   ###
 ################################################
 
+# Check bin requirement
+require_bin_or_die "valgrind"
+
 memcheck_output_file="${memcheck_output_name}.${memcheck_result_ext}"
 
 valgrind_opts=(
