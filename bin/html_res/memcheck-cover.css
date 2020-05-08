@@ -437,7 +437,7 @@ body {
     padding-right: 10px;
 }
 
-/* Vagrind warnings */
+/* Valgrind warnings */
 .valgrind_warning, .valgrind_warning_context {
     color: #F08411; /* Orange */
     font-weight: bold;
@@ -457,7 +457,7 @@ body {
     font-weight: bold;
 }
 
-/* Vagrind hint message for some errors */
+/* Valgrind hint message for some errors */
 .valgrind_hint {
     color: #F08411; /* Orange */
     font-weight: bold;

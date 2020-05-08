@@ -207,17 +207,17 @@
     ## Valgrind's suppression entry
     #############
 
-    # Vagrind suppression opening
+    # Valgrind suppression opening
     output=gensub(/^{$/, valgrind_suppression_opening "{", 1, output)
 
-    # Vagrind suppression closing (add two ==== lines to seperate the suppression from the next violation)
+    # Valgrind suppression closing (add two ==== lines to seperate the suppression from the next violation)
     output=gensub(/^}$/, "}</div>====<br />====", 1, output)
 
     #############
     ## Additionnal infos
     #############
 
-    # Vagrind hint message for some errors
+    # Valgrind hint message for some errors
     output=gensub(/^(==[0-9]*== )(This is usually caused by using VALGRIND_MALLOCLIKE_BLOCK in an inappropriate way.)/,
                   "\\1<span class=\"valgrind_hint\">\\2</span>", 1, output)
 
