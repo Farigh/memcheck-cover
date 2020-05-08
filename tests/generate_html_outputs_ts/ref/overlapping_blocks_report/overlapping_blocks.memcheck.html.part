@@ -8,7 +8,7 @@ async function updateContentOnceLoaded1()
 ==1== Parent PID: 1<br />
 ==1== <br />
 ==1== <br />
-==1== HEAP SUMMARY:<br />
+==1== <span class="valgrind_summary_title">HEAP SUMMARY:</span><br />
 ==1== &nbsp; &nbsp; in use at exit: 20 bytes in 2 blocks<br />
 ==1== &nbsp; total heap usage: 3 allocs, 0 frees, 276 bytes allocated<br />
 ==1== <br />

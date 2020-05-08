@@ -387,11 +387,19 @@ body {
     font-weight: bold;
 }
 
+.valgrind_summary_title {
+    font-weight: bold;
+    color: #222222; /* Dark grey */
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+}
+
 /* Vagrind warnings */
 .valgrind_warning, .valgrind_warning_context {
     color: #F08411; /* Orange */
     font-weight: bold;
     text-decoration: underline;
+    text-decoration-thickness: 1px;
 }
 
 /* Leak warnings */

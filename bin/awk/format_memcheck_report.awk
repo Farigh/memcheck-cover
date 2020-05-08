@@ -129,6 +129,10 @@
     ## Customizable summary criticality
     #############
 
+    # Highlight summary titles
+    output=gensub(/^(==[0-9]*== )((HEAP|LEAK|ERROR) SUMMARY:)(.*)/,
+                  "\\1<span class=\"valgrind_summary_title\">\\2</span>\\4", 1, output)
+
     # Highlight LEAK SUMMARY if any error occured (ie, not having "0 bytes in 0 blocks" output)
     output=gensub(/^(==[0-9]*== )(.*definitely lost: [1-9][0-9,]* bytes in [1-9][0-9,]* blocks.*)/,
                   "\\1<span class=\"" definitely_lost_summary_criticality "_leak\">\\2</span>", 1, output)

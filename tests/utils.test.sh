@@ -58,6 +58,7 @@ function anonymize_memcheck_file()
 
     # Replace all backtrace addresses
     anonymize_sed_cmd+=";s/\( \(at\|by\) 0x\)[A-Fa-f0-9]*:/\110101042:/g"
+    anonymize_sed_cmd+=";s/\( Address 0x\)[A-Fa-f0-9]*\( is on thread [0-9]*'s stack\)/\1abcdef1234\2/g"
 
     # Replace some errors addresses
     anonymize_sed_cmd+=";s/\(Source and destination overlap in [^(]*(0x\)[A-Fa-f0-9]*, 0x[A-Fa-f0-9]*/\1abcdef42, 0xabcdef43/g"
