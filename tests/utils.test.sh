@@ -47,8 +47,9 @@ function anonymize_memcheck_file()
     anonymize_sed_cmd+=";s# ${test_bin_dir// /\\\\ }# memcheck-cover/tests/bin#g"
 
     # Remove host specific lib path and version
-    anonymize_sed_cmd+=";s#(in \(.*/\)\?\(.*\.so\)\([.0-9]*\)\?)#(in a_host_lib.so)#g"
+    anonymize_sed_cmd+=";s#(in \(.*/\)\?.*\.so\([.0-9]*\)\?)#(in a_host_lib.so)#g"
     anonymize_sed_cmd+=";s#\( at 0x[A-Fa-f0-9]*: ??? (in\) [-/a-z0-9]*)#\1 /path/to/memcheck)#g"
+    anonymize_sed_cmd+=";s#^\([ ]* obj:\)\(\(.*/\)\?.*\.so\([.0-9]*\)\?\)#\1/path/to/a_host_lib.so#g"
 
     # Remove glibc version specific file line (templates from headers)
     anonymize_sed_cmd+=";s#(unique_ptr\.h:[0-9]*)#(unique_ptr\.h:42)#g"

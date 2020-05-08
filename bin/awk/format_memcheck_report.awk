@@ -204,6 +204,16 @@
                   "\\1\\&nbsp;<span class=\"leak_context_info\">\\2</span>", 1, output)
 
     #############
+    ## Valgrind's suppression entry
+    #############
+
+    # Vagrind suppression opening
+    output=gensub(/^{$/, valgrind_suppression_opening "{", 1, output)
+
+    # Vagrind suppression closing (add two ==== lines to seperate the suppression from the next violation)
+    output=gensub(/^}$/, "}</div>====<br />====", 1, output)
+
+    #############
     ## Additionnal infos
     #############
 

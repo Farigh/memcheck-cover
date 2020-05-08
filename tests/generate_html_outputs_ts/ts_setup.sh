@@ -50,6 +50,34 @@ function generate_memcheck_report()
     echo "Done"
 }
 
+function generate_memcheck_report_with_suppressions()
+{
+    local test_violation_out_dir="${test_out_dir}suppressions/"
+    local memcheck_runner="$(get_tools_bin_dir)/memcheck_runner.sh"
+
+    # Use uninitialized_value since it has multiple violations
+    local binary_name="uninitialized_value"
+    local test_binary_fullpath=$(get_test_bin_fullpath "${binary_name}")
+
+    echo -n "    > Generating memcheck report with suppressions for '${binary_name}'..."
+
+    # Create output dir if needed
+    [ ! -d "${test_violation_out_dir}" ] && mkdir -p "${test_violation_out_dir}"
+
+    local test_std_output="${test_violation_out_dir}${binary_name}.memcheck_gen.out"
+    local test_err_output="${test_violation_out_dir}${binary_name}.memcheck_gen.err.out"
+
+    # Call the memcheck runner with it's output set to ${test_violation_out_dir}${binary_name}.memcheck
+    # and the suppression generation option
+    "${memcheck_runner}" -o"${test_violation_out_dir}${binary_name}" -s -- "${test_binary_fullpath}" > "${test_std_output}" 2> "${test_err_output}"
+
+    expect_file "${test_violation_out_dir}${binary_name}.memcheck"
+
+    anonymize_memcheck_file "${test_violation_out_dir}${binary_name}.memcheck"
+
+    echo "Done"
+}
+
 function generate_many_result_report_ref_report()
 {
     local test_ref_report_dir="${current_full_path}/ref/many_result_report/"
@@ -136,6 +164,9 @@ testsuite_setup_begin
 
     # Generate one with true (so we have a successful representative output)
     generate_memcheck_report "true"
+
+    # Generate one with violation suppressions
+    generate_memcheck_report_with_suppressions
 
     # Generate ref report for many_result_report test
     generate_many_result_report_ref_report

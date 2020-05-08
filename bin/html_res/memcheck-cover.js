@@ -160,7 +160,7 @@ function UpdateAnalysisVisibility(action, test_id)
             // Update the visibility image to the expand one
             visibility_span.innerHTML = "<div class=\"expand\"><div></div></div>";
 
-            // Remove the hidden class to the analysis content
+            // Add the hidden class to the analysis content
             analysis_div.className = "memcheck_analysis_content hidden";
         }
     }
@@ -171,8 +171,47 @@ function UpdateAnalysisVisibility(action, test_id)
             // Update the visibility image to the collapse one
             visibility_span.innerHTML = "<div class=\"collapse\"><div></div></div>";
 
-            // Add the hidden class to the analysis content
+            // Remove the hidden class to the analysis content
             analysis_div.className = "memcheck_analysis_content";
         }
     }
+}
+
+/**
+ * This function toggles the visibility of the violation suppression content
+ *
+ * @param titleDiv: The violation suppression "button" div that triggered the event
+ */
+function ToogleSuppressionVisibility(titleDiv)
+{
+    // Next siblig is a <br /> tag, the second next is the content
+    contentDiv = titleDiv.nextSibling.nextSibling;
+
+    actionToPerform = "";
+    visibilityClass = "";
+
+    if (contentDiv.className === "suppression_content")
+    {
+        actionToPerform = "Show";
+
+        // Update the visibility image to the expand one
+        visibilityClass = "expand";
+
+        // Add the hidden class to the suppression content
+        contentDiv.className = "suppression_content hidden";
+    }
+    else
+    {
+        actionToPerform = "Hide";
+
+        // Update the visibility image to the collapse one
+        visibilityClass = "collapse";
+
+        // Remove the hidden class to the suppression content
+        contentDiv.className = "suppression_content";
+    }
+
+    titleDiv.innerHTML = "<span class=\"suppression_visibility_icon\"><div class=\""
+                       + visibilityClass + "\"><div></div></div></span> "
+                       + actionToPerform + " generated suppression";
 }
