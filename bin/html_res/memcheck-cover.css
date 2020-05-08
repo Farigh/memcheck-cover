@@ -283,7 +283,7 @@ body {
     user-select: none;
 }
 
-/* Change the background color on hover for an additionnal hint the title can be clicked */
+/* Change the background color on hover as an additionnal hint the title can be clicked */
 .memcheck_analysis_title:hover {
     background-color: #F2F2FF;
 }
@@ -392,6 +392,49 @@ body {
     color: #222222; /* Dark grey */
     text-decoration: underline;
     text-decoration-thickness: 1px;
+}
+
+/* Valgrind suppressions */
+.suppression_title, .suppression_content {
+    color: #733B00; /* Brown */
+    background-color: #ffeec66e; /* Light yellow */
+    font-style: italic;
+    margin: 0px;
+    margin-left: 20px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 10px;
+    border: dashed thin #F08411; /* Orange dashed border */
+}
+
+.suppression_title {
+    font-size: 0.9em;
+    display: inline-block;
+    position: relative;
+    width: 255px;
+
+    /* Move this div 1px down so the borders merges into the content div's one */
+    top: 1px;
+
+    /* Enable pointer on hover to inform the user it can be clicked */
+    cursor: pointer;
+
+    /* Disable text selection to avoid double click selection */
+    user-select: none;
+}
+
+/* Change the background color on hover as an additionnal hint the title can be clicked */
+.suppression_title:hover {
+    background-color: #ffe7b0; /* Orangish yellow */
+}
+
+.suppression_visibility_icon {
+    position: relative;
+    top: 2px;
+}
+
+.suppression_content {
+    padding-right: 10px;
 }
 
 /* Vagrind warnings */

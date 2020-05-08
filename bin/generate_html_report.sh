@@ -596,6 +596,14 @@ function generate_html_report()
         awk_memcheck_format_opt+=(-v "${opt}_client_check_criticality=${memcheck_client_check_criticality[${opt}],,}")
     done
 
+    # Add valgrind suppression header
+    local visibility_icon='<span class="suppression_visibility_icon"><div class="expand"><div></div></div></span>'
+    local valgrind_suppression_opening='<div class="suppression_title" onclick="javascript:ToogleSuppressionVisibility(this)">'
+    valgrind_suppression_opening+="${visibility_icon} Show generated suppression"
+    valgrind_suppression_opening+='</div><br /><div class="hidden suppression_content">'
+
+    awk_memcheck_format_opt+=(-v "valgrind_suppression_opening=${valgrind_suppression_opening}")
+
     local memcheck_input_dir_len=${#memcheck_input_dir}
 
     # Process each memcheck result file
