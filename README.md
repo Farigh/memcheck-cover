@@ -1,8 +1,10 @@
 # Memcheck cover
 
 Memcheck cover provides a bash helper for Valgrind Memcheck analysis.\
-It also provides an HTML report generator formating Valgrind raw reports and highlighting important parts to help you interpret those results.\
+It also provides an HTML report generator formatting Valgrind raw reports and highlighting important parts to help you interpret those results.\
 It can easily be used in you CI environment to automatically generate reports.
+
+A demonstration being better than any words, you can find a [generated HTML report example here](https://david-garcin.github.io/demos/memcheck-cover/index.html).
 
 ### The Valgrind's Memcheck tool runner
 
@@ -30,11 +32,11 @@ Options:
                           file, those can be used to create a suppression file.
 ```
 
-The only mandatory option is the `--output-name`, which will define the outpout file path and name.\
+The only mandatory option is the `--output-name`, which will define the output file path and name.\
 If the path does not exist, it will be created.\
-The `.memcheck` extension will automatically added to it for compatibility with the `generate_html_report.sh` script.
+The `.memcheck` extension will automatically be added to it for compatibility with the `generate_html_report.sh` script.
 
-You can specify an violation suppression file using the `--ignore` option.\
+You can specify a violation suppression file using the `--ignore` option.\
 Such suppression file must follow [Valgrind's suppression file rules](https://valgrind.org/docs/manual/mc-manual.html#mc-manual.suppfiles).
 
 Suppressions can be generated within the report using the `--gen-suppressions` option.\
@@ -59,7 +61,7 @@ The suppression will look like that in the report:
 [...]
 ```
 
-Exemple:
+Example:
 ```shell
 $ memcheck_runner.sh --output-name "my/output/path/filename" -- true can take useless params and still be one true self
 Info: Output file set to: 'my/output/path/filename.memcheck'
@@ -68,7 +70,7 @@ Info: Running the following cmd with valgrind:
       "true" "can" "take" "useless" "params" "and" "still" "be" "one" "true" "self"
 ```
 
-This call will output the Valgind's report to the `filename.memcheck` file within the `my/output/path/` directory, which in this exemple was created.\
+This call will output the Valgind's report to the `filename.memcheck` file within the `my/output/path/` directory, which in this example was created.\
 The Valgrind analysis was run using the `true` binary, passing it many parameters.
 
 #### Valgrind's Memcheck tool options
@@ -77,7 +79,7 @@ For now, Valgrind's options are not customizable.
 
 The following options are used:
   - `--track-origins=yes`\
-When set to yes, Memcheck keeps track of the origins of all uninitialised values.\
+When set to yes, Memcheck keeps track of the origins of all uninitialized values.\
 Then, when an uninitialised value error is reported, Memcheck will try to show the origin of the value.\
 An origin can be one of the following four places: a heap block, a stack allocation, a client request, or miscellaneous other sources (eg, a call to brk).
   - `--leak-check=full`\
@@ -137,7 +139,7 @@ There are two mandatory parameters to the generator:
 The generator will iterate over sub-directories and process any `.memcheck` file it finds.
   - `--output-dir` which defines the path in which the HTML report will be generated.
 
-If the default violation settings does not fit you, the violations criticality can be ajusted.\
+If the default violation settings does not fit you, each violation criticality can be adjusted.\
 A configuration file, with all the available criticality settings and their default values, can be generated using the `--generate-config` option:
 ```shell
 $ generate_html_report.sh --generate-config
@@ -150,12 +152,12 @@ The default configuration file is generated in the current directory in the file
 You can then change any criticality to fit your needs, and pass it to the generator using the `--config` option.\
 If any criticality is missing from the file, the default one will be applied.
 
-Passing any configuration file with invalid parameters or parameters values will result in an error.\
-For exemple:
+Passing any configuration file with invalid parameters or parameter values will result in an error.\
+For example:
   - `Error: Invalid configuration value 'dummy' for parameter: memcheck_violation_criticality['contains_unaddressable']` => The `dummy` criticality does not exist
   - `Error: Invalid configuration parameter: memcheck_violation_criticality['dummy_param']` => The `dummy_param` key does not exist for `memcheck_violation_criticality`
 
-Here is a generation exemple, with the following tree:
+Here is a generation example, with the following tree:
 ```
 my/output/path/
 ├── another_dir/
