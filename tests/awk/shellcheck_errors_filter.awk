@@ -64,6 +64,16 @@ function print_buffers()
                  || (previous_lines[0] ~ /bin\/generate_html_report\.sh line 55:/)))
     {
     }
+    # `memcheck_cover_always_use_colors` might be set by utils.common.sh users to force color output
+    else if (($0 ~ /\^-- SC2154: memcheck_cover_always_use_colors is referenced but not assigned\./) \
+             && (previous_lines[0] ~ /bin\/utils.common\.sh line 22:/))
+    {
+    }
+    # The `memcheck_cover_always_use_colors` variable can be set to "true" before sourcing utils.common.sh to force color output
+    else if (($0 ~ /\^-- SC2034: memcheck_cover_always_use_colors appears unused\./) \
+             && (previous_lines[0] ~ /\/tests\/.+\.sh line [0-9]+:/))
+    {
+    }
     # Those elements are defined in utils.common.sh but used by the ones importing it
     else if ((($0 ~ /\^-- SC2034: memcheck_result_ext appears unused\. Verify it or export it\./) \
               || ($0 ~ /\^-- SC2034: BOLD appears unused\. Verify it or export it\./) \
@@ -75,38 +85,38 @@ function print_buffers()
     }
     # This call to a sub-shell is intended to
     else if (($0 ~ /\^-- SC2091: Remove surrounding \$\(\) to avoid executing output./) \
-             && (previous_lines[0] ~ /tests\/generate_html_params_ts\/generate_config_param_ts_ptc\.sh line 41:/))
+             && (previous_lines[0] ~ /\/tests\/generate_html_params_ts\/generate_config_param_ts_ptc\.sh line 41:/))
     {
     }
     # `test_cases` is set by the caller
     else if (($0 ~ /\^-- SC2154: test_cases is referenced but not assigned \(did you mean 'test_case'\?\)\./) \
-             && (previous_lines[0] ~ /tests\/utils\.test\.sh line 26:/))
+             && (previous_lines[0] ~ /\/tests\/utils\.test\.sh line 26:/))
     {
     }
     # `error_occured` is used by the caller
     else if (($0 ~ /\^-- SC2034: error_occured appears unused\. Verify it or export it\./) \
-             && (previous_lines[0] ~ /tests\/utils\.test\.sh line 277:/))
+             && (previous_lines[0] ~ /\/tests\/utils\.test\.sh line 277:/))
     {
     }
     # `useless_result` in only set to prevent evaluation of it's assigned sub-shell output
     else if (($0 ~ /\^-- SC2034: useless_result appears unused./) \
-             && (previous_lines[0] ~ /tests\/generate_html_outputs_ts\/ts_setup\.sh line 139:/))
+             && (previous_lines[0] ~ /\/tests\/generate_html_outputs_ts\/ts_setup\.sh line 139:/))
     {
     }
     # In tests, `test_cases` variable is declared and then processed by a function from utils.test.sh
     else if (($0 ~ /\^-- SC2034: test_cases appears unused\./) \
-             && (previous_lines[0] ~ /tests\/[^\/]+\/.+\.sh line [0-9]+:/))
+             && (previous_lines[0] ~ /\/tests\/[^\/]+\/.+\.sh line [0-9]+:/))
     {
     }
-    # In tests, `param_to_test` is voluntarily not quote to check space behaviour
+    # In tests, `param_to_test` is voluntarily not quoted to check space behaviour
     else if (($0 ~ /\^-- SC2086: Double quote to prevent globbing and word splitting\./) \
-             && (previous_lines[0] ~ /tests\/[^\/]+\/.+\.sh line [0-9]+:/) \
+             && (previous_lines[0] ~ /\/tests\/[^\/]+\/.+\.sh line [0-9]+:/) \
              && (previous_lines[1] ~ / \$\{param_to_test\}/))
     {
     }
-    # In tests, `in_dir_param` and `out_dir_param` are voluntarily not quote to check space behaviour
+    # In tests, `in_dir_param` and `out_dir_param` are voluntarily not quoted to check space behaviour
     else if (($0 ~ /\^-- SC2086: Double quote to prevent globbing and word splitting\./) \
-             && (previous_lines[0] ~ /tests\/generate_html_params_ts\/in_dir_out_dir_param_ts_ptc\.sh line 73:/))
+             && (previous_lines[0] ~ /\/tests\/generate_html_params_ts\/in_dir_out_dir_param_ts_ptc\.sh line 73:/))
     {
     }
     else

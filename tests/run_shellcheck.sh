@@ -24,6 +24,11 @@ current_full_path=$(readlink -e "${current_script_dir}")
 
 root_dir=$(readlink -e "${current_full_path}/../")
 
+# Force colored output in github-ci
+if [ "${GITHUB_RUN_ID}" != "" ]; then
+    memcheck_cover_always_use_colors="true"
+fi
+
 # Import common utils
 source "${root_dir}/bin/utils.common.sh"
 

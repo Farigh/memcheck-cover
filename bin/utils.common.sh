@@ -18,8 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ######
 
-# Enable colors only if in interactive shell
-if [ -t 1 ]; then
+# Enable colors only if in interactive shell or if asked for
+if [ -t 1 ] || [ "${memcheck_cover_always_use_colors}" == "true" ]; then
     RESET_FORMAT=$(echo -e '\e[00m')
     BOLD=$(echo -e '\e[1m')
     RED=$(echo -e '\e[31m')
