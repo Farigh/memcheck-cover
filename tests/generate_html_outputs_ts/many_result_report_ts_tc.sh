@@ -27,7 +27,6 @@ function setup_test()
     # Move the 'invalid_delete' result to another sub-directory
     [ ! -d "${test_out_dir}z/test/bin/" ] && mkdir -p "${test_out_dir}z/test/bin/"
     mv "${test_out_dir}test/bin/invalid_delete.memcheck" "${test_out_dir}z/test/bin/"
-
 }
 
 function test_many_result_report()
@@ -43,7 +42,7 @@ function test_many_result_report()
 
     # Call the html report generator with the ${test_out_dir} as input directory
     # and the ${report_out_dir} as output directory
-    "$generate_html_report" -i "${test_out_dir}" -o "${report_out_dir}" > "${test_std_output}" 2> "${test_err_output}"
+    "${generate_html_report}" -i "${test_out_dir}" -o "${report_out_dir}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output

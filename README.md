@@ -161,7 +161,7 @@ Here is a generation example, with the following tree:
 ```
 my/output/path/
 ├── another_dir/
-│   └── a_report.memcheck
+│   ├── a_report.memcheck
 │   └── other_report.memcheck
 └── filename.memcheck
 ```
@@ -177,13 +177,13 @@ Info: Processing memcheck file 'another_dir/other_report.memcheck' ...
 Info: Generating index.html...
 ```
 
-The result will look like:
+The result will look like this:
 ```
 my/output/path/report/
 ├── another_dir/
-│   └── a_report.memcheck.html.part
+│   ├── a_report.memcheck.html.part
 │   └── other_report.memcheck.html.part
-└── filename.memcheck.html.part
+├── filename.memcheck.html.part
 ├── index.html
 ├── memcheck-cover.css
 └── memcheck-cover.js

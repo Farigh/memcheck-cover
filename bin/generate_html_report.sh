@@ -738,7 +738,7 @@ if [ ! -d "${memcheck_input_dir}" ]; then
     exit 1
 fi
 
-# -e test returns false if /path/to/a exists but is not a dir if it has a trailing /
+# -e test returns false if /path/to/a exists but is not a dir and has a trailing /
 html_output_dir_not_trailling="${html_output_dir}"
 if [ "${html_output_dir_not_trailling: -1}" == "/" ]; then
     html_output_dir_not_trailling="${html_output_dir_not_trailling:0:-1}"
@@ -747,6 +747,15 @@ fi
 if [ -e "${html_output_dir_not_trailling}" ] && [ ! -d "${html_output_dir}" ]; then
     error "Provided output directory '${html_output_dir}' exists but is not a directory"
     exit 1
+fi
+
+# Make sure input and output directories ends with a /
+if [ "${memcheck_input_dir: -1}" != "/" ]; then
+    memcheck_input_dir+="/"
+fi
+
+if [ "${html_output_dir: -1}" != "/" ]; then
+    html_output_dir+="/"
 fi
 
 ################################################
