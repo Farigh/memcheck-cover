@@ -27,6 +27,9 @@ bin_dir=$(readlink -e "${current_full_path}/../bin/")
 # Import common utils
 source "${bin_dir}/utils.common.sh"
 
+testrunner_error=0
+testrunner_error_msg=""
+
 overall_test_failed=0
 overall_test_passed=0
 overall_test_skipped=0
@@ -200,6 +203,15 @@ function run_testsuite()
     # Run all tests in testsuite
     local test_runner
     while read -r test_runner; do
+        # Ensure the test-runner is executable
+        if ! [ -x "${test_runner}" ]; then
+            ((++testrunner_error))
+
+            testrunner_error_msg+="  - Missing execution rights for test '${test_runner}'\n"
+
+            continue
+        fi
+
         if is_parameterized_test "${test_runner}"; then
             run_parameterized_test "${test_suite_name}" "${test_runner}"
         else
@@ -396,7 +408,7 @@ done < <(get_testsuite_dirs_ordered)
 
 echo ""
 # Print overall summary
-suite_result_status=$(get_test_result_status $overall_test_failed)
+suite_result_status=$(get_test_result_status ${overall_test_failed})
 echo "**** Summary [${suite_result_status}]"
 echo "**    Total test count: $((overall_test_passed + overall_test_failed + overall_test_skipped))"
 echo "** Total success count: ${overall_test_passed}"
@@ -404,5 +416,11 @@ echo "** Total failure count: ${overall_test_failed}"
 echo "** Total skipped count: ${overall_test_skipped}"
 echo "********"
 
+if [ $testrunner_error -ne 0 ]; then
+    error "Error occured during test execution:"
+    echo -e "${testrunner_error_msg}"
+    exit 1
+fi
+
 # Error on failure
-exit ${overall_test_failed}
+exit $overall_test_failed
