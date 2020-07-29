@@ -316,5 +316,10 @@ function testsuite_setup_end()
     info "Done"
 }
 
+# Force colored output in github-ci
+if [ "${GITHUB_RUN_ID}" != "" ]; then
+    memcheck_cover_always_use_colors="true"
+fi
+
 # Source common utils from tools bin directory
 source "$(get_tools_bin_dir)/utils.common.sh"
