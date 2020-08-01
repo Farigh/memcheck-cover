@@ -61,12 +61,18 @@ function convert_ref()
     ####
 
     # Convert report title
-    local new_criticality_css_bg
+    local status_pass_color="var(--summary-status-pass-font-color)"
+    local status_warning_color="var(--summary-status-warning-font-color)"
+    local status_error_color="var(--summary-status-error-font-color)"
+
+    local warning_percentage="100"
     if [ "${new_criticality_level}" == "error" ]; then
-        new_criticality_css_bg=' style="background-image: linear-gradient(to right, #00CF00 0%, orange 0%, orange 0%, red 0%, red 100%);">'
-    else
-        new_criticality_css_bg=' style="background-image: linear-gradient(to right, #00CF00 0%, orange 0%, orange 100%, red 100%, red 100%);">'
+        warning_percentage="0"
     fi
+    local new_criticality_css_bg=' style="background-image: linear-gradient(to right, '
+    new_criticality_css_bg+="${status_pass_color} 0%, ${status_warning_color} 0%, ${status_warning_color} ${warning_percentage}%, "
+    new_criticality_css_bg+="${status_error_color} ${warning_percentage}%"
+    new_criticality_css_bg+=", ${status_error_color} 100%);\">"
     local sed_replace_title="s/\(report_summary_ratio\" title=\"\)[^:]*: \([0-9]*\"\).*/\\1${new_criticality_level^}s: \\2${new_criticality_css_bg}/g"
 
     # Convert summary (right after the title)

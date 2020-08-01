@@ -97,12 +97,14 @@ END {
         warning_percent = 100
     }
 
-    green_color = "#00CF00"
+    status_pass_color = "var(--summary-status-pass-font-color)"
+    status_warning_color = "var(--summary-status-warning-font-color)"
+    status_error_color = "var(--summary-status-error-font-color)"
 
     ratio_style = "background-image: linear-gradient(to right, "
-    ratio_style = ratio_style green_color " " success_percent "%, orange " success_percent "%, "
-    ratio_style = ratio_style "orange " warning_percent "%, red " warning_percent "%, "
-    ratio_style = ratio_style "red 100%);"
+    ratio_style = ratio_style status_pass_color " " success_percent "%, " status_warning_color " " success_percent "%, "
+    ratio_style = ratio_style status_warning_color " " warning_percent "%, " status_error_color " " warning_percent "%, "
+    ratio_style = ratio_style status_error_color " 100%);"
 
     summary_ratio_title = ""
 
