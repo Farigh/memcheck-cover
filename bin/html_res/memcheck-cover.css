@@ -214,6 +214,20 @@
     --analysis-content-border-color: #5A5A75;
 }
 
+/* Command title (default) */
+:root, [data-title-type="command"] {
+    --other-title-type-content: "Analysis name";
+    --analysis-command-title-visibility: inline-block;
+    --analysis-name-title-visibility: none;
+}
+
+/* Analysis name title */
+[data-title-type="name"] {
+    --other-title-type-content: "Command";
+    --analysis-command-title-visibility: none;
+    --analysis-name-title-visibility: inline-block;
+}
+
 html, body {
     height:100%;
 }
@@ -511,10 +525,22 @@ body {
     margin-right: 6px;
 }
 
+.analysis_command_title {
+    display: var(--analysis-command-title-visibility);
+}
+
+.analysis_name_title {
+    display: var(--analysis-name-title-visibility);
+}
+
 .analysis_title_type_button {
     width: 200px;
     border-radius: 5px;
     margin: 6px;
+}
+
+.analysis_title_type_button:after {
+    content: var(--other-title-type-content);
 }
 
 .analysis_title_type_button:hover {
