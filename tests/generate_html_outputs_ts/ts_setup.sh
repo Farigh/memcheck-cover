@@ -84,18 +84,23 @@ function generate_many_result_report_ref_report()
 
     echo -n "    > Generating ${CYAN}many_result_report${RESET_FORMAT} test ref report..."
 
+    [ ! -d "${test_ref_report_dir}suppressions/" ] && mkdir -p "${test_ref_report_dir}suppressions/"
     [ ! -d "${test_ref_report_dir}test/bin/" ] && mkdir -p "${test_ref_report_dir}test/bin/"
     [ ! -d "${test_ref_report_dir}z/test/bin/" ] && mkdir -p "${test_ref_report_dir}z/test/bin/"
 
     # Copy every other test's ref .html.part files
     local ref_path
     while read -r ref_path; do
-        # Skip current test ref directory
-        if [[ "${ref_path}" == *"many_result_report" ]]; then
+        # Skip current test ref directory and generated context reports
+        if [[ "${ref_path}" == *"many_result_report" ]] || [[ "${ref_path}" == *"violation_context_report" ]]; then
             continue
         fi
 
-        cp "${ref_path}/"*.html.part "${test_ref_report_dir}test/bin/"
+        if [[ "${ref_path}" == *"violation_suppression_report" ]]; then
+            cp "${ref_path}/"*.html.part "${test_ref_report_dir}suppressions/"
+        else
+            cp "${ref_path}/"*.html.part "${test_ref_report_dir}test/bin/"
+        fi
     done < <(find "${current_full_path}/ref/" -mindepth 1 -maxdepth 1 -type d)
 
     # Move back the 'true' result to the root directory
