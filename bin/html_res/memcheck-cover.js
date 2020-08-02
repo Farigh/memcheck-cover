@@ -32,68 +32,18 @@ function ToggleAnalysisResultVisibility(test_id)
  */
 function ToggleAnalysisTitleType()
 {
-    var id_num = 1;
+    var currentTitleType = document.documentElement.getAttribute('data-title-type');
 
-    var toggle_to_title = "unset";
+    var newTitleType = "command";
 
-    var current_button = document.getElementById("analysis_title_type_button");
-
-    // Disable button action to prevent multiple click before all results title are updated
-    var old_onclick_action = current_button.onclick;
-    current_button.onclick = "";
-
-    // Update button description
-    var toggle_to_title_content = "Toggle title: Analysis name";
-    if (current_button.innerHTML == toggle_to_title_content)
+    // Default title type is the Execution command
+    if (currentTitleType == null || currentTitleType == "command")
     {
-        current_button.innerHTML = "Toggle title: Command";
-    }
-    else
-    {
-        current_button.innerHTML = toggle_to_title_content;
+        newTitleType = "name";
     }
 
-    // Iterate over all results
-    while (true)
-    {
-        var test_id = "valgrind.result" + id_num.toString();
-        var analysis_cmd_title_span = document.getElementById(test_id + ".Title.Cmd");
-
-        if (analysis_cmd_title_span == null)
-        {
-            break;
-        }
-
-        ++id_num;
-
-        if (toggle_to_title == "unset")
-        {
-            if (analysis_cmd_title_span.className == "hidden")
-            {
-                toggle_to_title = "false";
-            }
-            else
-            {
-                toggle_to_title = "true";
-            }
-        }
-
-        var analysis_name_title_span = document.getElementById(test_id + ".Title.Name");
-
-        if (toggle_to_title == "true")
-        {
-            analysis_cmd_title_span.className = "hidden";
-            analysis_name_title_span.className = "";
-        }
-        else
-        {
-            analysis_name_title_span.className = "hidden";
-            analysis_cmd_title_span.className = "";
-        }
-    }
-
-    // Restore button onclick action
-    current_button.onclick = old_onclick_action;
+    document.documentElement.setAttribute('data-title-type', newTitleType);
+    localStorage.setItem('title_type', newTitleType);
 }
 
 /**
@@ -102,6 +52,7 @@ function ToggleAnalysisTitleType()
 function SetCssTheme(theme_id)
 {
     document.documentElement.setAttribute('data-theme', theme_id);
+    localStorage.setItem('theme', theme_id);
 }
 
 /**
@@ -223,3 +174,32 @@ function ToogleSuppressionVisibility(titleDiv)
                        + visibilityClass + "\"><div></div></div></span> "
                        + actionToPerform + " generated suppression";
 }
+
+/**
+ * This function restores previously stored settings.
+ * The following display settings are stored:
+ *   - The CSS theme (Light or Dark)
+ *   - The analysis title type (Command or Analysis name)
+ */
+function initializePage()
+{
+    // Restore previously set theme
+    var storedTheme = localStorage.getItem('theme');
+
+    if (storedTheme != null)
+    {
+        document.documentElement.setAttribute('data-theme', storedTheme);
+    }
+
+    // Restore previously set title type
+    var storedTitle = localStorage.getItem('title_type');
+
+    if (storedTitle != null)
+    {
+        document.documentElement.setAttribute('data-title-type', storedTitle);
+    }
+
+}
+
+// Reload saved properties
+initializePage();

@@ -414,10 +414,10 @@ function get_memcheck_analysis_title()
     report_name="${report_name//\// \/ }"
 
     local result="${analysis_result_status} "
-    result+="<span id=\"${unique_analysis_id}.Title.Cmd\">"
+    result+='<span class="analysis_command_title">'
     result+="${analysis_result_cmd}"
     result+="</span>"
-    result+="<span id=\"${unique_analysis_id}.Title.Name\" class=\"hidden\">"
+    result+='<span class="analysis_name_title">'
     result+="Analysis name: ${report_name}"
     result+="</span>"
 
@@ -531,9 +531,7 @@ function generate_result_summary()
     print_with_indent "${print_indent}    " '<div title="Collapse all" onclick="JavaScript: CollapseAll();" class="collapseall"><div></div><div></div><div></div></div>'
 
     # Add title type selection button (command or result file)
-    local toggle_title_type_button_content='<div onclick="JavaScript: ToggleAnalysisTitleType();" id="analysis_title_type_button"'
-    toggle_title_type_button_content+=' class="analysis_title_type_button">Toggle title: Analysis name</div>'
-    print_with_indent "${print_indent}    " "${toggle_title_type_button_content}"
+    print_with_indent "${print_indent}    " '<div onclick="JavaScript: ToggleAnalysisTitleType();" class="analysis_title_type_button">Toggle title: </div>'
 
     # Add theme button (dark-grey, dark-blue or light theme)
     local theme_buttons='<div class="css_theme_selection_button"><span class="css_theme_button_name_part">Theme: </span>'
