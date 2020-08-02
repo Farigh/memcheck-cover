@@ -229,7 +229,7 @@ function expect_content_to_match()
     local to_compare_input=$2
 
     local diff_output
-    diff_output=$(diff -u "${reference_input}" "${to_compare_input}" 2>&1)
+    diff_output=$(diff -ur "${reference_input}" "${to_compare_input}" 2>&1)
     local cmd_exit_code=$?
 
     if [ "${cmd_exit_code}" -ne 0 ]; then

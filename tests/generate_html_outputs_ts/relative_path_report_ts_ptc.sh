@@ -41,6 +41,10 @@ function setup_test()
     # Move the 'invalid_delete' result to another sub-directory
     [ ! -d "${test_out_dir}z/test/bin/" ] && mkdir -p "${test_out_dir}z/test/bin/"
     mv "${test_out_dir}test/bin/invalid_delete.memcheck" "${test_out_dir}z/test/bin/"
+
+    # Add a suppression example
+    [ ! -d "${test_out_dir}suppressions/" ] && mkdir -p "${test_out_dir}suppressions/"
+    cp "${testsuite_setup_out_dir}suppressions/uninitialized_value.memcheck" "${test_out_dir}suppressions/"
 }
 
 function error_and_exit()
