@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <link rel="stylesheet" type="text/css" href="memcheck-cover.css">
         <script type="text/javascript" src="memcheck-cover.js"></script>
+        <title>%{html_report_title}</title>
 
         <!-- Valgrind reports asynchronous loading parts -->%{html_part_imports}
     </head>
