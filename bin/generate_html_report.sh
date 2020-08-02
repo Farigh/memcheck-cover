@@ -535,6 +535,14 @@ function generate_result_summary()
     toggle_title_type_button_content+=' class="analysis_title_type_button">Toggle title: Analysis name</div>'
     print_with_indent "${print_indent}    " "${toggle_title_type_button_content}"
 
+    # Add theme button (dark-grey, dark-blue or light theme)
+    local theme_buttons='<div class="css_theme_selection_button"><span class="css_theme_button_name_part">Theme: </span>'
+    theme_buttons+='<span class="css_theme_light_part" onclick="JavaScript: SetCssTheme('"'light'"');">Light</span>'
+    theme_buttons+='<span class="css_theme_dark_grey_part" onclick="JavaScript: SetCssTheme('"'dark-grey'"');">Dark-grey</span>'
+    theme_buttons+='<span class="css_theme_dark_blue_part" onclick="JavaScript: SetCssTheme('"'dark-blue'"');">Dark-blue</span></div>'
+
+    print_with_indent "${print_indent}    " "${theme_buttons}"
+
     # Close the report summary div tag
     print_with_indent "${print_indent}" "</div>"
 }
