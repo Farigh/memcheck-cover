@@ -88,7 +88,7 @@ function generate_many_result_report_ref_report()
     [ ! -d "${test_ref_report_dir}test/bin/" ] && mkdir -p "${test_ref_report_dir}test/bin/"
     [ ! -d "${test_ref_report_dir}z/test/bin/" ] && mkdir -p "${test_ref_report_dir}z/test/bin/"
 
-    # Copy every other test's ref .html.part files
+    # Copy every other test's ref HTML part files
     local ref_path
     while read -r ref_path; do
         # Skip current test ref directory and generated context reports
@@ -97,21 +97,21 @@ function generate_many_result_report_ref_report()
         fi
 
         if [[ "${ref_path}" == *"violation_suppression_report" ]]; then
-            cp "${ref_path}/"*.html.part "${test_ref_report_dir}suppressions/"
+            cp "${ref_path}/"*.html.part.js "${test_ref_report_dir}suppressions/"
         else
-            cp "${ref_path}/"*.html.part "${test_ref_report_dir}test/bin/"
+            cp "${ref_path}/"*.html.part.js "${test_ref_report_dir}test/bin/"
         fi
     done < <(find "${current_full_path}/ref/" -mindepth 1 -maxdepth 1 -type d)
 
     # Move back the 'true' result to the root directory
-    mv "${test_ref_report_dir}test/bin/true.memcheck.html.part" "${test_ref_report_dir}"
+    mv "${test_ref_report_dir}test/bin/true.memcheck.html.part.js" "${test_ref_report_dir}"
 
     # Move the 'invalid_delete' result to another sub-directory
-    mv "${test_ref_report_dir}test/bin/invalid_delete.memcheck.html.part" "${test_ref_report_dir}z/test/bin/"
+    mv "${test_ref_report_dir}test/bin/invalid_delete.memcheck.html.part.js" "${test_ref_report_dir}z/test/bin/"
 
     local last_report_id=0
 
-    # Update the report id from those .html.part
+    # Update the report id from those HTML part
     local html_part_file
     while read -r html_part_file; do
         ((last_report_id++))
@@ -127,7 +127,7 @@ function generate_many_result_report_ref_report()
                 };                                                                                                         \
                 print output;                                                                                              \
             }" "${html_part_file}"
-    done < <(find "${test_ref_report_dir}" -name "*.html.part" -type f | sort | gawk -f "$(get_tools_bin_dir)/awk/order_files_first.awk")
+    done < <(find "${test_ref_report_dir}" -name "*.html.part.js" -type f | sort | gawk -f "$(get_tools_bin_dir)/awk/order_files_first.awk")
 
     echo "Done"
 }

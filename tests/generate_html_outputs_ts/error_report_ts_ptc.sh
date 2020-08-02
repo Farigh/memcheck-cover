@@ -54,7 +54,7 @@ function convert_ref()
                         print gensub(/class=\"[^\"]*_leak\"/,                                 \
                                      \"class=\\\"${new_criticality_css_class}\\\"\", \"g\");  \
                      }"                                                                       \
-        "${test_ref_report_dir}"*.html.part
+        "${test_ref_report_dir}"*.html.part.js
 
     ####
     # Convert ref HTML file
@@ -128,7 +128,7 @@ function test_error_report()
     ### Check test output
 
     # Expect HTML part files
-    expect_file "${report_out_dir}${binary_name}.memcheck.html.part"
+    expect_file "${report_out_dir}${binary_name}.memcheck.html.part.js"
 
     # Compare report output with reference reports
     expect_content_to_match "${test_ref_report_dir}" "${report_out_dir}"

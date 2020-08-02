@@ -41,7 +41,7 @@ function test_definitely_lost_report()
     ### Check test output
 
     # Expect HTML part files
-    expect_file "${report_out_dir}true.memcheck.html.part"
+    expect_file "${report_out_dir}true.memcheck.html.part.js"
 
     # Compare report output with reference reports
     expect_content_to_match "${test_ref_report_dir}" "${report_out_dir}"
