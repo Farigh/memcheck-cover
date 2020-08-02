@@ -97,6 +97,14 @@ function ToggleAnalysisTitleType()
 }
 
 /**
+ * This function sets the current analysis CSS theme
+ */
+function SetCssTheme(theme_id)
+{
+    document.documentElement.setAttribute('data-theme', theme_id);
+}
+
+/**
  * This function processes all results and expands any being hidden
  */
 function ExpandAll()

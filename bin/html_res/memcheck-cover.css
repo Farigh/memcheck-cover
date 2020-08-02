@@ -20,8 +20,8 @@
 |**    Header styles    **|
 \*************************/
 
-/* Light theme colors */
-:root {
+/* Light theme colors (default) */
+:root, [data-theme="light"] {
     --font-color: #000000;
     --background-color: #FFFFFF;
 
@@ -34,6 +34,24 @@
     --button-collapse-subsequent-border: #0505FF;
     --button-background-hover-color: #E1EAFF;
     --button-border-color: #8787EE;
+
+    --light-theme-button-font-color: var(--font-color);
+    --light-theme-button-background-color: #FBDFDF;
+    --light-theme-button-background-hover-color: var(--light-theme-button-background-color); /* No hover color for current theme */
+    --light-theme-button-cursor: unset; /* No cursor modification for current theme */
+    --light-theme-button-selector-color: var(--font-color);
+
+    --dark-grey-theme-button-font-color: var(--font-color);
+    --dark-grey-theme-button-background-color: var(--button-background-color);
+    --dark-grey-theme-button-background-hover-color: var(--button-background-hover-color);
+    --dark-grey-theme-button-cursor: pointer; /* Enable pointer on hover to inform the user it can be clicked */
+    --dark-grey-theme-button-selector-color: #00000000; /* Invisible */
+
+    --dark-blue-theme-button-font-color: var(--font-color);
+    --dark-blue-theme-button-background-color: var(--button-background-color);
+    --dark-blue-theme-button-background-hover-color: var(--button-background-hover-color);
+    --dark-blue-theme-button-cursor: pointer; /* Enable pointer on hover to inform the user it can be clicked */
+    --dark-blue-theme-button-selector-color: #00000000; /* Invisible */
 
     /* Report summary */
     --summary-ratio-font-color: #FFFFFF;
@@ -78,6 +96,122 @@
     /* Footer */
     --footer-background-color: #E0E0E8; /* Light-grey */
     --footer-font-color: #000000;
+}
+
+/* Dark theme common colors */
+[data-theme="dark-grey"], [data-theme="dark-blue"] {
+    --font-color: #E4E6EB;  /* Lighter grey */
+
+    /* Title */
+    --title-font-color: #6C83DF; /* Light blue */
+    --separator-color: #3B3BB5;
+
+    /* Buttons */
+    --button-collapse-subsequent-border: #81888F;
+    --button-border-color: #76767E;
+
+    /* Report summary */
+    --summary-ratio-font-color: #E4E6EB;
+
+    --summary-status-pass-font-color: #0BB70B; /* Green */
+    --summary-status-warning-font-color: #E67600; /* Orange */
+    --summary-status-error-font-color: #CE0D0D; /* Red */
+
+    --summary-error-background-color: #D09C9C; /* Light red */
+    --summary-error-font-color: #820303; /* Dark red */
+    --summary-warning-background-color: #D7B795; /* Light orange */
+    --summary-warning-font-color: #A25B10; /* Dark orange */
+    --summary-info-background-color: #9CB3CC; /* Light blue */
+    --summary-info-font-color: #08407B; /* Dark blue */
+
+    /* Analysis content */
+    --analysis-status-pass-font-color: #0BB70B; /* Green */
+    --analysis-status-warning-font-color: #E67600; /* Orange */
+    --analysis-status-error-font-color: #CE0D0D; /* Red */
+
+    --analysis-error-leak-color: #CE0D0D; /* Red */
+    --analysis-warning-leak-color: #E67600; /* Orange */
+    --analysis-leak-hint-color: #E67600; /* Orange */
+    --analysis-leak-context-color: #13A8BA; /* Cyan */
+    --analysis-valgring-summary-title-color: #888888; /* Light grey */
+    --analysis-valgring-warning-color: #E67600; /* Orange */
+    --analysis-file-info-color: #CD73FF; /* Dark purple */
+
+    /* Analysis suppression */
+    --analysis-suppression-font-color: #ECC59B; /* Light orange */
+    --analysis-suppression-background-color: #150501; /* Dark brown */
+    --analysis-suppression-background-hover-color: #1E1502; /* Orangish brown */
+    --analysis-suppression-border-color: #864500; /* Dark orange dashed border */
+
+    /* Analysis loader */
+    --analysis-loader-background-color: #3D3E3F; /* Dark grey */
+    --analysis-loader-part-background-color: #3F77E1; /* Blue */
+
+    /* Footer */
+    --footer-background-color: #808088; /* Grey */
+    --footer-font-color: #000000;
+}
+
+/* Dark-grey theme colors */
+[data-theme="dark-grey"] {
+    --background-color: #18191A; /* Darker grey */
+
+    /* Buttons */
+    --button-background-color: #3A3B3C;  /* Dark grey */
+    --button-background-hover-color: #61686F;  /* Grey */
+
+    --light-theme-button-font-color: var(--font-color);
+    --light-theme-button-background-color: var(--button-background-color);
+    --light-theme-button-background-hover-color: var(--button-background-color-hover-color);
+    --light-theme-button-cursor: pointer; /* Enable pointer on hover to inform the user it can be clicked */
+    --light-theme-button-selector-color: #00000000; /* Invisible */
+
+    --dark-grey-theme-button-font-color: var(--font-color);
+    --dark-grey-theme-button-background-color: #442728;
+    --dark-grey-theme-button-background-hover-color: var(--dark-grey-theme-button-background-color); /* No hover color for current theme */
+    --dark-grey-theme-button-cursor: unset; /* No cursor modification for current theme */
+    --dark-grey-theme-button-selector-color: var(--font-color);
+
+    --dark-blue-theme-button-font-color: var(--font-color);
+    --dark-blue-theme-button-background-color: var(--button-background-color);
+    --dark-blue-theme-button-background-hover-color: var(--button-background-hover-color);
+    --dark-blue-theme-button-cursor: pointer; /* Enable pointer on hover to inform the user it can be clicked */
+    --dark-blue-theme-button-selector-color: #00000000; /* Invisible */
+
+    /* Analysis content */
+    --analysis-title-hover-color: #2A2B2C;
+    --analysis-content-border-color: #555555;
+}
+
+/* Dark-blue theme colors */
+[data-theme="dark-blue"] {
+    --background-color: #0D1520; /* Darker blue */
+
+    /* Buttons */
+    --button-background-color: #273544;  /* Dark blue */
+    --button-background-hover-color: #40556D;  /* Greyed-blue */
+
+    --light-theme-button-font-color: var(--font-color);
+    --light-theme-button-background-color: var(--button-background-color);
+    --light-theme-button-background-hover-color: var(--button-background-hover-color);
+    --light-theme-button-cursor: pointer; /* Enable pointer on hover to inform the user it can be clicked */
+    --light-theme-button-selector-color: #00000000; /* Invisible */
+
+    --dark-grey-theme-button-font-color: var(--font-color);
+    --dark-grey-theme-button-background-color: var(--button-background-color);
+    --dark-grey-theme-button-background-hover-color: var(--button-background-hover-color);
+    --dark-grey-theme-button-cursor: pointer; /* Enable pointer on hover to inform the user it can be clicked */
+    --dark-grey-theme-button-selector-color: #00000000; /* Invisible */
+
+    --dark-blue-theme-button-font-color: var(--font-color);
+    --dark-blue-theme-button-background-color: #442728;
+    --dark-blue-theme-button-background-hover-color: var(--dark-blue-theme-button-background-color); /* No hover color for current theme */
+    --dark-blue-theme-button-cursor: unset; /* No cursor modification for current theme */
+    --dark-blue-theme-button-selector-color: var(--font-color);
+
+    /* Analysis content */
+    --analysis-title-hover-color: #1A2131;
+    --analysis-content-border-color: #5A5A75;
 }
 
 html, body {
@@ -293,17 +427,15 @@ body {
 }
 
 /*************************\
-|** Analysis title type **|
-|**  selection button   **|
+|**   Toogle buttons    **|
 \*************************/
 
+.css_theme_button_name_part,
+.css_theme_light_part,
+.css_theme_dark_grey_part,
+.css_theme_dark_blue_part,
 .analysis_title_type_button {
-    width: 200px;
-    background-color: var(--button-background-color);
     text-align: center;
-
-    border-radius: 5px;
-    border: solid var(--button-border-color) 1px;
 
     display: inline-block;
 
@@ -312,20 +444,140 @@ body {
 
     padding-left: 10px;
     padding-right: 10px;
-    margin: 6px;
 
     /* Add a color transition duration */
     transition-duration: 0.4s;
-
-    /* Enable pointer on hover to inform the user it can be clicked */
-    cursor: pointer;
 
     /* Disable text selection to avoid double click selection */
     user-select: none;
 }
 
+.css_theme_button_name_part {
+    border-width: 0px;
+}
+
+.css_theme_light_part,
+.css_theme_dark_grey_part,
+.css_theme_dark_blue_part,
+.analysis_title_type_button {
+    border: solid var(--button-border-color) 1px;
+}
+
+.analysis_title_type_button {
+    background-color: var(--button-background-color);
+}
+
+.css_theme_light_part {
+    color: var(--light-theme-button-font-color);
+    background-color: var(--light-theme-button-background-color);
+    cursor: var(--light-theme-button-cursor);
+}
+
+.css_theme_dark_grey_part {
+    color: var(--dark-grey-theme-button-font-color);
+    background-color: var(--dark-grey-theme-button-background-color);
+    cursor: var(--dark-grey-theme-button-cursor);
+}
+
+.css_theme_dark_blue_part {
+    color: var(--dark-blue-theme-button-font-color);
+    background-color: var(--dark-blue-theme-button-background-color);
+    cursor: var(--dark-blue-theme-button-cursor);
+}
+
+.analysis_title_type_button {
+    /* Enable pointer on hover to inform the user it can be clicked */
+    cursor: pointer;
+}
+
+.css_theme_dark_grey_part,
+.css_theme_dark_blue_part {
+    /* Avoid double-width border */
+    border-left-width: 0px;
+}
+
+.css_theme_button_name_part {
+    margin-left: 6px;
+}
+
+.css_theme_light_part {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.css_theme_dark_blue_part {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-right: 6px;
+}
+
+.analysis_title_type_button {
+    width: 200px;
+    border-radius: 5px;
+    margin: 6px;
+}
+
 .analysis_title_type_button:hover {
     background-color: var(--button-background-hover-color);
+}
+
+.css_theme_light_part:hover {
+    background-color: var(--light-theme-button-background-hover-color);
+}
+
+.css_theme_dark_grey_part:hover {
+    background-color: var(--dark-grey-theme-button-background-hover-color);
+}
+
+.css_theme_dark_blue_part:hover {
+    background-color: var(--dark-blue-theme-button-background-hover-color);
+}
+
+.css_theme_selection_button {
+    display: inline-block;
+
+    /* Forbide space wrapping to avoid the button to break in the middle */
+    white-space: nowrap;
+}
+
+/***** Color-blind selection indicators */
+.css_theme_light_part:before,
+.css_theme_dark_grey_part:before,
+.css_theme_dark_blue_part:before,
+.css_theme_light_part:after,
+.css_theme_dark_grey_part:after,
+.css_theme_dark_blue_part:after {
+    content: ".";
+    font-weight: bold;
+    position: relative;
+    bottom: 3px;
+}
+
+.css_theme_light_part:before,
+.css_theme_dark_grey_part:before,
+.css_theme_dark_blue_part:before {
+    right: 3px;
+}
+
+.css_theme_light_part:after,
+.css_theme_dark_grey_part:after,
+.css_theme_dark_blue_part:after {
+    left: 3px;
+}
+
+.css_theme_light_part:before,
+.css_theme_light_part:after {
+    color: var(--light-theme-button-selector-color);
+}
+
+.css_theme_dark_grey_part:before,
+.css_theme_dark_grey_part:after {
+    color: var(--dark-grey-theme-button-selector-color);
+}
+
+.css_theme_dark_blue_part:before,
+.css_theme_dark_blue_part:after {
+    color: var(--dark-blue-theme-button-selector-color);
 }
 
 /*************************\
