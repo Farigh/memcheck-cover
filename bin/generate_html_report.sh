@@ -25,7 +25,7 @@ current_full_path=$(readlink -e "${current_script_dir}")
 # Import common utils
 source "${current_full_path}/utils.common.sh"
 
-html_part_ext=".html.part"
+html_part_ext=".html.part.js"
 
 awk_script_dir="${current_full_path}/awk/"
 
@@ -448,7 +448,7 @@ function generate_html_part()
     ((last_analysis_result_id++))
     local unique_analysis_id="${analysis_result_id_prefix}${last_analysis_result_id}"
 
-    # Generate .html.part file
+    # Generate the HTML part file
     {
         echo "async function updateContentOnceLoaded${last_analysis_result_id}()"
         echo "{"
