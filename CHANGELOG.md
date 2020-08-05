@@ -8,7 +8,7 @@ All notable changes to the Memcheck-Cover project will be documented in this fil
 
 ## [v1.1](https://github.com/Farigh/memcheck-cover/releases/tag/release-1.1) (2020-08-05)
 
-[Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.1...release-1.0)
+[Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.0...release-1.1)
 
 **Implemented enhancements:**
   - Add dark theme alternatives (issue [#5](https://github.com/Farigh/memcheck-cover/issues/5))
