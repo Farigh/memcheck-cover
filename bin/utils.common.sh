@@ -47,7 +47,7 @@ function info()
 
 function get_memcheck_cover_version()
 {
-    echo "1.0"
+    echo "1.1"
 }
 
 function print_copyright_notice()
