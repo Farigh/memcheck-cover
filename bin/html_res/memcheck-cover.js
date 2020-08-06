@@ -27,23 +27,12 @@ function ToggleAnalysisResultVisibility(test_id)
 }
 
 /**
- * This function processes all results and toggles the displayed title
- * between 'Analysis name' and 'Execution command'
+ * This function sets the current analysis displayed title
  */
-function ToggleAnalysisTitleType()
+function SetAnalysisTitle(title_id)
 {
-    var currentTitleType = document.documentElement.getAttribute('data-title-type');
-
-    var newTitleType = "command";
-
-    // Default title type is the Execution command
-    if (currentTitleType == null || currentTitleType == "command")
-    {
-        newTitleType = "name";
-    }
-
-    document.documentElement.setAttribute('data-title-type', newTitleType);
-    localStorage.setItem('title_type', newTitleType);
+    document.documentElement.setAttribute('data-title-type', title_id);
+    localStorage.setItem('title_type', title_id);
 }
 
 /**
