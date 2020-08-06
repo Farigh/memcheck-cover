@@ -531,10 +531,13 @@ function generate_result_summary()
     print_with_indent "${print_indent}    " '<div title="Collapse all" onclick="JavaScript: CollapseAll();" class="collapseall"><div></div><div></div><div></div></div>'
 
     # Add title type selection button (command or result file)
-    print_with_indent "${print_indent}    " '<div onclick="JavaScript: ToggleAnalysisTitleType();" class="analysis_title_type_button">Toggle title: </div>'
+    local title_buttons='<div class="multiple_choice_button_container"><span class="button_description_text">Title: </span>'
+    title_buttons+='<span class="analysis_title_command_part" onclick="JavaScript: SetAnalysisTitle('"'command'"');">Command</span>'
+    title_buttons+='<span class="analysis_title_name_part" onclick="JavaScript: SetAnalysisTitle('"'name'"');">Analysis name</span></div>'
+    print_with_indent "${print_indent}    " "${title_buttons}"
 
     # Add theme button (dark-grey, dark-blue or light theme)
-    local theme_buttons='<div class="css_theme_selection_button"><span class="css_theme_button_name_part">Theme: </span>'
+    local theme_buttons='<div class="multiple_choice_button_container"><span class="button_description_text">Theme: </span>'
     theme_buttons+='<span class="css_theme_light_part" onclick="JavaScript: SetCssTheme('"'light'"');">Light</span>'
     theme_buttons+='<span class="css_theme_dark_grey_part" onclick="JavaScript: SetCssTheme('"'dark-grey'"');">Dark-grey</span>'
     theme_buttons+='<span class="css_theme_dark_blue_part" onclick="JavaScript: SetCssTheme('"'dark-blue'"');">Dark-blue</span></div>'
