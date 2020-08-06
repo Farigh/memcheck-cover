@@ -234,6 +234,11 @@
     --analysis-name-title-visibility: inline-block;
 }
 
+:root {
+    --scollbar-size: calc(100vw - 100%);
+    --report-footer-height: 70px;
+}
+
 html, body {
     height:100%;
 }
@@ -253,7 +258,7 @@ body {
 
 .report_header {
     /* Prevent y scroll-bar recenter effect */
-    padding-left: calc(100vw - 100%);
+    padding-left: var(--scollbar-size);
 }
 
 .report_content {
@@ -262,14 +267,21 @@ body {
 
 .report_footer {
     width: 100%;
-    height: 70px;
-    line-height: 70px; /* vertical center */
+    height: var(--report-footer-height);
     background-color: var(--footer-background-color);
     color: var(--footer-font-color);
-    text-align: center;
-    font-size: 1.15em;
     position: absolute;
     bottom: 0;
+}
+
+.generation_tool_version {
+    line-height: var(--report-footer-height); /* vertical center */
+    text-align: center;
+    font-size: 1.15em;
+
+    /* Prevent y scroll-bar recenter effect */
+    width: calc(100% - var(--scollbar-size));
+    margin-left: var(--scollbar-size);
 }
 
 /* HTML report title */
@@ -277,17 +289,23 @@ body {
     font-weight: bold;
     font-size: 2.1em;
     text-align: center;
-    padding-top: 40px;
+    padding-top: 15px;
     color: var(--title-font-color);
 }
 
 /* HTML report separator */
 .report_separator {
-    margin: 40px auto;
+    margin-bottom: 20px;
+    margin-top: 15px;
+
+    /* Center the separator */
+    margin-left: auto;
+    margin-right: auto;
+
     width: 425px;
-    height: 10px;
+    height: 6px;
     display: block;
-    border-radius: 10px;
+    border-radius: 3px;
     background-color: var(--separator-color);
 }
 
