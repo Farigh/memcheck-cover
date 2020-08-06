@@ -80,6 +80,7 @@
     --analysis-leak-hint-color: #F08411; /* Orange */
     --analysis-leak-context-color: #13A8BA; /* Cyan */
     --analysis-valgring-summary-title-color: #222222; /* Dark grey */
+    --analysis-leak-programm-exit-and-stacktrace-color: #222222; /* Dark grey */
     --analysis-valgring-warning-color: #F08411; /* Orange */
     --analysis-file-info-color: #C017B2; /* Purple */
 
@@ -101,10 +102,6 @@
 /* Dark theme common colors */
 [data-theme="dark-grey"], [data-theme="dark-blue"] {
     --font-color: #E4E6EB;  /* Lighter grey */
-
-    /* Title */
-    --title-font-color: #6C83DF; /* Light blue */
-    --separator-color: #3B3BB5;
 
     /* Buttons */
     --button-collapse-subsequent-border: #81888F;
@@ -134,6 +131,7 @@
     --analysis-leak-hint-color: #E67600; /* Orange */
     --analysis-leak-context-color: #13A8BA; /* Cyan */
     --analysis-valgring-summary-title-color: #888888; /* Light grey */
+    --analysis-leak-programm-exit-and-stacktrace-color: #888888; /* Light grey */
     --analysis-valgring-warning-color: #E67600; /* Orange */
     --analysis-file-info-color: #CD73FF; /* Dark purple */
 
@@ -155,6 +153,10 @@
 /* Dark-grey theme colors */
 [data-theme="dark-grey"] {
     --background-color: #18191A; /* Darker grey */
+
+    /* Title */
+    --title-font-color: #6A90BB; /* Light gray */
+    --separator-color: #40556D;  /* Greyed-blue */
 
     /* Buttons */
     --button-background-color: #3A3B3C;  /* Dark grey */
@@ -186,6 +188,10 @@
 /* Dark-blue theme colors */
 [data-theme="dark-blue"] {
     --background-color: #0D1520; /* Darker blue */
+
+    /* Title */
+    --title-font-color: #5D92D5; /* Light blue */
+    --separator-color: #40556D;  /* Greyed-blue */
 
     /* Buttons */
     --button-background-color: #273544;  /* Dark blue */
@@ -812,6 +818,7 @@ body {
 
 /* Leak program exit and valgrind program stacktrace */
 .leak_program_exit, .host_program_stacktrace {
+    color: var(--analysis-leak-programm-exit-and-stacktrace-color);
     font-style: italic;
     font-weight: bold;
 }
