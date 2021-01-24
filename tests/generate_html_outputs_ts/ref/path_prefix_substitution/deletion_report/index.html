@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="memcheck-cover.css">
+        <script type="text/javascript" src="memcheck-cover.js"></script>
+        <title>Valgrind's memcheck report</title>
+
+        <!-- Valgrind reports asynchronous loading parts -->
+        <script src="fake_multiple_path_report.memcheck.html.part.js" async="async"></script>
+    </head>
+    <body>
+        <div class="report_container">
+            <div class="report_header">
+                <div class="report_title">
+                    Valgrind's memcheck report
+                </div>
+                <div class="report_separator"></div>
+            </div>
+            <div class="report_content">
+                <div class="report_summary">
+                    <div class="report_summary_title">Result summary:</div>
+                    <div class="report_summary_ratio" title="Errors: 1" style="background-image: linear-gradient(to right, var(--summary-status-pass-font-color) 0%, var(--summary-status-warning-font-color) 0%, var(--summary-status-warning-font-color) 0%, var(--summary-status-error-font-color) 0%, var(--summary-status-error-font-color) 100%);">
+                        Pass: 0 / 1
+                    </div>
+                    <div class="report_summary_errors">Errors: 2</div>
+                    <div class="report_summary_warnings">Warnings: 1</div>
+                    <div class="report_summary_infos">Infos: 4</div>
+                    <br /><br />
+                    <div title="Expand all" onclick="JavaScript: ExpandAll();" class="expandall"><div></div><div></div><div></div></div>
+                    <div title="Collapse all" onclick="JavaScript: CollapseAll();" class="collapseall"><div></div><div></div><div></div></div>
+                    <div class="multiple_choice_button_container"><span class="button_description_text">Title: </span><span class="analysis_title_command_part" onclick="JavaScript: SetAnalysisTitle('command');">Command</span><span class="analysis_title_name_part" onclick="JavaScript: SetAnalysisTitle('name');">Analysis name</span></div>
+                    <div class="multiple_choice_button_container"><span class="button_description_text">Theme: </span><span class="css_theme_light_part" onclick="JavaScript: SetCssTheme('light');">Light</span><span class="css_theme_dark_grey_part" onclick="JavaScript: SetCssTheme('dark-grey');">Dark-grey</span><span class="css_theme_dark_blue_part" onclick="JavaScript: SetCssTheme('dark-blue');">Dark-blue</span></div>
+                </div>
+                <div class="memcheck_analysis_title" onclick="JavaScript: ToggleAnalysisResultVisibility('valgrind.result1');">
+                    <span id="valgrind.result1.VisibilityIcon"><div class="expand"><div></div></div></span> <span class="brace_recenter">[</span><span class="analysis_error_status">ERROR</span><span class="brace_recenter">]</span> <span class="analysis_command_title">Command: fake_bin_with_multiple_local_dir</span><span class="analysis_name_title">Analysis name: fake_multiple_path_report</span> <span class="analysis_type_infos"><div class="report_summary_errors">Errors: 2</div>
+                    <div class="report_summary_warnings">Warnings: 1</div>
+                    <div class="report_summary_infos">Infos: 4</div></span>
+                </div>
+                <div id="valgrind.result1.Report" class="memcheck_analysis_content hidden">
+                    <span class="result_loader"></span><span class="result_loader_text"></span>
+                </div>
+            </div>
+            <div class="report_footer">
+                <div class="generation_tool_version">
+                    This report was generated using <a href="https://github.com/Farigh/memcheck-cover">memcheck-cover</a> v1.1
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

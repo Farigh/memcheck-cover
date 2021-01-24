@@ -61,7 +61,7 @@ function print_buffers()
     # `memcheck_result_ext` is set by utils.common.sh
     else if (($0 ~ /\^-- SC2154: memcheck_result_ext is referenced but not assigned\./) \
              && ((previous_lines[0] ~ /bin\/memcheck_runner\.sh line 50:/) \
-                 || (previous_lines[0] ~ /bin\/generate_html_report\.sh line 56:/))) {
+                 || (previous_lines[0] ~ /bin\/generate_html_report\.sh line 57:/))) {
     }
     # `memcheck_cover_always_use_colors` might be set by utils.common.sh users to force color output
     else if (($0 ~ /\^-- SC2154: memcheck_cover_always_use_colors is referenced but not assigned\./) \
@@ -89,11 +89,12 @@ function print_buffers()
     }
     # `error_occured` is used by the caller
     else if (($0 ~ /\^-- SC2034: error_occured appears unused\. Verify it or export it\./) \
-             && (previous_lines[0] ~ /\/tests\/utils\.test\.sh line 280:/)) {
+             && (previous_lines[0] ~ /\/tests\/utils\.test\.sh line 289:/)) {
     }
     # `useless_result` in only set to prevent evaluation of it's assigned sub-shell output
     else if (($0 ~ /\^-- SC2034: useless_result appears unused./) \
-             && (previous_lines[0] ~ /\/tests\/generate_html_outputs_ts\/ts_setup\.sh line 144:/)) {
+             && ((previous_lines[0] ~ /\/tests\/generate_html_outputs_ts\/ts_setup\.sh line 146:/) \
+                 || (previous_lines[0] ~ /\/tests\/generate_html_outputs_ts\/path_prefix_substitution_ts_ptc\.sh line 37:/))) {
     }
     # In tests, `test_cases` variable is declared and then processed by a function from utils.test.sh
     else if (($0 ~ /\^-- SC2034: test_cases appears unused\./) \

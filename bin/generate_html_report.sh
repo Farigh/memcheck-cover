@@ -45,6 +45,7 @@ declare -A memcheck_summary_criticality
 declare -A memcheck_violation_criticality_example
 declare -A memcheck_client_check_criticality_example
 declare -A memcheck_summary_criticality_example
+declare -A memcheck_path_prefix_replacement
 
 ################################################
 ###                 FUNCTIONS                ###
@@ -305,6 +306,11 @@ function generate_default_config()
         echo "# Case does not matter."
         echo "######"
 
+        # Add criticality default values
+        echo "#==========================="
+        echo "#=== Criticality options ==="
+        echo "#==========================="
+
         # Add each default values, alphabetically ordered, with example comment
         local opt
         for opt in $(echo "${!memcheck_violation_criticality[@]}" | xargs -n1 | sort -g | xargs); do
@@ -345,6 +351,30 @@ function generate_default_config()
             echo "# Criticality for the following leak summary type: ${memcheck_summary_criticality_example[${opt}]}"
             echo "memcheck_summary_criticality['${opt}']=\"${memcheck_summary_criticality[${opt}]}\""
         done
+
+        # Add path prefix replacement optional parameters example
+        echo ""
+        echo ""
+        echo "#==========================="
+        echo "#===  Advanced options   ==="
+        echo "#==========================="
+        echo ""
+        echo "# Prefix replacement can be applied to remove or replace paths prefixes"
+        echo "# It can be defined by filling the following map:"
+        echo '#    memcheck_path_prefix_replacement["<prefix_to_replace>"]="<replacement_value>"'
+        echo "# Where the key 'prefix_to_replace' is the path's prefix to be replaced"
+        echo "# And the value 'replacement_value' is the replacing value (it can be left empty to remove the prefix completly)"
+        echo "#"
+        echo "# For example, setting:"
+        echo '#    memcheck_path_prefix_replacement["/var/user/repo"]="<repo>"'
+        echo "# Would convert the following report line:"
+        echo "#    ==1==    at 0x10101042: myFunc() (/var/user/repo/src/lib1/MyClass.cpp:14)"
+        echo "# To:"
+        echo "#    ==1==    at 0x10101042: myFunc() (<repo>/src/lib1/MyClass.cpp:14)"
+        echo "#"
+        echo "# Multiple replacements can be defined"
+        echo ""
+
     } > "${default_config_output}"
 
     echo "Done. The generated configuration can be modified and then loaded"
@@ -616,6 +646,13 @@ function generate_html_report()
         valgrind_suppression_opening+='</div><br /><div class=\"hidden suppression_content\">'
 
         echo "    valgrind_suppression_opening = \"${valgrind_suppression_opening}\""
+
+        # Add optional path prefix replacement
+        for opt in "${!memcheck_path_prefix_replacement[@]}"; do
+            # Escape the \ character, twice since the resulting string will be within a js string
+            replacement_value="${memcheck_path_prefix_replacement[${opt}]/\\/\\\\\\\\}"
+            echo "    path_prefix_replacement[\"${opt}\"] = \"${replacement_value}\""
+        done
 
         echo "}"
     } > "${awk_script_config_file}"

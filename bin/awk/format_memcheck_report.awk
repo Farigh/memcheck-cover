@@ -18,17 +18,59 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ######
 
+function escapeHTMLSymbols(str)
 {
-    output = $0
-
     # Escape HTML special char &
-    output = gensub(/\&/, "\\&amp;", "g", output)
+    output = gensub(/\&/, "\\&amp;", "g", str)
 
     # Escape HTML special char <
     output = gensub(/</, "\\&lt;", "g", output)
 
     # Escape HTML special char >
-    output = gensub(/>/, "\\&gt;", "g", output)
+    return gensub(/>/, "\\&gt;", "g", output)
+}
+
+function escapeAwkSymbols(str)
+{
+    # Escape Awk special char \
+    output = gensub(/\\/, "\\\\\\\\", "g", str)
+
+    # Escape Awk special char &
+    output = gensub(/\&/, "\\\\&", "g", output)
+
+    return output
+}
+
+function substitute_path_prefixes(str)
+{
+    output = str
+
+    for (prefix in path_prefix_replacement) {
+        regex = "^(==[0-9]*== .* )\\(" prefix "([^:]*:[0-9]*)\\)(.*)$"
+        output = gensub(regex, "\\1 (" path_prefix_replacement[prefix] "\\2)\\3", 1, output)
+    }
+
+    return output
+}
+
+BEGIN {
+    for (ind in path_prefix_replacement) {
+        # User defined prefixes might contain HTML special chars, resolve those
+        path_prefix_replacement[ind] = escapeHTMLSymbols(path_prefix_replacement[ind])
+
+        # Escape ` to prevent any problem with the HTML content in the js file
+        path_prefix_replacement[ind] = gensub(/`/, "\\\\`", "g", path_prefix_replacement[ind])
+
+        # Finally, we need to escape Awk regex replacement special sequences
+        path_prefix_replacement[ind] = escapeAwkSymbols(path_prefix_replacement[ind])
+    }
+}
+
+{
+    output = $0
+
+    # Escape HTML special chars
+    output = escapeHTMLSymbols(output)
 
     # Replace consecutive spaces with non-breaking space to preserve valgrind report alignment
     output = gensub(/  /, " \\&nbsp;", "g", output)
@@ -212,6 +254,13 @@
 
     # Valgrind suppression closing (add two ==== lines to seperate the suppression from the next violation)
     output = gensub(/^}$/, "}</div>====<br />====", 1, output)
+
+    #############
+    ## Advanced replacement options
+    #############
+
+    # Substitute path prefix if any
+    output = substitute_path_prefixes(output)
 
     #############
     ## Additionnal infos

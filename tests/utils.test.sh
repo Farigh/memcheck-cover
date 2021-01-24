@@ -97,6 +97,15 @@ function get_test_outdir()
     echo "${current_test_full_path}/out/${current_test_name}/"
 }
 
+function get_test_resources_dir()
+{
+    local resolved_test_path=$(readlink -f "$0")
+    local current_test_dir=$(dirname "${resolved_test_path}")
+    local current_test_full_path=$(readlink -e "${current_test_dir}")
+
+    echo "${current_test_full_path}/resx/"
+}
+
 function get_test_bin_dir()
 {
     local resolved_test_path=$(readlink -f "$0")

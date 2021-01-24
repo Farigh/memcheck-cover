@@ -133,6 +133,8 @@ In short, if multiple threads are ready to run, the threads will be scheduled in
 
 For more details, please refer to the [Valgrind's documentation](https://valgrind.org/docs/manual/).
 
+---
+
 ### :eight_spoked_asterisk: The HTML report generator
 
 The `generate_html_report.sh` script will generate an HTML report with all the Memcheck result files in a given directory.
@@ -222,3 +224,36 @@ my/output/path/report/
 ├── memcheck-cover.css
 └── memcheck-cover.js
 ```
+
+#### :large_orange_diamond: Advanced options
+
+##### :small_blue_diamond: Path prefix substitution
+
+This option is only available through the configuration file (see **-g|--generate-config** option).
+
+It can be defined by filling the following associative array:
+```shell
+memcheck_path_prefix_replacement["<prefix_to_replace>"]="<replacement_value>"
+```
+
+Where the key `prefix_to_replace` is the path's prefix to be replaced\
+And the value `replacement_value` is the replacing value (it can be left empty to remove the prefix completly)
+
+For example, setting:
+```shell
+memcheck_path_prefix_replacement["/var/user/repo"]="<repo>"
+```
+
+Would convert the following report line:
+```text
+==1==    at 0x10101042: myFunc() (/var/user/repo/src/lib1/MyClass.cpp:14)
+```
+
+To:
+```
+==1==    at 0x10101042: myFunc() (<repo>/src/lib1/MyClass.cpp:14)
+```
+
+Multiple replacements can be defined
+
+:warning: The source path needs to be displayed for this to work (see [Display source fullpath](#small_blue_diamond-display-sources-fullpath))
