@@ -41,10 +41,10 @@ function anonymize_memcheck_file()
     # The parent process id is printed
     anonymize_sed_cmd+=";s/\(==1== Parent PID:\) [0-9]*/\1 1/g"
 
-    # Remove host specific dir path
+    # Remove host specific dir path (except for file and line infos since it will be done using the
+    # built-in fullpath-after feature)
     local test_bin_dir=$(get_test_bin_dir)
-    anonymize_sed_cmd+=";s# ${test_bin_dir}# memcheck-cover/tests/bin#g"
-    anonymize_sed_cmd+=";s# ${test_bin_dir// /\\\\ }# memcheck-cover/tests/bin#g"
+    anonymize_sed_cmd+=";s#\([^(]\)${test_bin_dir// /\\\\ }#\1memcheck-cover/tests/bin#g"
 
     # Remove host specific lib path and version
     anonymize_sed_cmd+=";s#(in \(.*/\)\?.*\.so\([.0-9]*\)\?)#(in a_host_lib.so)#g"

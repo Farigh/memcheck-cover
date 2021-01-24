@@ -83,7 +83,7 @@ function test_invalid_config()
 
     ### Check test output
 
-    # Expect the output file to be print
+    # Expect the output file to be printed
     declare -A expected_error
     expected_error['invalid_summary_criticality_key']="Error: Invalid configuration parameter: memcheck_summary_criticality['dummy']"
     expected_error['invalid_summary_criticality_value']="Error: Invalid configuration value 'not a valid value' for parameter: memcheck_summary_criticality['possibly_lost']"

@@ -6,17 +6,17 @@ It can easily be used in you CI environment to automatically generate reports.
 
 A demonstration being better than any words, you can find a [generated HTML report example here](https://david-garcin.github.io/demos/memcheck-cover/index.html).
 
-### The Valgrind's Memcheck tool runner
+### :eight_spoked_asterisk: The Valgrind's Memcheck tool runner
 
 The `memcheck_runner.sh` script is a wrapper that will run a binary under Valgrind's Memcheck tool.
 
-#### Prerequisites
+#### :large_orange_diamond: Prerequisites
 
 For the `memcheck_runner.sh` script to work, the following tools must be installed and accessible using the PATH environment variable:
   - `bash` Bash version 4 and upper only are supported.
   - `valgrind` Valgrind version 3.13 was tested, older version might not work as intended
 
-#### Memcheck runner usage
+#### :large_orange_diamond: Memcheck runner usage
 
 Here is its usage (it can be accessed using the `--help` option):
 ```
@@ -30,11 +30,28 @@ Options:
                           (will be suffixed with the .memcheck extension).
   -s|--gen-suppressions   Enables valgrind suppression generation in the output
                           file, those can be used to create a suppression file.
+  --fullpath-after=       (with nothing after the '=')
+                          Show full source paths in call stacks.
+  --fullpath-after=STR    Like --fullpath-after=, but only show the part of the
+                          path after 'STR'. Allows removal of path prefixes.
+                          Use this flag multiple times to specify a set of
+                          prefixes to remove.
 ```
 
 The only mandatory option is the `--output-name`, which will define the output file path and name.\
 If the path does not exist, it will be created.\
 The `.memcheck` extension will automatically be added to it for compatibility with the `generate_html_report.sh` script.
+
+Example:
+```shell
+$ memcheck_runner.sh --output-name "my/output/path/filename" -- true can take useless params and still be one true self
+Info: Output file set to: 'my/output/path/filename.memcheck'
+Info: Creating output directory 'my/output/path/'
+Info: Running the following cmd with valgrind:
+      "true" "can" "take" "useless" "params" "and" "still" "be" "one" "true" "self"
+```
+
+##### :small_blue_diamond: Valgrind suppressions
 
 You can specify a violation suppression file using the `--ignore` option.\
 Such suppression file must follow [Valgrind's suppression file rules](https://valgrind.org/docs/manual/mc-manual.html#mc-manual.suppfiles).
@@ -61,19 +78,36 @@ The suppression will look like that in the report:
 [...]
 ```
 
-Example:
-```shell
-$ memcheck_runner.sh --output-name "my/output/path/filename" -- true can take useless params and still be one true self
-Info: Output file set to: 'my/output/path/filename.memcheck'
-Info: Creating output directory 'my/output/path/'
-Info: Running the following cmd with valgrind:
-      "true" "can" "take" "useless" "params" "and" "still" "be" "one" "true" "self"
-```
-
 This call will output the Valgind's report to the `filename.memcheck` file within the `my/output/path/` directory, which in this example was created.\
 The Valgrind analysis was run using the `true` binary, passing it many parameters.
 
-#### Valgrind's Memcheck tool options
+##### :small_blue_diamond: Display sources fullpath
+
+From [Valgrind's documentation](https://www.valgrind.org/docs/manual/manual-core.html#opt.fullpath-after):
+```
+By default Valgrind only shows the filenames in stack traces, but not full paths to source files.
+When using Valgrind in large projects where the sources reside in multiple different directories, this can be inconvenient.
+`--fullpath-after` provides a flexible solution to this problem.
+When this option is present, the path to each source file is shown, with the following all-important caveat:
+if string is found in the path, then the path up to and including string is omitted, else the path is shown unmodified.
+Note that string is not required to be a prefix of the path.
+
+For example, consider a file named /home/janedoe/blah/src/foo/bar/xyzzy.c. Specifying --fullpath-after=/home/janedoe/blah/src/ will cause Valgrind to show the name as foo/bar/xyzzy.c.
+
+Because the string is not required to be a prefix, --fullpath-after=src/ will produce the same output. This is useful when the path contains arbitrary machine-generated characters.
+For example, the path /my/build/dir/C32A1B47/blah/src/foo/xyzzy can be pruned to foo/xyzzy using --fullpath-after=/blah/src/.
+
+If you simply want to see the full path, just specify an empty string: --fullpath-after=. This isn't a special case, merely a logical consequence of the above rules.
+
+Finally, you can use --fullpath-after multiple times. Any appearance of it causes Valgrind to switch to producing full paths and applying the above filtering rule.
+Each produced path is compared against all the --fullpath-after-specified strings, in the order specified. The first string to match causes the path to be truncated as described above.
+If none match, the full path is shown.
+This facilitates chopping off prefixes when the sources are drawn from a number of unrelated directories.
+```
+
+Passing the `--fullpath-after` to `memcheck_runner.sh` will forward it directly to Valgrind, having the previously described effect.
+
+#### :large_orange_diamond: Valgrind's Memcheck tool options
 
 For now, Valgrind's options are not customizable.
 
@@ -99,17 +133,17 @@ In short, if multiple threads are ready to run, the threads will be scheduled in
 
 For more details, please refer to the [Valgrind's documentation](https://valgrind.org/docs/manual/).
 
-### The HTML report generator
+### :eight_spoked_asterisk: The HTML report generator
 
 The `generate_html_report.sh` script will generate an HTML report with all the Memcheck result files in a given directory.
 
-#### Prerequisites
+#### :large_orange_diamond: Prerequisites
 
 For the `generate_html_report.sh` script to work, the following tools must be installed and accessible using the PATH environment variable:
   - `bash` Bash version 4 and upper only are supported.
   - `gawk` GNU awk 4.1.4 was tested, older version might not work as intended
 
-#### HTML report generator usage
+#### :large_orange_diamond: HTML report generator usage
 
 Here is its usage (it can be accessed using the `--help` option):
 ```
@@ -122,16 +156,16 @@ Options:
   -g|--generate-config  Generates a 'memcheck-cover.config' file in the current
                         directory, containing the default configuration values.
 
-  -c|--config=FILE      Loads the configuration from FILE. A sample configuration
-                        file can be generated using the --generate-config option.
-                        If this option is not set, or values are missing in FILE,
-                        the default values will be used.
-  -i|--input-dir=DIR    [MANDATORY] Defines the input directory
-                        where the .memcheck files are.
-                        The files will be searched in directories
-                        recursivly.
-  -o|--output-dir=DIR   [MANDATORY] Defines the output directory
-                        where the HTML report will be produced.
+  -c|--config=FILE      Loads the configuration from FILE. An example
+                        configuration file can be generated using the
+                        --generate-config option.
+                        If this option is not set, or values are missing in
+                        FILE, the default values will be used.
+  -i|--input-dir=DIR    [MANDATORY] Defines the input directory where the
+                        .memcheck files are.
+                        The files will be searched in directories recursivly.
+  -o|--output-dir=DIR   [MANDATORY] Defines the output directory where the
+                        HTML report will be produced.
 ```
 
 There are two mandatory parameters to the generator:
