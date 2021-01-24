@@ -45,7 +45,7 @@ function test_config_param()
 
     local config_file="${test_in_out_dir}dummy.config"
 
-    # Add an emptyu memcheck file, at least one is requiered
+    # Add an empty memcheck file, at least one is requiered
     touch "${test_in_out_dir}dummy.memcheck"
 
     # An empty file is a valid config
@@ -58,7 +58,7 @@ function test_config_param()
 
     ### Check test output
 
-    # Expect the output file to be print
+    # Expect the output file to be printed
     expect_output "${test_std_output}" "Info: Loading configuration from file '${config_file}'..."
 
     expect_empty_file "${test_err_output}"

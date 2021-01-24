@@ -48,7 +48,7 @@ function test_ignore_param()
 
     ### Check test output
 
-    # Expect ignore file to be print
+    # Expect ignore file to be printed
     expect_output "${test_std_output}" "Info: Memcheck suppression file set to: '${definitely_lost_ignore_file}'"
 
     local expected_file="${test_output_prefix}.memcheck"

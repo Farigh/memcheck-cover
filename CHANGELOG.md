@@ -6,11 +6,19 @@ All notable changes to the Memcheck-Cover project will be documented in this fil
 
 [Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.1...HEAD)
 
+**New features:**
+  - Add support for Valgrind's `--fullpath-after` option to the `memcheck_runner.sh` script
+
+**Enhancements:**
+  - Reduced header size
+  - Improved dark theme (Process termination and host stacktrace titles are now more visible)
+  - Reworked the report title selection to match the theme selection style
+
 ## [v1.1](https://github.com/Farigh/memcheck-cover/releases/tag/release-1.1) (2020-08-05)
 
 [Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.0...release-1.1)
 
-**Implemented enhancements:**
+**Enhancements:**
   - Add dark theme alternatives (issue [#5](https://github.com/Farigh/memcheck-cover/issues/5))
   - Persist both `theme` and `title type` display settings (issue [#8](https://github.com/Farigh/memcheck-cover/issues/8))
   - Set the <title> HTML tag (issue [#10](https://github.com/Farigh/memcheck-cover/issues/10))
@@ -29,14 +37,14 @@ The `memcheck_runner.sh` script supports the following options:
   - `-h|--help` which displays the help message.
   - `-i|--ignore=FILE` which provides FILE to Valgrind as the suppression file.
   - `-o|--output-name=NAME` which is mandatory and defines the output file name (which will be suffixed with the .memcheck extension).
-  - `-s|--gen-suppressions` which enables valgrind suppression generation in the output file, those can be used to create a suppression file.
+  - `-s|--gen-suppressions` which enables Valgrind suppression generation in the output file, those can be used to create a suppression file.
 
 ---
 
 The `generate_html_report.sh` script supports the following options:
   - `-h|--help` which displays this help message.
   - `-g|--generate-config` which generates a 'memcheck-cover.config' file in the current directory, containing the default configuration values.
-  - `-c|--config=FILE` which loads the configuration from FILE. A sample configuration file can be generated using the --generate-config option.\
+  - `-c|--config=FILE` which loads the configuration from FILE. An example configuration file can be generated using the --generate-config option.\
 If this option is not set, or values are missing in FILE, the default values will be used.
   - `-i|--input-dir=DIR` which is mandatory and defines the input directory where the .memcheck files are.\
 The files will be searched in directories recursivly.

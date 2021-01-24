@@ -75,7 +75,7 @@ function test_in_dir_out_dir_param()
 
     ### Check test output
 
-    # Expect the output file to be print
+    # Expect the output file to be printed
     expect_output "${test_std_output}" "Info: Input directory set to: '${test_out_dir}'"
     expect_output "${test_std_output}" "Info: Creating output directory '${report_out_dir}'"
 

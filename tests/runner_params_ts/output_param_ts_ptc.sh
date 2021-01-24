@@ -49,7 +49,7 @@ function test_output_param()
 
     ### Check test output
 
-    # Expect the output file to be print
+    # Expect the output file to be printed
     local expected_file="${output_file_prefix}.memcheck"
     expect_output "${test_std_output}" "Info: Output file set to: '${expected_file}'"
     expect_output "${test_std_output}" "Info: Creating output directory '${test_output_prefix}/'"

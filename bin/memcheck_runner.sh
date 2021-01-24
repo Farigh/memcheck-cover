@@ -50,6 +50,12 @@ function print_usage()
     echo "                          (will be suffixed with the .${memcheck_result_ext} extension)."
     echo "  -s|--gen-suppressions   Enables valgrind suppression generation in the output"
     echo "                          file, those can be used to create a suppression file."
+    echo "  --fullpath-after=       (with nothing after the '=')"
+    echo "                          Show full source paths in call stacks."
+    echo "  --fullpath-after=STR    Like --fullpath-after=, but only show the part of the"
+    echo "                          path after 'STR'. Allows removal of path prefixes."
+    echo "                          Use this flag multiple times to specify a set of"
+    echo "                          prefixes to remove."
 
     print_copyright_notice
 }
@@ -70,11 +76,15 @@ function print_args()
 memcheck_output_name=""
 memcheck_ignore_file=""
 enable_suppression=0
+valgrind_fullpath_after=()
 while getopts ":hi:o:s-:" parsed_option; do
     case "${parsed_option}" in
         # Long options
         -)
             case "${OPTARG}" in
+                fullpath-after=*)
+                    valgrind_fullpath_after+=("${OPTARG#*=}")
+                ;;
                 ignore)
                     memcheck_ignore_file="${!OPTIND}"; ((OPTIND++))
                     check_param "--ignore" "${memcheck_ignore_file}"
@@ -194,6 +204,12 @@ if [ $enable_suppression -eq 1 ]; then
     valgrind_opts+=("--gen-suppressions=all")
     info "Valgrind suppression generation enabled"
 fi
+
+# Add fullpath-after options if asked for
+for path in "${valgrind_fullpath_after[@]}"; do
+    valgrind_opts+=("--fullpath-after=${path}")
+    info "Adding '${path}' to the fullpath-after"
+done
 
 # Output option
 info "Output file set to: '${memcheck_output_file}'"

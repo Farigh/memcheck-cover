@@ -43,7 +43,7 @@ function test_generate_config_param()
 
     ### Check test output
 
-    # Expect the config file to be print
+    # Expect the config file to be printed
     expect_output "${test_std_output}" "Info: Generating configuration with default values: 'memcheck-cover.config'..."
     expect_output "${test_std_output}" "Done. The generated configuration can be modified and then loaded"
     expect_output "${test_std_output}" "by the current script using the --config option."
