@@ -74,6 +74,9 @@ function anonymize_memcheck_file()
     anonymize_sed_cmd+=";s#\(== Copyright (C)\) [-0-9]*,#\1,#g"
     anonymize_sed_cmd+=";s#\(== Using Valgrind\)-[^ ]* #\1 #g"
 
+    # Some implementation are not using strncpy but __strncpy_sse2_unaligned instead
+    anonymize_sed_cmd+=";s#__strncpy_sse2_unaligned#strncpy#g"
+
     sed -i "${anonymize_sed_cmd}" "${file_to_anonymize}"
 }
 

@@ -41,8 +41,7 @@ BEGIN {
 
 # Flush on blank line if any buffer was set
 /^==[0-9]*== $/ {
-    if (in_context == 1)
-    {
+    if (in_context == 1) {
         # Append valgrind's thread context blank line and the duplicated buffer
         print "==1== \n" buffer
 
@@ -53,16 +52,13 @@ BEGIN {
 }
 
 {
-    if (in_context == 1)
-    {
-        if (buffer == "")
-        {
+    if (in_context == 1) {
+        if (buffer == "") {
             # Rename 'points to' to 'contains' to emulate this violation
             # and append to the buffer
             buffer = gensub(/points to/, "contains", 1, $0)
         }
-        else
-        {
+        else {
             # Append the context line to the buffer
             buffer = buffer "\n" $0
         }

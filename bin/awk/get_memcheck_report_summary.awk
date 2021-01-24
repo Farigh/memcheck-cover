@@ -37,18 +37,14 @@ BEGIN {
 
 function endOfPreviousReport()
 {
-    if (current_report_level != "")
-    {
-        if (current_report_level == "S")
-        {
+    if (current_report_level != "") {
+        if (current_report_level == "S") {
             ++success_report_count
         }
-        else if (current_report_level == "W")
-        {
+        else if (current_report_level == "W") {
             ++warning_report_count
         }
-        else
-        {
+        else {
             ++error_report_count
         }
     }
@@ -70,8 +66,7 @@ function endOfPreviousReport()
     ++total_warning_count
 
     # Only update the status if the report is still successful
-    if (current_report_level == "S")
-    {
+    if (current_report_level == "S") {
         current_report_level = "W"
     }
 }
@@ -85,14 +80,12 @@ END {
 
     total_reports_count = success_report_count + warning_report_count + error_report_count
 
-    if (total_reports_count > 0)
-    {
+    if (total_reports_count > 0) {
         success_percent = 100 * success_report_count / total_reports_count
         warning_percent = 100 * warning_report_count / total_reports_count
         warning_percent = warning_percent + success_percent
     }
-    else
-    {
+    else {
         success_percent = 100
         warning_percent = 100
     }
@@ -108,55 +101,45 @@ END {
 
     summary_ratio_title = ""
 
-    if (success_report_count != 0)
-    {
+    if (success_report_count != 0) {
         summary_ratio_title = summary_ratio_title "Success: " success_report_count
     }
 
-    if (warning_report_count != 0)
-    {
-        if (summary_ratio_title != "")
-        {
+    if (warning_report_count != 0) {
+        if (summary_ratio_title != "") {
             summary_ratio_title = summary_ratio_title "   |   "
         }
         summary_ratio_title = summary_ratio_title "Warnings: " warning_report_count
     }
 
-    if (error_report_count != 0)
-    {
-        if (summary_ratio_title != "")
-        {
+    if (error_report_count != 0) {
+        if (summary_ratio_title != "") {
             summary_ratio_title = summary_ratio_title "   |   "
         }
         summary_ratio_title = summary_ratio_title "Errors: " error_report_count
     }
 
     # Print report result
-    if (only_print_content_type_infos != "true")
-    {
+    if (only_print_content_type_infos != "true") {
         print "<div class=\"report_summary_title\">Result summary:</div>"
         print "<div class=\"report_summary_ratio\" title=\"" summary_ratio_title "\" style=\"" ratio_style "\">"
         print "    Pass: " success_report_count " / " total_reports_count
         print "</div>"
     }
 
-    if (total_error_count != 0)
-    {
+    if (total_error_count != 0) {
         print "<div class=\"report_summary_errors\">Errors: " total_error_count "</div>"
     }
 
-    if (total_warning_count != 0)
-    {
+    if (total_warning_count != 0) {
         print "<div class=\"report_summary_warnings\">Warnings: " total_warning_count "</div>"
     }
 
-    if (total_info_count != 0)
-    {
+    if (total_info_count != 0) {
         print "<div class=\"report_summary_infos\">Infos: " total_info_count "</div>"
     }
 
-    if (only_print_content_type_infos != "true")
-    {
+    if (only_print_content_type_infos != "true") {
         print "<br /><br />"
     }
 }
