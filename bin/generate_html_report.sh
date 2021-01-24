@@ -28,6 +28,8 @@ source "${current_full_path}/utils.common.sh"
 html_part_ext=".html.part.js"
 
 awk_script_dir="${current_full_path}/awk/"
+awk_script_tmp_dir="${awk_script_dir}tmp/"
+awk_script_config_file="${awk_script_tmp_dir}format_config.awk"
 
 html_res_dir="${current_full_path}/html_res/"
 
@@ -43,7 +45,6 @@ declare -A memcheck_summary_criticality
 declare -A memcheck_violation_criticality_example
 declare -A memcheck_client_check_criticality_example
 declare -A memcheck_summary_criticality_example
-declare -a awk_memcheck_format_opt
 
 ################################################
 ###                 FUNCTIONS                ###
@@ -363,7 +364,7 @@ function format_memcheck_report()
 {
     local report_to_format=$1
 
-    gawk -f "${awk_script_dir}format_memcheck_report.awk"  "${awk_memcheck_format_opt[@]}" "${report_to_format}"
+    gawk -f "${awk_script_config_file}" -f "${awk_script_dir}format_memcheck_report.awk" "${report_to_format}"
 }
 
 function get_memcheck_report_summary()
@@ -591,27 +592,33 @@ function generate_html_report()
     local html_output_dir=$2
 
     # Populate awk "format memcheck report" script options
-    local opt
-    for opt in "${!memcheck_violation_criticality[@]}"; do
-        # Add violation criticality config, lower cased
-        awk_memcheck_format_opt+=(-v "${opt}_criticality=${memcheck_violation_criticality[${opt}],,}")
-    done
-    for opt in "${!memcheck_summary_criticality[@]}"; do
-        # Add violation criticality config, lower cased
-        awk_memcheck_format_opt+=(-v "${opt}_summary_criticality=${memcheck_summary_criticality[${opt}],,}")
-    done
-    for opt in "${!memcheck_client_check_criticality[@]}"; do
-        # Add violation criticality config, lower cased
-        awk_memcheck_format_opt+=(-v "${opt}_client_check_criticality=${memcheck_client_check_criticality[${opt}],,}")
-    done
+    {
+        echo "BEGIN {"
 
-    # Add valgrind suppression header
-    local visibility_icon='<span class="suppression_visibility_icon"><div class="expand"><div></div></div></span>'
-    local valgrind_suppression_opening='<div class="suppression_title" onclick="javascript:ToogleSuppressionVisibility(this)">'
-    valgrind_suppression_opening+="${visibility_icon} Show generated suppression"
-    valgrind_suppression_opening+='</div><br /><div class="hidden suppression_content">'
+        local opt
+        for opt in "${!memcheck_violation_criticality[@]}"; do
+            # Add violation criticality config, lower cased
+            echo "    ${opt}_criticality = \"${memcheck_violation_criticality[${opt}],,}\""
+        done
+        for opt in "${!memcheck_summary_criticality[@]}"; do
+            # Add violation criticality config, lower cased
+            echo "    ${opt}_summary_criticality = \"${memcheck_summary_criticality[${opt}],,}\""
+        done
+        for opt in "${!memcheck_client_check_criticality[@]}"; do
+            # Add violation criticality config, lower cased
+            echo "    ${opt}_client_check_criticality = \"${memcheck_client_check_criticality[${opt}],,}\""
+        done
 
-    awk_memcheck_format_opt+=(-v "valgrind_suppression_opening=${valgrind_suppression_opening}")
+        # Add valgrind suppression header
+        local visibility_icon='<span class=\"suppression_visibility_icon\"><div class=\"expand\"><div></div></div></span>'
+        local valgrind_suppression_opening='<div class=\"suppression_title\" onclick=\"javascript:ToogleSuppressionVisibility(this)\">'
+        valgrind_suppression_opening+="${visibility_icon} Show generated suppression"
+        valgrind_suppression_opening+='</div><br /><div class=\"hidden suppression_content\">'
+
+        echo "    valgrind_suppression_opening = \"${valgrind_suppression_opening}\""
+
+        echo "}"
+    } > "${awk_script_config_file}"
 
     local memcheck_input_dir_len=${#memcheck_input_dir}
 
@@ -777,7 +784,11 @@ require_bin_or_die "gawk"
 info "Input directory set to: '${memcheck_input_dir}'"
 
 create_outdir_if_necessary "${html_output_dir}"
+create_outdir_if_necessary "${awk_script_tmp_dir}"
 
 load_configuration
 
 generate_html_report "${memcheck_input_dir}" "${html_output_dir}"
+
+# Cleanup tmp directory
+rm -r "${awk_script_tmp_dir}"
