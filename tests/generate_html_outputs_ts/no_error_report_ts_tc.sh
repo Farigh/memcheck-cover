@@ -22,7 +22,7 @@ function setup_test()
     cp "${testsuite_setup_out_dir}true.memcheck" "${test_out_dir}/"
 }
 
-function test_definitely_lost_report()
+function test_no_error_report()
 {
     local test_out_dir=$(get_test_outdir)
     local generate_html_report="$(get_tools_bin_dir)/generate_html_report.sh"
@@ -58,6 +58,6 @@ error_occured=0
 setup_test
 
 # Run test
-test_definitely_lost_report
+test_no_error_report
 
 exit $error_occured

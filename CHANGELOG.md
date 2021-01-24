@@ -8,6 +8,7 @@ All notable changes to the Memcheck-Cover project will be documented in this fil
 
 **New features:**
   - Add support for Valgrind's `--fullpath-after` option to the `memcheck_runner.sh` script
+  - Add support for path prefix substitution to the `generate_html_report.sh` script (issue [#15](https://github.com/Farigh/memcheck-cover/issues/15))
 
 **Enhancements:**
   - Reduced header size

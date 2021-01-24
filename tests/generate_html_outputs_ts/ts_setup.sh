@@ -91,8 +91,10 @@ function generate_many_result_report_ref_report()
     # Copy every other test's ref HTML part files
     local ref_path
     while read -r ref_path; do
-        # Skip current test ref directory and generated context reports
-        if [[ "${ref_path}" == *"many_result_report" ]] || [[ "${ref_path}" == *"violation_context_report" ]]; then
+        # Skip generated context reports
+        if [[ "${ref_path}" == *"many_result_report" ]] \
+		   || [[ "${ref_path}" == *"violation_context_report" ]] \
+		   || [[ "${ref_path}" == *"path_prefix_substitution" ]]; then
             continue
         fi
 
@@ -144,9 +146,15 @@ function generate_criticality_config()
     local useless_result=$(cd "${test_out_dir}" && "${generate_html_report}" -g)
     mv "${test_out_dir}memcheck-cover.config" "${result_config_file}"
 
-    # Replace all config values with the selected one
-    # (uppercase the 1st char to check the case insensitivity works properly)
-    sed -i "s/=\"[^\"]*\"/=\"${all_criticality_level^}\"/g" "${result_config_file}"
+    if [ "${all_criticality_level}" != "default" ]; then
+        # Replace all config values with the selected one
+        # (uppercase the 1st char to check the case insensitivity works properly)
+        sed -i "s/=\"[^\"]*\"/=\"${all_criticality_level^}\"/g" "${result_config_file}"
+    fi
+
+    # Add path replacement to avoid host specific dir path
+    local test_bin_dir=$(get_test_bin_dir)
+    echo "memcheck_path_prefix_replacement[\"${test_bin_dir}\"]=\"\"" >> "${result_config_file}"
 
     echo "Done"
 }
@@ -164,6 +172,7 @@ testsuite_setup_begin
         fi
     done < <(find "${test_bin_dir}" -mindepth 1 -maxdepth 1 -type d)
 
+    generate_criticality_config "default"
     generate_criticality_config "error"
     generate_criticality_config "warning"
 
