@@ -20,7 +20,7 @@
 
 # Enable colors only if in interactive shell or if asked for
 if [ -t 1 ] || [ "${memcheck_cover_always_use_colors}" == "true" ]; then
-    RESET_FORMAT=$(echo -e '\e[00m')
+    RESET_FORMAT=$(echo -e '\e[0m')
     BOLD=$(echo -e '\e[1m')
     RED=$(echo -e '\e[31m')
     GREEN=$(echo -e '\e[32m')
