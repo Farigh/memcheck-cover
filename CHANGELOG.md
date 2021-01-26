@@ -15,6 +15,9 @@ All notable changes to the Memcheck-Cover project will be documented in this fil
   - Improved dark theme (Process termination and host stacktrace titles are now more visible)
   - Reworked the report title selection to match the theme selection style
 
+**Fixed bugs:**
+  - Color reset sequence was not working properly in some environment (was set to `\e[00m` instead of `\e[0m`)
+
 ## [v1.1](https://github.com/Farigh/memcheck-cover/releases/tag/release-1.1) (2020-08-05)
 
 [Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.0...release-1.1)
