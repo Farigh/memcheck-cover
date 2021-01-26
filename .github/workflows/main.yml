@@ -24,7 +24,7 @@ jobs:
 
             # Runs a single command using the runners shell
             - name: Install dependencies
-              run: sudo apt install valgrind
+              run: sudo apt-get update && sudo apt-get install valgrind
 
             # Runs a single command using the runners shell
             - name: Run tests
