@@ -46,6 +46,8 @@ declare -A memcheck_violation_criticality_example
 declare -A memcheck_client_check_criticality_example
 declare -A memcheck_summary_criticality_example
 declare -A memcheck_path_prefix_replacement
+declare -A memcheck_url_prefix_replacement
+declare -A memcheck_url_prefix_replacement_type
 
 ################################################
 ###                 FUNCTIONS                ###
@@ -279,6 +281,25 @@ function load_configuration()
             fi
         done
 
+        local key
+        for key in "${!memcheck_url_prefix_replacement[@]}"; do
+            if [ "${memcheck_url_prefix_replacement_type[${key}]}" != "" ]; then
+                # Check memcheck_url_prefix_replacement_type
+                case ${memcheck_url_prefix_replacement_type[${key}],,} in
+                    github|gitlab|bitbucket)
+                    ;;
+                    *)
+                        error "Invalid configuration value '${memcheck_url_prefix_replacement_type[${key}]}' for parameter: memcheck_url_prefix_replacement_type['${key}']"
+                        ((++config_error_occured))
+                    ;;
+                esac
+                # If memcheck_url_prefix_replacement is set, memcheck_url_prefix_replacement_type must be set as well
+            else
+                error "'memcheck_url_prefix_replacement_type' not set for key '${key}'"
+                ((++config_error_occured))
+            fi
+        done
+
         unset memcheck_valid_violation_criticality_keys
         unset memcheck_valid_summary_criticality_keys
         unset memcheck_valid_client_check_criticality_keys
@@ -359,6 +380,7 @@ function generate_default_config()
         echo "#===  Advanced options   ==="
         echo "#==========================="
         echo ""
+        echo "###"
         echo "# Prefix replacement can be applied to remove or replace paths prefixes"
         echo "# It can be defined by filling the following map:"
         echo '#    memcheck_path_prefix_replacement["<prefix_to_replace>"]="<replacement_value>"'
@@ -371,6 +393,38 @@ function generate_default_config()
         echo "#    ==1==    at 0x10101042: myFunc() (/var/user/repo/src/lib1/MyClass.cpp:14)"
         echo "# To:"
         echo "#    ==1==    at 0x10101042: myFunc() (<repo>/src/lib1/MyClass.cpp:14)"
+        echo "#"
+        echo "# Multiple replacements can be defined"
+        echo ""
+        echo ""
+        echo "###"
+        echo "# Source control server links can be added based on paths prefixes"
+        echo "# It can be defined by filling the following map:"
+        echo '#    memcheck_url_prefix_replacement["<prefix_to_consider>"]="<replacement_value>"'
+        echo "# Where the key 'prefix_to_consider' is the path's prefix that should be replaced"
+        echo "# with the provided link prefix for the link"
+        echo "# And the value 'replacement_value' is the source control server link prefix"
+        echo "#"
+        echo "# It's advised to set a link prefix pointing to a specific commit sha1 instead of a"
+        echo "# branch so the links would always points to a meaningful line."
+        echo "#"
+        echo "# Since the syntax is not the same for every source control web servers,"
+        echo "# the target server type must be specified for each <prefix_to_consider> using"
+        echo "# the following parameter:"
+        echo '#     memcheck_url_prefix_replacement_type["<prefix_to_consider>"]="<type>"'
+        echo "#"
+        echo "# For now, the following <type> are supported (case does not matter):"
+        echo "#    - GitHub"
+        echo "#    - GitLab"
+        echo "#    - BitBucket"
+        echo "#"
+        echo "# For example, setting:"
+        echo '#    memcheck_url_prefix_replacement["/var/user/repo"]="http://github.com/example/example_project/blob/master/"'
+        echo '#    memcheck_url_prefix_replacement_type["/var/user/repo"]="github"'
+        echo "# Would convert the following report line:"
+        echo "#    ==1==    at 0x10101042: myFunc() (/var/user/repo/src/lib1/MyClass.cpp:14)"
+        echo "# To:"
+        echo '#    ==1==    at 0x10101042: myFunc() (<a href="http://github.com/example/example_project/blob/master/src/lib1/MyClass.cpp#L14">/var/user/repo/src/lib1/MyClass.cpp:14</a>)'
         echo "#"
         echo "# Multiple replacements can be defined"
         echo ""
@@ -652,6 +706,14 @@ function generate_html_report()
             # Escape the \ character, twice since the resulting string will be within a js string
             replacement_value="${memcheck_path_prefix_replacement[${opt}]/\\/\\\\\\\\}"
             echo "    path_prefix_replacement[\"${opt}\"] = \"${replacement_value}\""
+        done
+
+        # Add optional url prefix replacement
+        for opt in "${!memcheck_url_prefix_replacement[@]}"; do
+            # Escape the \ character, twice since the resulting string will be within a js string
+            replacement_value="${memcheck_url_prefix_replacement[${opt}]/\\/\\\\\\\\}"
+            echo "    url_prefix_replacement[\"${opt}\"] = \"${replacement_value}\""
+            echo "    url_prefix_replacement_type[\"${opt}\"] = \"${memcheck_url_prefix_replacement_type[${opt}],,}\""
         done
 
         echo "}"

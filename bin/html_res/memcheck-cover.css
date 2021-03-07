@@ -867,7 +867,6 @@ body {
 .leak_file_info {
     color: var(--analysis-file-info-color);
     font-style: italic;
-    text-decoration: underline;
 }
 
 /* Leak program exit and valgrind program stacktrace */

@@ -41,29 +41,59 @@ function escapeAwkSymbols(str)
     return output
 }
 
-function substitute_path_prefixes(str)
+function escapeSpecialCharactersInArray(array_to_escape)
+{
+    for (ind in array_to_escape) {
+        # User defined prefixes might contain HTML special chars, resolve those
+        array_to_escape[ind] = escapeHTMLSymbols(array_to_escape[ind])
+
+        # Escape ` to prevent any problem with the HTML content in the js file
+        array_to_escape[ind] = gensub(/`/, "\\\\`", "g", array_to_escape[ind])
+
+        # Finally, we need to escape Awk regex replacement special sequences
+        array_to_escape[ind] = escapeAwkSymbols(array_to_escape[ind])
+    }
+}
+
+function addSourceControlServerLink(str)
+{
+    output = str
+
+    for (prefix in url_prefix_replacement) {
+        regex = "^(==[0-9]*== .* \\()(" prefix ")([^:]*):([0-9]*)(\\).*)$"
+
+        link_prefix = "<a class=\"leak_file_info\" href=\"" url_prefix_replacement[prefix] "\\3"
+        link_suffix = "</a>"
+
+        if (url_prefix_replacement_type[prefix] == "bitbucket") {
+            link_prefix = link_prefix "#-"
+        }
+        else {
+            # GitHub and GitLab share the same syntax
+            link_prefix = link_prefix "#L"
+        }
+
+        output = gensub(regex, "\\1" link_prefix "\\4\">\\2\\3:\\4" link_suffix "\\5", 1, output)
+    }
+
+    return output
+}
+
+function substitutePathPrefixes(str)
 {
     output = str
 
     for (prefix in path_prefix_replacement) {
-        regex = "^(==[0-9]*== .* \\()" prefix "([^:]*:[0-9]*)(\\).*)$"
-        output = gensub(regex, "\\1" path_prefix_replacement[prefix] "\\2\\3", 1, output)
+        regex = "^(==[0-9]*== .* \\((<a [^>]+>)?)" prefix "([^:]*:[0-9]*)((<\\/a>)?\\).*)$"
+        output = gensub(regex, "\\1" path_prefix_replacement[prefix] "\\3\\4", 1, output)
     }
 
     return output
 }
 
 BEGIN {
-    for (ind in path_prefix_replacement) {
-        # User defined prefixes might contain HTML special chars, resolve those
-        path_prefix_replacement[ind] = escapeHTMLSymbols(path_prefix_replacement[ind])
-
-        # Escape ` to prevent any problem with the HTML content in the js file
-        path_prefix_replacement[ind] = gensub(/`/, "\\\\`", "g", path_prefix_replacement[ind])
-
-        # Finally, we need to escape Awk regex replacement special sequences
-        path_prefix_replacement[ind] = escapeAwkSymbols(path_prefix_replacement[ind])
-    }
+    escapeSpecialCharactersInArray(url_prefix_replacement)
+    escapeSpecialCharactersInArray(path_prefix_replacement)
 }
 
 {
@@ -259,8 +289,11 @@ BEGIN {
     ## Advanced replacement options
     #############
 
+    # Add source control server link if any
+    output = addSourceControlServerLink(output)
+
     # Substitute path prefix if any
-    output = substitute_path_prefixes(output)
+    output = substitutePathPrefixes(output)
 
     #############
     ## Additionnal infos

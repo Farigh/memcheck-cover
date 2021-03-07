@@ -257,3 +257,44 @@ To:
 Multiple replacements can be defined
 
 :warning: The source path needs to be displayed for this to work (see [Display source fullpath](#small_blue_diamond-display-sources-fullpath))
+
+##### :small_blue_diamond: Source control server link generation
+
+This option is only available through the configuration file (see **-g|--generate-config** option).
+
+It can be defined by filling the following associative arrays (both are needed):
+```shell
+memcheck_url_prefix_replacement["<path_prefix>"]="<repository_url_prefix>"
+memcheck_url_prefix_replacement_type["<path_prefix>"]="<repository_type>"
+```
+
+Where the key `path_prefix` is the file path prefix to the repository root directory.
+
+The value `repository_url_prefix` is the source control server prefix to the repository.
+Here are some example:
+  - Github: https://github.com/example/example_project/blob/master/
+  - GitLab: https://gitlab.com/example/example_project/-/blob/master/
+  - BitBucket: http://bitbucket.org/example/example_project/src/master/
+
+And the value `repository_type` is one of the supported server type (case does not matter):
+  - GitHub
+  - GitLab
+  - BitBucket
+
+:warning: It's advised to set a link pointing to a specific commit sha1 instead of a branch so the links would always points to a meaningful line.
+
+For example, setting:
+```shell
+memcheck_url_prefix_replacement["/var/user/repo/"]="https://github.com/example/example_project/blob/master/"
+memcheck_url_prefix_replacement_type["/var/user/repo/"]="github"
+```
+
+Would convert the following report line:
+```text
+==1==    at 0x10101042: myFunc() (/var/user/repo/src/lib1/MyClass.cpp:14)
+```
+
+To:
+```
+==1==    at 0x10101042: myFunc() (<a href="https://github.com/example/example_project/blob/master/src/lib1/MyClass.cpp#L14">/var/user/repo/src/lib1/MyClass.cpp:14</a>)
+```

@@ -94,7 +94,9 @@ function generate_many_result_report_ref_report()
         # Skip generated context reports
         if [[ "${ref_path}" == *"many_result_report" ]] \
 		   || [[ "${ref_path}" == *"violation_context_report" ]] \
-		   || [[ "${ref_path}" == *"path_prefix_substitution" ]]; then
+		   || [[ "${ref_path}" == *"path_prefix_substitution" ]] \
+		   || [[ "${ref_path}" == *"path_url_link_generation_report" ]] \
+		   || [[ "${ref_path}" == *"combined_path_substitution_and_url_link_report" ]]; then
             continue
         fi
 
