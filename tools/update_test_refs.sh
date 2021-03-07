@@ -20,11 +20,17 @@ for test_ref_dir in "${memcheck_cover_test_dir}/ref/"*; do
     if [ "${test_name}" == "many_result_report" ] || [ "${test_name}" == "no_error_report" ] \
         || [ "${test_name}" == "violation_context_report" ] || [ "${test_name}" == "violation_suppression_report" ]; then
         cp -f "${memcheck_cover_test_dir}out/${test_name}/report/"*html* "${test_ref_dir}"
+    elif [ "${test_name}" == "path_url_link_generation_report" ]; then
+        # All reports are the same for this test, retrieve on of those as ref
+        test_name="${test_name:0: -7}"
+        cp -f "${memcheck_cover_test_dir}out/${test_name}/lower_case_types/report/"*html* "${test_ref_dir}"
     elif [ "${test_name}" == "path_prefix_substitution" ]; then
         for testcase_ref_dir in "${memcheck_cover_test_dir}/ref/${test_name}/"*; do
             test_case_name=$(basename "${testcase_ref_dir}")
             cp -f "${memcheck_cover_test_dir}out/${test_name}/${test_case_name:0: -7}/report/"*html* "${test_ref_dir}/${test_case_name}"
         done
+    elif [ "${test_name}" == "combined_path_substitution_and_url_link_report" ]; then
+        cp -f "${memcheck_cover_test_dir}out/${test_name:0: -7}/report/"*html* "${test_ref_dir}/${test_case_name}"
     else
         test_name="${test_name:0: -7}"
 

@@ -52,7 +52,7 @@ function test_generate_config_param()
     # Expect config file
     local output_config_file="${test_out_dir}memcheck-cover.config"
     # Expect information header
-    expect_content_to_match "${output_config_file}" "${current_full_path}/ref/default-memcheck-cover.config"
+    expect_content_to_match "${current_full_path}/ref/default-memcheck-cover.config" "${output_config_file}"
 
     expect_empty_file "${test_err_output}"
 

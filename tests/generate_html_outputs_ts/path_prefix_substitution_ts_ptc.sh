@@ -37,29 +37,29 @@ function setup_test()
     local useless_result=$(cd "${test_case_out_dir}" && "${generate_html_report}" -g)
     local config_file="${test_case_out_dir}memcheck-cover.config"
     expect_file "${config_file}"
-	
+
     if [ "${test_case}" == "with_substitution_lt_and_gt" ]; then
 		{
-			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/computation_libs\"]=\"<computation libs>\"" 
-			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/my_proj\"]=\"<my proj>\"" 
-			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/another_libs\"]=\"<another lib>\"" 
+			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/computation_libs\"]=\"<computation libs>\""
+			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/my_proj\"]=\"<my proj>\""
+			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/another_libs\"]=\"<another lib>\""
 		} >> "${config_file}"
     elif [ "${test_case}" == "with_substitution_backslash" ]; then
 		{
-			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/computation_libs\"]=\"[deps \\\\ computation]\"" 
-			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/my_proj\"]=\"[my proj]\"" 
-			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/another_libs\"]=\"[deps \\\\ another lib]\"" 
+			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/computation_libs\"]=\"[deps \\\\ computation]\""
+			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/my_proj\"]=\"[my proj]\""
+			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/another_libs\"]=\"[deps \\\\ another lib]\""
 		} >> "${config_file}"
     elif [ "${test_case}" == "with_substitution_backquote" ]; then
 		{
 			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/computation_libs\"]=\"\\\`computation libs\\\`\""
-			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/my_proj\"]=\"\\\`my proj\\\`\"" 
+			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/my_proj\"]=\"\\\`my proj\\\`\""
 			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/another_libs\"]=\"\\\`another lib\\\`\""
 		} >> "${config_file}"
     else
 		{
-			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/computation_libs/\"]=\"\"" 
-			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/my_proj/\"]=\"\"" 
+			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/computation_libs/\"]=\"\""
+			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/my_proj/\"]=\"\""
 			echo "memcheck_path_prefix_replacement[\"/var/user/git_repos/another_libs/\"]=\"\""
 		} >> "${config_file}"
     fi
@@ -96,6 +96,8 @@ function test_path_prefix_substitution()
 
     # Compare report output with reference reports
     expect_content_to_match "${test_ref_report_dir}" "${report_out_dir}"
+
+    expect_empty_file "${test_err_output}"
 
     expect_exit_code $test_exit_code 0
 }
