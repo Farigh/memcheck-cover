@@ -11,8 +11,8 @@ All notable changes to the Memcheck-Cover project will be documented in this fil
   - Add support for path prefix substitution to the `generate_html_report.sh` script (issue [#15](https://github.com/Farigh/memcheck-cover/issues/15))
 
 **Enhancements:**
-  - Reduced header size
-  - Improved dark theme (Process termination and host stacktrace titles are now more visible)
+  - Reduced the report header size
+  - Improved the report dark themes (Process termination and host stacktrace titles are now more visible)
   - Reworked the report title selection to match the theme selection style
 
 **Fixed bugs:**

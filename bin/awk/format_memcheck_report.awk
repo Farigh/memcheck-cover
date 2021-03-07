@@ -46,8 +46,8 @@ function substitute_path_prefixes(str)
     output = str
 
     for (prefix in path_prefix_replacement) {
-        regex = "^(==[0-9]*== .* )\\(" prefix "([^:]*:[0-9]*)\\)(.*)$"
-        output = gensub(regex, "\\1 (" path_prefix_replacement[prefix] "\\2)\\3", 1, output)
+        regex = "^(==[0-9]*== .* \\()" prefix "([^:]*:[0-9]*)(\\).*)$"
+        output = gensub(regex, "\\1" path_prefix_replacement[prefix] "\\2\\3", 1, output)
     }
 
     return output
