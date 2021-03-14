@@ -4,7 +4,11 @@ All notable changes to the Memcheck-Cover project will be documented in this fil
 
 ## [Unreleased](https://github.com/Farigh/memcheck-cover/tree/HEAD)
 
-[Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.1...HEAD)
+[Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.2...HEAD)
+
+## [v1.2](https://github.com/Farigh/memcheck-cover/releases/tag/release-1.2) (2021-03-14)
+
+[Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.1...release-1.2)
 
 **New features:**
   - Add support for Valgrind's `--fullpath-after` option to the `memcheck_runner.sh` script

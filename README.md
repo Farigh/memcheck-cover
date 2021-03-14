@@ -270,7 +270,7 @@ memcheck_url_prefix_replacement_type["<path_prefix>"]="<repository_type>"
 
 Where the key `path_prefix` is the file path prefix to the repository root directory.
 
-The value `repository_url_prefix` is the source control server prefix to the repository.
+The value `repository_url_prefix` is the source control server prefix to the repository.\
 Here are some example:
   - Github: https://github.com/example/example_project/blob/master/
   - GitLab: https://gitlab.com/example/example_project/-/blob/master/
@@ -281,7 +281,7 @@ And the value `repository_type` is one of the supported server type (case does n
   - GitLab
   - BitBucket
 
-:warning: It's advised to set a link pointing to a specific commit sha1 instead of a branch so the links would always points to a meaningful line.
+:warning: It's advised to set a link pointing to a specific commit sha1 instead of a branch so that the report's links would always point to a meaningful line.
 
 For example, setting:
 ```shell
@@ -298,3 +298,5 @@ To:
 ```
 ==1==    at 0x10101042: myFunc() (<a href="https://github.com/example/example_project/blob/master/src/lib1/MyClass.cpp#L14">/var/user/repo/src/lib1/MyClass.cpp:14</a>)
 ```
+
+Multiple replacements can be defined
