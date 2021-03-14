@@ -18,6 +18,7 @@ All notable changes to the Memcheck-Cover project will be documented in this fil
 
 **Fixed bugs:**
   - Color reset sequence was not working properly in some environment (was set to `\e[00m` instead of `\e[0m`)
+  - Fixed gawk newer version (5.0) raised warnings
 
 ## [v1.1](https://github.com/Farigh/memcheck-cover/releases/tag/release-1.1) (2020-08-05)
 
