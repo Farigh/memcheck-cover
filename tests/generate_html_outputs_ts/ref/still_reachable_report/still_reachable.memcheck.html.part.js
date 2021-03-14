@@ -24,7 +24,7 @@ async function updateContentOnceLoaded1()
 ==1== <span class="error_leak">&nbsp; &nbsp;still reachable: 10 bytes in 1 blocks</span><br />
 ==1== &nbsp; &nbsp; &nbsp; &nbsp; suppressed: 0 bytes in 0 blocks<br />
 ==1== <br />
-==1== For counts of detected and suppressed errors, rerun with: -v<br />
+==1== For lists of detected and suppressed errors, rerun with: -s<br />
 ==1== <span class="valgrind_summary_title">ERROR SUMMARY:</span> 0 errors from 0 contexts (suppressed: 0 from 0)<br />
 `;
     var analysis_div = document.getElementById('valgrind.result1.Report');

@@ -20,7 +20,7 @@ async function updateContentOnceLoaded1()
 ==1== <br />
 ==1== All heap blocks were freed -- no leaks are possible<br />
 ==1== <br />
-==1== For counts of detected and suppressed errors, rerun with: -v<br />
+==1== For lists of detected and suppressed errors, rerun with: -s<br />
 ==1== <span class="valgrind_summary_title">ERROR SUMMARY:</span> 0 errors from 0 contexts (suppressed: 0 from 0)<br />
 `;
     var analysis_div = document.getElementById('valgrind.result1.Report');

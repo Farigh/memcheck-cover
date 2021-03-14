@@ -24,7 +24,7 @@ async function updateContentOnceLoaded1()
 Memcheck: mc_leakcheck.c:2121 (vgMemCheck_detect_memory_leaks): the 'impossible' happened.<br />
 <br />
 <span class="host_program_stacktrace">host stacktrace:</span><br />
-==1== &nbsp; &nbsp;at 0x10101042: ??? (in /path/to/memcheck)<br />
+==1== &nbsp; &nbsp;at 0x10101042: ??? (in /path/to/valgrind/memcheck)<br />
 <br />
 sched status:<br />
  &nbsp;running_tid=1<br />
