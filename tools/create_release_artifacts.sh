@@ -24,6 +24,13 @@ function error_and_exit()
     exit 1
 }
 
+function indent()
+{
+    local indent_string="   "
+
+    gawk '{ print "'"${indent_string}"'" $0; }'
+}
+
 function create_outputs()
 {
     local memcheck_cover_version=$(get_memcheck_cover_version)
@@ -45,11 +52,13 @@ function create_outputs()
 
         # Create tarball
         info "Generating archive for version ${memcheck_cover_version}..."
-        tar cjf "${tarball_name}" "${archive_content[@]}" || error_and_exit "Failed to create tarball"
+
+        tar cjf "${tarball_name}" "${archive_content[@]}" 2>&1 | indent
+        # shellcheck disable=SC2181 ; Not possible to convert to if, because of the pipe
+        [ $? -eq 0 ] || error_and_exit "Failed to create tarball"
 
         info "Successfully created archive with the following content:"
-        local tarball_content=$(tar tf "${tarball_name}")
-        print_with_indent "   " "${tarball_content}"
+        tar tf "${tarball_name}" | indent
 
         # Create signature file
         echo ""
@@ -63,8 +72,7 @@ function create_outputs()
         } > "${signature_file}"
 
         info "Successfully created signatures with the following content:"
-        local signature_content=$(cat "${signature_file}")
-        print_with_indent "   " "${signature_content}"
+        indent < "${signature_file}"
     }
 }
 
@@ -73,6 +81,13 @@ function create_outputs()
 ##############
 
 out_dir="${current_full_path}/out/"
+
+# Always cleanup before generating release tarball
+info "Cleaning up bin directory..."
+{
+    cd "${repo_root_dir}bin/" || error_and_exit "Failed to go to the bin directory"
+    git clean -xdf | indent
+}
 
 # Cleanup potential previous run outputs
 [ -d "${out_dir}" ]; rm -rf "${out_dir}"
