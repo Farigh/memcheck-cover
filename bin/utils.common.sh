@@ -47,7 +47,7 @@ function info()
 
 function get_memcheck_cover_version()
 {
-    echo "1.1"
+    echo "1.2"
 }
 
 function print_copyright_notice()
@@ -75,6 +75,7 @@ function require_bin_or_die()
         exit 1
     fi
 }
+
 function check_param()
 {
     local opt_name=$1
