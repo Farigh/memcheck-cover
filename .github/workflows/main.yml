@@ -15,7 +15,8 @@ jobs:
     # This workflow contains a single job called "build"
     build:
         # The type of runner that the job will run on
-        runs-on: ubuntu-latest
+        # TODO: go back to ubuntu-latest once new valgrind/gcc version changes are supported
+        runs-on: ubuntu-18.04
 
         # Steps represent a sequence of tasks that will be executed as part of the job
         steps:

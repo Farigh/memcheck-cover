@@ -48,11 +48,22 @@ function anonymize_memcheck_file()
 
     # Remove host specific lib path and version
     anonymize_sed_cmd+=";s#(in \(.*/\)\?.*\.so\([.0-9]*\)\?)#(in a_host_lib.so)#g"
-    anonymize_sed_cmd+=";s#\( at 0x[A-Fa-f0-9]*: ??? (in\) [-/a-z0-9]*)#\1 /path/to/memcheck)#g"
+    anonymize_sed_cmd+=";s#\( \(at\|by\) 0x[A-Fa-f0-9]*: ??? (in\) [-/a-z0-9_]*)#\1 /path/to/valgrind/memcheck)#g"
     anonymize_sed_cmd+=";s#^\([ ]* obj:\)\(\(.*/\)\?.*\.so\([.0-9]*\)\?\)#\1/path/to/a_host_lib.so#g"
 
-    # Remove glibc version specific file line (templates from headers)
+    # Remove glibc version specific file line
     anonymize_sed_cmd+=";s#(unique_ptr\.h:[0-9]*)#(unique_ptr\.h:42)#g"
+    anonymize_sed_cmd+=";s#(new_allocator\.h:[0-9]*)#(new_allocator\.h:42)#g"
+    anonymize_sed_cmd+=";s#(alloc_traits\.h:[0-9]*)#(alloc_traits\.h:42)#g"
+    anonymize_sed_cmd+=";s#(allocated_ptr\.h:[0-9]*)#(allocated_ptr\.h:42)#g"
+    anonymize_sed_cmd+=";s#(shared_ptr_base\.h:[0-9]*)#(shared_ptr_base\.h:42)#g"
+    anonymize_sed_cmd+=";s#(shared_ptr\.h:[0-9]*)#(shared_ptr\.h:42)#g"
+    anonymize_sed_cmd+=";s#(libc-start\.c:[0-9]*)#(libc-start\.c:42)#g"
+    anonymize_sed_cmd+=";s#(read\.c:[0-9]*)#(read\.c:42)#g"
+    anonymize_sed_cmd+=";s#(write\.c:[0-9]*)#(write\.c:42)#g"
+
+    # Signature changed
+    anonymize_sed_cmd+=";s#operator delete(void\*, unsigned long)#operator delete(void*)#g"
 
     # Remove valgrind version specific file line
     anonymize_sed_cmd+=";s#\(Memcheck: mc_leakcheck.c:\)[0-9]* #\12121 #g"
@@ -76,6 +87,9 @@ function anonymize_memcheck_file()
 
     # Some implementation are not using strncpy but __strncpy_sse2_unaligned instead
     anonymize_sed_cmd+=";s#__strncpy_sse2_unaligned#strncpy#g"
+
+    # Valgrind's message changed in v3.15
+    anonymize_sed_cmd+=";s#For counts of detected and suppressed errors, rerun with: -v#For lists of detected and suppressed errors, rerun with: -s#g"
 
     sed -i "${anonymize_sed_cmd}" "${file_to_anonymize}"
 }

@@ -89,7 +89,7 @@ function print_buffers()
     }
     # `error_occured` is used by the caller
     else if (($0 ~ /\^-- SC2034: error_occured appears unused\. Verify it or export it\./) \
-             && (previous_lines[0] ~ /\/tests\/utils\.test\.sh line 289:/)) {
+             && (previous_lines[0] ~ /\/tests\/utils\.test\.sh line 303:/)) {
     }
     # `useless_result` in only set to prevent evaluation of it's assigned sub-shell output
     else if (($0 ~ /\^-- SC2034: useless_result appears unused./) \

@@ -11,7 +11,7 @@ async function updateContentOnceLoaded1()
 ==1== &nbsp; &nbsp;at 0x10101042: _Exit (<span class="leak_file_info">_exit.c:31</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: __run_exit_handlers (<span class="leak_file_info">exit.c:132</span>)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: exit (<span class="leak_file_info">exit.c:139</span>)<br />
-==1== &nbsp; &nbsp;by 0x10101042: (below main) (<span class="leak_file_info">libc-start.c:344</span>)<br />
+==1== &nbsp; &nbsp;by 0x10101042: (below main) (<span class="leak_file_info">libc-start.c:42</span>)<br />
 ==1== <span class="leak_context_info">&nbsp;Uninitialised value was created by a heap allocation</span><br />
 ==1== &nbsp; &nbsp;at 0x10101042: operator new(unsigned long) (in a_host_lib.so)<br />
 ==1== &nbsp; &nbsp;by 0x10101042: breakage::get_invalid_uninitialized_number() (<span class="leak_file_info">main.cpp:6</span>)<br />
@@ -24,7 +24,7 @@ async function updateContentOnceLoaded1()
 ==1== <br />
 ==1== All heap blocks were freed -- no leaks are possible<br />
 ==1== <br />
-==1== For counts of detected and suppressed errors, rerun with: -v<br />
+==1== For lists of detected and suppressed errors, rerun with: -s<br />
 ==1== <span class="valgrind_summary_title">ERROR SUMMARY:</span> 1 errors from 1 contexts (suppressed: 0 from 0)<br />
 `;
     var analysis_div = document.getElementById('valgrind.result1.Report');
