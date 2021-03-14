@@ -127,6 +127,8 @@ function test_error_report()
 
     ### Check test output
 
+    expect_empty_file "${test_err_output}"
+
     # Expect HTML part files
     expect_file "${report_out_dir}${binary_name}.memcheck.html.part.js"
 

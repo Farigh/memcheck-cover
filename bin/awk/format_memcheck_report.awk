@@ -21,7 +21,7 @@
 function escapeHTMLSymbols(str)
 {
     # Escape HTML special char &
-    output = gensub(/\&/, "\\&amp;", "g", str)
+    output = gensub(/&/, "\\&amp;", "g", str)
 
     # Escape HTML special char <
     output = gensub(/</, "\\&lt;", "g", output)
@@ -36,7 +36,7 @@ function escapeAwkSymbols(str)
     output = gensub(/\\/, "\\\\\\\\", "g", str)
 
     # Escape Awk special char &
-    output = gensub(/\&/, "\\\\&", "g", output)
+    output = gensub(/&/, "\\\\&", "g", output)
 
     return output
 }
@@ -216,7 +216,7 @@ BEGIN {
                     "\\1<span class=\"" still_reachable_summary_criticality "_leak\">\\2</span>", 1, output)
 
     # LEAK SUMMARY context
-    output = gensub(/^(==[0-9]*==)(( \&nbsp;)+ of which reachable via heuristic:)$/,
+    output = gensub(/^(==[0-9]*==)(( &nbsp;)+ of which reachable via heuristic:)$/,
                     "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
 
     #############
@@ -231,9 +231,9 @@ BEGIN {
                     "\\1<span class=\"valgrind_warning\">\\2</span>", 1, output)
     output = gensub(/^(==[0-9]*== )(Warning: ignored attempt to set .* handler in sigaction\(\);)/,
                     "\\1<span class=\"valgrind_warning\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*==( \&nbsp;)+)(the .* signal is used internally by Valgrind)/,
+    output = gensub(/^(==[0-9]*==( &nbsp;)+)(the .* signal is used internally by Valgrind)/,
                     "\\1<span class=\"valgrind_warning_context\">\\3</span>", 1, output)
-    output = gensub(/^(==[0-9]*==( \&nbsp;)+)(the .* signal is uncatchable)/,
+    output = gensub(/^(==[0-9]*==( &nbsp;)+)(the .* signal is uncatchable)/,
                     "\\1<span class=\"valgrind_warning_context\">\\3</span>", 1, output)
 
     #############
@@ -241,35 +241,35 @@ BEGIN {
     #############
 
     ## Highlight context headlines from valgrind's source file 'coregrind/m_addrinfo.c'
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Address 0x[0-9A-Fa-f]+ is .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Block was alloc'd at)$/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Block was alloc'd by thread .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;(In stack guard protected page, )?[0-9]+ bytes below stack pointer)/,
+    output = gensub(/^(==[0-9]*== )(&nbsp;Address 0x[0-9A-Fa-f]+ is .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Block was alloc'd at)$/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Block was alloc'd by thread .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;(In stack guard protected page, )?[0-9]+ bytes below stack pointer)/,
                     "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
 
     # Only reindent this one
-    output = gensub(/^(==[0-9]*== )(\&nbsp;in frame #[0-9]+, created by .*)/, "\\1\\&nbsp; \\2", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;in frame #[0-9]+, created by .*)/, "\\1\\&nbsp; \\2", 1, output)
 
     # Highlight context headlines from valgrind's source file 'coregrind/m_signals.c'
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Access not within mapped region.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Bad permissions for mapped region.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;General Protection Fault.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Illegal (opcode|operand|addressing mode|trap) at address .*)/,
+    output = gensub(/^(==[0-9]*== )(&nbsp;Access not within mapped region.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Bad permissions for mapped region.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;General Protection Fault.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Illegal (opcode|operand|addressing mode|trap) at address .*)/,
                     "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Privileged (opcode|register) at address.*)/,
+    output = gensub(/^(==[0-9]*== )(&nbsp;Privileged (opcode|register) at address.*)/,
                     "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Coprocessor error at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Internal stack error at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Integer (divide by zero|overflow) at address .*)/,
+    output = gensub(/^(==[0-9]*== )(&nbsp;Coprocessor error at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Internal stack error at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Integer (divide by zero|overflow) at address .*)/,
                     "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;FP (divide by zero|overflow|underflow|inexact|invalid operation|subscript out of range|denormalize) at address .*)/,
+    output = gensub(/^(==[0-9]*== )(&nbsp;FP (divide by zero|overflow|underflow|inexact|invalid operation|subscript out of range|denormalize) at address .*)/,
                     "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Invalid address alignment at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Non-existent physical address at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Hardware error at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Invalid address alignment at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Non-existent physical address at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Hardware error at address .*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
 
     ## Highlight context headlines from valgrind's source file 'memcheck/mc_errors.c'
-    output = gensub(/^(==[0-9]*== )(\&nbsp;Uninitialised value was created.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
+    output = gensub(/^(==[0-9]*== )(&nbsp;Uninitialised value was created.*)/, "\\1<span class=\"leak_context_info\">\\2</span>", 1, output)
 
     # Highlight context headlines from valgrind's source file 'memcheck/mc_leakcheck.c'
     output = gensub(/^(==[0-9]*== )(Blocks allocation contexts:)/,
