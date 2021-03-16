@@ -217,9 +217,9 @@ The result will look like this:
 ```
 my/output/path/report/
 ├── another_dir/
-│   ├── a_report.memcheck.html.part
-│   └── other_report.memcheck.html.part
-├── filename.memcheck.html.part
+│   ├── a_report.memcheck.html.part.js
+│   └── other_report.memcheck.html.part.js
+├── filename.memcheck.html.part.js
 ├── index.html
 ├── memcheck-cover.css
 └── memcheck-cover.js
