@@ -50,6 +50,11 @@ function print_usage()
     echo "                          (will be suffixed with the .${memcheck_result_ext} extension)."
     echo "  -s|--gen-suppressions   Enables valgrind suppression generation in the output"
     echo "                          file, those can be used to create a suppression file."
+    echo "  --error-exitcode=CODE   Specifies an alternative exit code to return "
+    echo "                          if Valgrind reported any errors in the run."
+    echo "                          When set to the default value (zero),"
+    echo "                          the return value from Valgrind will always be the"
+    echo "                          return value of the process being analysed."
     echo "  --fullpath-after=       (with nothing after the '=')"
     echo "                          Show full source paths in call stacks."
     echo "  --fullpath-after=STR    Like --fullpath-after=, but only show the part of the"
@@ -77,11 +82,20 @@ memcheck_output_name=""
 memcheck_ignore_file=""
 enable_suppression=0
 valgrind_fullpath_after=()
+valgrind_error_exitcode=0
 while getopts ":hi:o:s-:" parsed_option; do
     case "${parsed_option}" in
         # Long options
         -)
             case "${OPTARG}" in
+                error-exitcode)
+                    valgrind_error_exitcode="${!OPTIND}"; ((OPTIND++))
+                    check_param "--error-exitcode" "${valgrind_error_exitcode}"
+                ;;
+                error-exitcode=*)
+                    valgrind_error_exitcode=${OPTARG#*=}
+                    check_param "--error-exitcode" "${valgrind_error_exitcode}"
+                ;;
                 fullpath-after=*)
                     valgrind_fullpath_after+=("${OPTARG#*=}")
                 ;;
@@ -210,6 +224,12 @@ for path in "${valgrind_fullpath_after[@]}"; do
     valgrind_opts+=("--fullpath-after=${path}")
     info "Adding '${path}' to the fullpath-after"
 done
+
+# Add error-exitcode options if asked for
+if [ $valgrind_error_exitcode -ne 0 ]; then
+    valgrind_opts+=("--error-exitcode=${valgrind_error_exitcode}")
+    info "Valgrind error-exitcode set to '${valgrind_error_exitcode}'"
+fi
 
 # Output option
 info "Output file set to: '${memcheck_output_file}'"

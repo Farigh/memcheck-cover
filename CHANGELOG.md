@@ -4,7 +4,14 @@ All notable changes to the Memcheck-Cover project will be documented in this fil
 
 ## [Unreleased](https://github.com/Farigh/memcheck-cover/tree/HEAD)
 
-[Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.2...HEAD)
+[Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.3...HEAD)
+
+## [v1.3](https://github.com/Farigh/memcheck-cover/releases/tag/release-1.3) (2026-04-25)
+
+[Full Changelog](https://github.com/Farigh/memcheck-cover/compare/release-1.2...release-1.3)
+
+**New features:**
+  - Add support for Valgrind's `--error-exitcode` option to the `memcheck_runner.sh` script (by @MhmRhm)
 
 ## [v1.2](https://github.com/Farigh/memcheck-cover/releases/tag/release-1.2) (2021-03-14)
 

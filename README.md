@@ -30,6 +30,11 @@ Options:
                           (will be suffixed with the .memcheck extension).
   -s|--gen-suppressions   Enables valgrind suppression generation in the output
                           file, those can be used to create a suppression file.
+  --error-exitcode=CODE   Specifies an alternative exit code to return
+                          if Valgrind reported any errors in the run.
+                          When set to the default value (zero),
+                          the return value from Valgrind will always be the
+                          return value of the process being analysed.
   --fullpath-after=       (with nothing after the '=')
                           Show full source paths in call stacks.
   --fullpath-after=STR    Like --fullpath-after=, but only show the part of the
@@ -50,6 +55,9 @@ Info: Creating output directory 'my/output/path/'
 Info: Running the following cmd with valgrind:
       "true" "can" "take" "useless" "params" "and" "still" "be" "one" "true" "self"
 ```
+
+This call will output the Valgind's report to the `filename.memcheck` file within the `my/output/path/` directory, which in this example was created.\
+The Valgrind analysis was run using the `true` binary, passing it many parameters.
 
 ##### :small_blue_diamond: Valgrind suppressions
 
@@ -78,9 +86,6 @@ The suppression will look like that in the report:
 [...]
 ```
 
-This call will output the Valgind's report to the `filename.memcheck` file within the `my/output/path/` directory, which in this example was created.\
-The Valgrind analysis was run using the `true` binary, passing it many parameters.
-
 ##### :small_blue_diamond: Display sources fullpath
 
 From [Valgrind's documentation](https://www.valgrind.org/docs/manual/manual-core.html#opt.fullpath-after):
@@ -106,6 +111,20 @@ This facilitates chopping off prefixes when the sources are drawn from a number 
 ```
 
 Passing the `--fullpath-after` to `memcheck_runner.sh` will forward it directly to Valgrind, having the previously described effect.
+
+##### :small_blue_diamond: Error exit code
+
+From [Valgrind's documentation](https://www.valgrind.org/docs/manual/manual-core.html#opt.error-exitcode):
+```
+Specifies an alternative exit code to return if Valgrind reported any errors in the run.
+When set to the default value (zero), the return value from Valgrind will always be the return value of the process being simulated.
+When set to a nonzero value, that value is returned instead, if Valgrind detects any errors.
+This is useful for using Valgrind as part of an automated test suite, since it makes it easy to detect test cases for which Valgrind has reported errors, just by inspecting return codes.
+When set to a nonzero value and Valgrind detects no error, the return value of Valgrind will be the return value of the program being simulated.
+```
+
+Passing the `--error-exitcode` to `memcheck_runner.sh` will forward it directly to Valgrind, having the previously described effect.
+Only the last value is forwarded in case its provided multiple times.
 
 #### :large_orange_diamond: Valgrind's Memcheck tool options
 
