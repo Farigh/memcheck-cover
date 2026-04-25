@@ -56,6 +56,9 @@ Info: Running the following cmd with valgrind:
       "true" "can" "take" "useless" "params" "and" "still" "be" "one" "true" "self"
 ```
 
+This call will output the Valgind's report to the `filename.memcheck` file within the `my/output/path/` directory, which in this example was created.\
+The Valgrind analysis was run using the `true` binary, passing it many parameters.
+
 ##### :small_blue_diamond: Valgrind suppressions
 
 You can specify a violation suppression file using the `--ignore` option.\
@@ -82,9 +85,6 @@ The suppression will look like that in the report:
 ==21849==    definitely lost: 4 bytes in 1 blocks
 [...]
 ```
-
-This call will output the Valgind's report to the `filename.memcheck` file within the `my/output/path/` directory, which in this example was created.\
-The Valgrind analysis was run using the `true` binary, passing it many parameters.
 
 ##### :small_blue_diamond: Display sources fullpath
 
