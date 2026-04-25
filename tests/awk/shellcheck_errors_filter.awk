@@ -91,7 +91,7 @@ function print_buffers()
     else if (($0 ~ /\^-- SC2034: error_occured appears unused\. Verify it or export it\./) \
              && (previous_lines[0] ~ /\/tests\/utils\.test\.sh line 303:/)) {
     }
-    # `useless_result` in only set to prevent evaluation of it's assigned sub-shell output
+    # `useless_result` is only set to prevent evaluation of its assigned sub-shell output
     else if (($0 ~ /\^-- SC2034: useless_result appears unused./) \
              && ((previous_lines[0] ~ /\/tests\/generate_html_outputs_ts\/ts_setup\.sh line 148:/) \
                  || (previous_lines[0] ~ /\/tests\/generate_html_outputs_ts\/combined_path_substitution_and_url_link_ts_tc\.sh line 23:/) \

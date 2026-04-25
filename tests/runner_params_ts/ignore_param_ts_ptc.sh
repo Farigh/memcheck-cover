@@ -41,7 +41,7 @@ function test_ignore_param()
     local test_std_output="${test_output_prefix}.out"
     local test_err_output="${test_output_prefix}.err.out"
 
-    # Call the memcheck runner with it's output set to ${test_output_prefix}.memcheck
+    # Call the memcheck runner with its output set to ${test_output_prefix}.memcheck
     # and the selected form of ignore param
     "${memcheck_runner}" -o"${test_output_prefix}" ${param_to_test}"${definitely_lost_ignore_file}" -- "${definitely_lost_bin}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?

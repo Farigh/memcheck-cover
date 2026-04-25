@@ -47,7 +47,7 @@ function test_fullpath_after_param()
         fullpath_after_value="${tests_root_dir}/"
     fi
 
-    # Call the memcheck runner with it's output set to ${test_output_prefix}.memcheck
+    # Call the memcheck runner with its output set to ${test_output_prefix}.memcheck
     # and the selected form of suppression generation param
     "${memcheck_runner}" -o"${test_output_prefix}" --fullpath-after="${fullpath_after_value}" -- "${definitely_lost_bin}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?

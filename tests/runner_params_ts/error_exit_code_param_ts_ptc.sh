@@ -39,15 +39,15 @@ function test_error_exit_code_param()
     local test_std_output="${test_output_prefix}.out"
     local test_err_output="${test_output_prefix}.err.out"
 
-    # Call the memcheck runner with its exit-code set to 42
+    # Call the memcheck runner with its output set to ${test_output_prefix}.memcheck
+    # and its exit-code set to 42
     local exit_code_value=42
-
     "${memcheck_runner}" -o"${test_output_prefix}" ${param_to_test}"${exit_code_value}" -- "${test_cmd}" > "${test_std_output}" 2> "${test_err_output}"
     local test_exit_code=$?
 
     ### Check test output
 
-    # Expect the output file to be printed
+    # Expect the error exit code to be printed
     expect_output "${test_std_output}" "Info: Valgrind error-exitcode set to '${exit_code_value}'"
 
     # Followed by the cmd

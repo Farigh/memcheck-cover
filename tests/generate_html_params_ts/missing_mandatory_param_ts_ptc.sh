@@ -31,7 +31,7 @@ function is_input_param()
 {
     local opt_to_test=$1
 
-    # An input param starts with -i for it's short form or --i for it's long one
+    # An input param starts with -i for its short form or --i for its long one
     [ "${opt_to_test:0:2}" == "-i" ] || [ "${opt_to_test:0:3}" == "--i" ]
 }
 

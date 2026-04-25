@@ -30,7 +30,7 @@ function generate_memcheck_report()
     local test_std_output="${test_out_dir}${binary_name}.memcheck_gen.out"
     local test_err_output="${test_out_dir}${binary_name}.memcheck_gen.err.out"
 
-    # Call the memcheck runner with it's output set to ${test_out_dir}${binary_name}.memcheck
+    # Call the memcheck runner with its output set to ${test_out_dir}${binary_name}.memcheck
     "${memcheck_runner}" -o"${test_out_dir}${binary_name}" -- "${test_bin_fullpath[@]}" > "${test_std_output}" 2> "${test_err_output}"
 
     expect_file "${test_out_dir}${binary_name}.memcheck"
@@ -67,7 +67,7 @@ function generate_memcheck_report_with_suppressions()
     local test_std_output="${test_violation_out_dir}${binary_name}.memcheck_gen.out"
     local test_err_output="${test_violation_out_dir}${binary_name}.memcheck_gen.err.out"
 
-    # Call the memcheck runner with it's output set to ${test_violation_out_dir}${binary_name}.memcheck
+    # Call the memcheck runner with its output set to ${test_violation_out_dir}${binary_name}.memcheck
     # and the suppression generation option
     "${memcheck_runner}" -o"${test_violation_out_dir}${binary_name}" -s -- "${test_binary_fullpath}" > "${test_std_output}" 2> "${test_err_output}"
 

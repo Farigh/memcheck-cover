@@ -17,7 +17,7 @@ int main()
 {
     int* p = (int*)breakage::evil_fishy_alloc();
 
-    // Print to avoid optimization discarding p and it's assignment
+    // Print to avoid optimization discarding p and its assignment
     std::cout << p << std::endl;
 
     return 0;

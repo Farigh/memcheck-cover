@@ -357,7 +357,7 @@ body {
     width: 300px;
     color: var(--summary-ratio-font-color);
 
-    /* Add text shadow for improved readability (4 times to increase it's opacity) */
+    /* Add text shadow for improved readability (4 times to increase its opacity) */
     text-shadow:  1px  1px 3px #000000,
                  -1px  1px 3px #000000,
                   1px -1px 3px #000000,
